@@ -1,13 +1,3 @@
----
-title: Specification
-sort_info: 20
---- name:overview
-
-#Stomp Protocol Specification, Version 1.0
-Stomp Protocol Specification, Version 1.0
-
---- name:content 
-
 #Stomp Protocol Specification, Version 1.0
 
 Initially the client must open a socket (I'm going to presume TCP, but really it is kind of irrelevant). The client then sends:
@@ -16,7 +6,7 @@ Initially the client must open a socket (I'm going to presume TCP, but really it
           login: <username>
           passcode:<passcode>
                         
-                        ^@
+          ^@
 
 The `^@` is a null (control-@ in ASCII) byte. The entire thing will be called a Frame in this doc. The frame starts with a command (in this case CONNECT), followed by a newline, followed by headers in a `<key>`:`<value>` with each header followed by a newline. A blank line indicates the end of the headers and beginning of the body (the body is empty in this case), and the null indicates the end of the frame.
 
