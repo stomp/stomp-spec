@@ -20,6 +20,7 @@ After the client sends the CONNECT frame, the server will always acknowledge the
 The `session-id` header is a unique identifier for this session (though it isn't actually used yet).
 
 At this point there are a number of commands the client may send
+
 * SEND
 * SUBSCRIBE
 * UNSUBSCRIBE
