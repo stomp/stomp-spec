@@ -41,7 +41,7 @@ At this point there are a number of commands the client may send
 ## Client Commands
 
 
-### SEND {#frame-SEND}
+<h3 id="frame-SEND">SEND</h3>
 
 The SEND command sends a message to a destination in the messaging system. It
 has one required header, *destination*, which indicates where to send the
@@ -70,7 +70,7 @@ there are null characters in the body. The frame still needs to be terminated
 with a null byte and if a content-length is not specified, the first null
 byte encountered signals the end of the frame.
 
-### SUBSCRIBE {#frame-SUBSCRIBE}
+<h3 id="frame-SUBSCRIBE">SUBSCRIBE</h3>
 
 The SUBSCRIBE command is used to register to listen to a given destination.
 Like the SEND command, the SUBSCRIBE command requires a *destination* header
@@ -105,7 +105,7 @@ subscription the message relates to. If using
 [selectors](http://activemq.apache.org/selectors.html) this can help clients
 figure out what subscription caused the message to be created.
 
-### UNSUBSCRIBE {#frame-UNSUBSCRIBE}
+<h3 id="frame-UNSUBSCRIBE">UNSUBSCRIBE</h3>
 
 The UNSUBSCRIBE command is used to remove an existing subscription - to no
 longer receive messages from that destination. It requires either a
@@ -117,7 +117,7 @@ passed an id value). Example:
     
     ^@
 
-### BEGIN {#frame-BEGIN}
+<h3 id="frame-BEGIN">BEGIN</h3>
 
 BEGIN is used to start a transaction. Transactions in this case apply to
 sending and acknowledging - any messages sent or acknowledged during a
@@ -132,7 +132,7 @@ The *transaction* header is required, and the transaction identifier will be
 used for SEND, COMMIT, ABORT, and ACK frames to bind them to the named
 transaction.
 
-### COMMIT {#frame-COMMIT}
+<h3 id="frame-COMMIT">COMMIT</h3>
 
 COMMIT is used to commit a transaction in progress.
 
@@ -144,7 +144,7 @@ COMMIT is used to commit a transaction in progress.
 The *transaction* header is required, you must specify which transaction to
 commit\!
 
-### ACK {#frame-ACK}
+<h3 id="frame-ACK">ACK</h3>
 
 ACK is used to acknowledge consumption of a message from a subscription using
 client acknowledgment. When a client has issued a SUBSCRIBE frame with the
@@ -165,7 +165,7 @@ acknowledgment should be part of the named transaction.
 
 The *transaction* header is optional.
 
-### ABORT {#frame-ABORT}
+<h3 id="frame-ABORT">ABORT</h3>
 
 ABORT is used to roll back a transaction in progress.
 
@@ -178,7 +178,7 @@ ABORT is used to roll back a transaction in progress.
 The *transaction* header is required, you must specify which transaction to
 abort\!
 
-### DISCONNECT {#frame-DISCONNECT}
+<h3 id="frame-DISCONNECT">DISCONNECT</h3>
 
 DISCONNECT does a graceful disconnect from the server. It is quite polite to
 use this before closing the socket.
@@ -192,7 +192,7 @@ use this before closing the socket.
 
 Some headers may be used, and have special meaning, with most packets
 
-### Receipt {#header-receipt}
+<h3 id="header-receipt">Receipt</h3>
 
 Any client frame other than CONNECT may specify a *receipt* header with an
 arbitrary value. This will cause the server to acknowledge receipt of the
@@ -215,7 +215,7 @@ initial CONNECTED frame). These frames may be one of:
 * [RECEIPT](#frame-RECEIPT)
 * [ERROR](#frame-ERROR)
 
-### MESSAGE {#frame-MESSAGE}
+<h3 id="frame-MESSAGE">MESSAGE</h3>
 
 MESSAGE frames are used to convey messages from subscriptions to the client.
 The MESSAGE frame will include a header, *destination*, indicating the
@@ -236,7 +236,7 @@ whether or not there are null characters in the body. The frame still needs
 to be terminated with a null byte, and if a *content-length* is not specified
 the first null byte encountered signals the end of the frame.
 
-### RECEIPT {#frame-RECEIPT}
+<h3 id="frame-RECEIPT">RECEIPT</h3>
 
 Receipts are issued from the server when the client has requested a receipt
 for a given command. A RECEIPT frame will include the header *receipt-id*,
@@ -251,7 +251,7 @@ is a receipt for.
 
 The receipt body will be empty.
 
-### ERROR {#frame-ERROR}
+<h3 id="frame-ERROR">ERROR</h3>
 
 The server may send ERROR frames if something goes wrong. The error frame
 should contain a *message* header with a short description of the error, and
@@ -279,7 +279,7 @@ whether or not there are null characters in the body. The frame still needs
 to be terminated with a null byte, and if a *content-length* is not specified
 the first null byte encountered signals the end of the frame.
 
-### Augmented BNF {#augmented-bnf}
+<h2 id="augmented-bnf">Augmented BNF</h2>
 
 We will use the augmented Backus-Naur Form (BNF) used in the HTTP/1.1
 (rfc2616) to define a valid stomp frame:
