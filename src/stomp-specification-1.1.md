@@ -29,8 +29,7 @@ client must then send the `CONNECT` frame.
 
     CONNECT
     version: 1.1
-    login: <username>
-    passcode:<passcode>
+    host:stomp.github.org
               
     ^@
 
@@ -39,7 +38,6 @@ If the server accepts the connection attempt it will respond with a
 
     CONNECTED
     version: 1.1
-    session: <session-id>
     
     ^@
 
@@ -51,7 +49,44 @@ connections to linger for short time before the connection is reset. This
 means that a client may not fully receive the ERROR frame before the socket is
 reset.
 
-### Protocol Version Negotiation
+<h3 id="frame-CONNECT">CONNECT Frame</h3>
+
+Stomp 1.1 clients MUST set the following headers:
+
+* `version`: The versions of the Stomp protocol the client supports.  See [Protocol Negotiation](#protocol-negotiation) for more details.
+* `host`: The host name that the socket was established against.  This allows the server to implement virtual hosts.
+
+Stomp 1.1 clients MAY set the following headers
+
+* `login`: The user id used to authenticate against a secured Stomp server.
+* `passcode`: The password used  to authenticate against a secured Stomp server.
+
+#### Future Compatibility    
+
+In future versions of the specification, the `CONNECT` frame will be renamed
+to `STOMP`. Stomp 1.1 servers should handle a `STOMP` frame the same way as
+the `CONNECT` frame. Stomp 1.1 clients should continue to use the `CONNECT`
+command to remain backward compatible with Stomp 1.0 servers.
+
+The reason to frame is being renamed is so that the protocol can more easily
+be differentiated from the HTTP protocol by a protocol sniffer/discriminator.
+
+<h3 id="frame-CONNECTED">CONNECTED Frame</h3>
+
+Stomp 1.1 servers MUST set the following headers:
+
+* `version`: The versions of the Stomp protocol the server supports.  See [Protocol Negotiation](#protocol-negotiation) for more details.
+
+Stomp 1.1 servers MAY set the following headers
+
+* `session`: A session id that uniquely identifies the session.  
+
+<!--
+TODO: is this the reasoning for the session id?
+The client can use the session id as the base to generate globally unique identifies by appending a incrementing counter.
+-->
+
+<h2 id="protocol-negotiation">Protocol Negotiation</h3>
 
 From Stomp 1.1 and onwards, the `CONNECT` and `CONNECTED` frames MUST
 include the `version` header. It should be set to a space separated list of
@@ -66,6 +101,7 @@ For example, if the client sends:
 
     CONNECT
     version:1.0 1.1 2.0
+    host:stomp.github.org
               
     ^@
 
@@ -84,19 +120,8 @@ If the client and server do not share any common protocol versions, then the sev
     version:1.1 2.1
               
     Supported protocol versions are 1.1 2.1^@
-    
-### Future Compatibility    
 
-In version 2.0 of the Specification, the `CONNECT` frame will be renamed to
-`STOMP`. Stomp 1.1 servers should handle a `STOMP` frame the same way as the
-`CONNECT` frame. Stomp 1.1 clients should continue to use the `CONNECT`
-command to remain backward compatible with Stomp 1.0 servers.
-
-The reason to frame is being renamed is so that the protocol can more easily
-be differentiated from the HTTP protocol by a protocol discriminator or
-sniffer.
-
-### Once Connected
+## Once Connected
 
 Once the client is connected it may send any of the following frames:
 
