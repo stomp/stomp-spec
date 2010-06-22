@@ -5,5 +5,5 @@ sort_info: 2
 --- name:overview
 {description:}
 
---- name:content pipeline:tags,markdown
+--- name:content pipeline:tags,markdown,fragments
 {include_file: {filename: src/stomp-specification-1.0.md, process_output: true, escape_html: false}}
