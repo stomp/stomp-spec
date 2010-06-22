@@ -187,11 +187,15 @@ byte encountered signals the end of the frame.
 
 <h3 id="frame-SUBSCRIBE">SUBSCRIBE</h3>
 
-The SUBSCRIBE frame is used to register to listen to a given destination.
-Like the SEND frame, the SUBSCRIBE frame requires a *destination* header
-indicating which destination to subscribe to. Any messages received on the
-subscription will henceforth be delivered as MESSAGE frames from the server
-to the client. The *ack* header is optional, and defaults to *auto*.
+The SUBSCRIBE frame is used to register to listen to a given destination. Like
+the SEND frame, the SUBSCRIBE frame requires a *destination* header indicating
+which destination to subscribe to. Any messages received on the subscription
+will henceforth be delivered as MESSAGE frames from the server to the client.
+The *ack* header is to control the message acknowledgement mode. The valid
+values for *ack* are *auto*, *client*, or *client-individual*. If the header
+is not set, it defaults to *auto*.
+
+Example:
 
     SUBSCRIBE
     destination: /queue/foo
@@ -199,10 +203,11 @@ to the client. The *ack* header is optional, and defaults to *auto*.
     
     ^@
 
-In this case the *ack* header is set to *client* which means that messages
-will only be considered delivered after the client specifically acknowledges
-them with an ACK frame. The valid values for *ack* are *auto* (the default if
-the header is not included) and *client*.
+When the the *ack* mode is *auto*, then the client does not need to send the server ACK frames for the messages it receives.  The server will assume the client has received the message as soon as it sends it to the the client.  This acknowledgment mode cause cause messages being transmitted to the client to get dropped.
+
+When the the *ack* mode is *client*, then the client must send the server ACK frames for the messages it processes.  If the connection fails before a client ACKs the message the server will assume the message has not been processed and may redeliver the message to another client.  The ACK frames sent by the client will be treated as a cumulative ACK.  This means the ACK operates  on the message specified in the ACK frame and all messages sent before the  messages to the subscription.
+
+When the the *ack* mode is *client-individual*, the ack mode operates just like the *client* ack mode except that the ACK frames sent by the client are not cumulative ACKs.  This means that an ACK for a subsequent message should not cause a previous message to get acknowledged. 
 
 The body of the SUBSCRIBE frame is ignored.
 
