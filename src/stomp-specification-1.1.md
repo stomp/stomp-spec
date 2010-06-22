@@ -24,62 +24,72 @@ section of this document.
 
 ## Connecting
 
-A Stomp client initiates the stream or TCP connection to the server. The client must then send the CONNECT frame.
+A Stomp client initiates the stream or TCP connection to the server. The
+client must then send the `CONNECT` frame.
 
-    STOMP/1.1 CONNECT
+    CONNECT
+    version: 1.1
     login: <username>
     passcode:<passcode>
               
     ^@
 
-If the server accepts the connection attempt it will respond with a CONNECTED frame:
+If the server accepts the connection attempt it will respond with a
+`CONNECTED` frame:
 
-    STOMP/1.1 CONNECTED
+    CONNECTED
+    version: 1.1
     session: <session-id>
     
     ^@
 
 The sever may reject the connection attempt. The server MAY respond back with
-a ERROR frame with the reason why the connection was rejected. It will then
-subsequently close/reset the connection.
+a ERROR frame before closing and reseting the connection.
 
 ### Protocol Version Negotiation
 
-The CONNECT and CONNECTED commands are prefixed with the Stomp protocol
-version that the client and server would like to use for the Stomp session.
-This allows both parties to negotiate which protocol version to use for the
-session.
+From Stomp 1.1 and onwards, the `CONNECT` and `CONNECTED` frames MUST
+include the `version` header. It should be set to a space separated list of
+incrementing Stomp protocol versions that the client or server support. If the
+version header is missing, it means that only version 1.0 of the protocol is
+supported.
 
-From the perspective of the server, it should handle the negotiation as outlined 
-following pseudo code:
+The protocol that will be used for the reset of the session will be the
+highest protocol version that both the client and server have in common.  
 
-    if server receives CONNECT frame with protocol it can support, then {
-      server responds with a CONNECTED frame where the version 
-      matches the client's requested version. 
-    } else {
-      if client protocol version > broker protocol version, then {
-        server responds with a CONNECTED frame which uses the latest 
-        version of the protocol that the broker supports.
-      } else { 
-        The server should reject the connection. The ERROR frame sent to the
-        client should included the versions of protocol the server does support.
-      }
-    }
+For example, if the client sends:
 
-From the perspective of the client, it should:
+    CONNECT
+    version:1.0 1.1 2.0
+              
+    ^@
 
-    send a CONNECT frame with the latest version of the protocol it supports.
-    if client receives a CONNECTED frame and server's protocol version is supported {
-      session continues at that protocol level. 
-    } else {
-      optionally can try to reconnect at an older protocol version.
-    }
+and the server responds with:
 
-Note that the Stomp 1.0 protocol, does not prefix the CONNECT and CONNECTED
-commands with the protocol versions. A Stomp 1.0 server will reject a
-connection attempt from 1.1 and older clients. Clients MAY choose to respond
-to a 1.1 CONNECTION rejection by reconnecting to the server using the 1.0
-protocol.
+    CONNECTED
+    version:1.1 2.1
+    
+    ^@
+
+Then the reset of the session should use version 1.1 of the protocol.
+
+If the client and server do not share any common protocol versions, then the sever should respond with an ERROR frame that looks like:
+
+    ERROR
+    version: 1.1
+              
+    Supported protocol versions are 1.1^@
+    
+### Future Compatibility    
+
+In version 2.0 of the Specification, the `CONNECT` frame will be renamed to
+`STOMP`. Stomp 1.1 servers should handle a `STOMP` frame the same way as the
+`CONNECT` frame. Stomp 1.1 clients should continue to use the `CONNECT`
+command to remain backward compatible with Stomp 1.0 servers.
+
+The reason to frame is being renamed is so that the protocol can more easily
+be differentiated from the HTTP protocol by a protocol discriminator or
+sniffer.
 
 ### Once Connected
 
