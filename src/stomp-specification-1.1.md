@@ -22,6 +22,26 @@ null byte can be optionally be followed by multiple newlines. For more
 details, on how to parse Stomp frames, see the [Augmented BNF](#augmented-bnf)
 section of this document.
 
+### Repeated Header Entries
+
+Since messaging systems can be organized in store and forward topologies,
+similar to SMTP, a message may traverse serval messaging servers before
+reaching a consumer. The intermediate server may 'update' header values in the
+message by prepending headers to the message.
+
+If the client receives repeated frame header entries, only the first header
+entry should be used as the value of header entry. Subsequent values are only
+use to maintain a history of state changes of the header. For example, if the
+client receives:
+
+    MESSAGE
+    foo:World
+    foo:Hello
+    
+    ^@
+
+The value of the `foo` header is just `World`.
+
 ## Connecting
 
 A Stomp client initiates the stream or TCP connection to the server. The
