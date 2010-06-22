@@ -86,7 +86,7 @@ TODO: is this the reasoning for the session id?
 The client can use the session id as the base to generate globally unique identifies by appending a incrementing counter.
 -->
 
-<h2 id="protocol-negotiation">Protocol Negotiation</h3>
+<h2 id="protocol-negotiation">Protocol Negotiation</h2>
 
 From Stomp 1.1 and onwards, the `CONNECT` and `CONNECTED` frames MUST
 include the `version` header. It should be set to a space separated list of
