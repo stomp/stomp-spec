@@ -43,8 +43,13 @@ If the server accepts the connection attempt it will respond with a
     
     ^@
 
-The sever may reject the connection attempt. The server MAY respond back with
-a ERROR frame before closing and reseting the connection.
+The sever may reject any connection attempt. The server SHOULD respond back
+with a ERROR frame listing why the connection was rejected and then the sever
+will close the connection. Since Stomp servers must support clients which
+rapidly connect and disconnect, a server will likely only allow closed
+connections to linger for short time before the connection is reset. This
+means that a client may not fully receive the ERROR frame before the socket is
+reset.
 
 ### Protocol Version Negotiation
 
@@ -76,9 +81,9 @@ Then the reset of the session should use version 1.1 of the protocol.
 If the client and server do not share any common protocol versions, then the sever should respond with an ERROR frame that looks like:
 
     ERROR
-    version: 1.1
+    version:1.1 2.1
               
-    Supported protocol versions are 1.1^@
+    Supported protocol versions are 1.1 2.1^@
     
 ### Future Compatibility    
 
