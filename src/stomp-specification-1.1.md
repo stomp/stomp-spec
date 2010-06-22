@@ -191,9 +191,6 @@ The SUBSCRIBE frame is used to register to listen to a given destination. Like
 the SEND frame, the SUBSCRIBE frame requires a *destination* header indicating
 which destination to subscribe to. Any messages received on the subscription
 will henceforth be delivered as MESSAGE frames from the server to the client.
-The *ack* header is to control the message acknowledgement mode. The valid
-values for *ack* are *auto*, *client*, or *client-individual*. If the header
-is not set, it defaults to *auto*.
 
 Example:
 
@@ -204,6 +201,12 @@ Example:
     ^@
 
 The body of the SUBSCRIBE frame is ignored.
+
+#### SUBSCRIBE `ack` Header
+
+The *ack* header is to control the message acknowledgement mode. The valid
+values for *ack* are *auto*, *client*, or *client-individual*. If the header
+is not set, it defaults to *auto*.
 
 When the the *ack* mode is *auto*, then the client does not need to send the
 server ACK frames for the messages it receives. The server will assume the
@@ -224,9 +227,13 @@ like the *client* ack mode except that the ACK frames sent by the client are
 not cumulative ACKs. This means that an ACK for a subsequent message should
 not cause a previous message to get acknowledged.
 
+#### SUBSCRIBE `selector` Header
+
 Stomp brokers may support the *selector* header which allows you to specify
 an [SQL 92 selector](http://activemq.apache.org/selectors.html) on the
 message headers which acts as a filter for content based routing.
+
+#### SUBSCRIBE `id` Header
 
 You can also specify an *id* header which can then later on be used to
 UNSUBSCRIBE from the specific subscription as you may end up with overlapping
