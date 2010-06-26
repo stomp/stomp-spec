@@ -1,0 +1,9 @@
+---
+title: 1.1
+in_menu: false
+sort_info: 3
+--- name:overview
+{description:}
+
+--- name:content pipeline:tags,markdown,fragments
+{include_file: {filename: src/stomp-specification-1.1.md, process_output: true, escape_html: false}}

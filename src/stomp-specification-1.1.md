@@ -412,6 +412,77 @@ whether or not there are null characters in the body. The frame still needs
 to be terminated with a null byte, and if a *content-length* is not specified
 the first null byte encountered signals the end of the frame.
 
+<h2 id="heart-beating">Heart-beating</h2>
+
+Heart-beating can optionally be used to test the healthiness of the
+underlying TCP connection and to make sure that the remote end is alive and
+kicking.
+
+In order to enable heart-beating, each party has to declare what it can do
+and what it would like the other party to do. This happens at the very
+beginning of the STOMP session, by adding a `heart-beat` header to the
+CONNECT and CONNECTED frames.
+
+When used, the `heart-beat` header MUST contain two positive integers
+separated by a comma.
+
+The first number represents what the sender of the frame can do (outgoing
+heart-beats): 
+ 
+* 0 means it cannot send heart-beats 
+
+* otherwise it is the smallest number of milliseconds between heart-beats
+  that it can guarantee
+
+The second number represents what the sender of the frame would like
+to get (incoming heart-beats):
+
+* 0 means it does not want to receive heart-beats
+
+* otherwise it is the desired number of milliseconds between heart-beats
+
+The `heart-beat` header is optional. A missing `heart-beat` header MUST be
+treated the same way as a "heart-beat:0,0" header, that is: the party cannot
+send and does not want to receive heart-beats.
+
+The `heart-beat` header provides enough information so that each party can
+find out if heart-beats can be used, in which direction and with which
+frequency.
+
+More formally, the initial frames look like:
+
+    CONNECT
+    heart-beat:<cx>,<cy>
+
+    CONNECTED:
+    heart-beat:<sx>,<sy>
+
+For heart-beats from the client to the server:
+
+* if `<cx>` is 0 (the client cannot send heart-beats) or `<sy>` is 0 (the
+  server does not want to receive heart-beats) then there will be none
+
+* otherwise, there will be heart-beats every MAX(`<cx>`,`<sy>`) milliseconds
+
+In the other direction, `<sx>` and `<cy>` are used the same way.
+
+Regarding the heart-beats themselves, any new data received over the network
+connection is an indication that the remote end is alive. In a given
+direction, if heart-beats are expected every `<n>` milliseconds:
+
+* the sender MUST send new data over the network connection at least every
+  `<n>` milliseconds
+
+* if the sender has no real STOMP frame to send, it MUST send a single
+  newline byte (0x0A)
+
+* if, inside a time window of at least `<n>` milliseconds, the receiver did
+  not receive any new data, it CAN consider the connection as dead
+
+* because of timing inaccuracies, the receiver SHOULD be tolerant and take
+  into account an error margin
+
+
 <h2 id="augmented-bnf">Augmented BNF</h2>
 
 We will use the augmented Backus-Naur Form (BNF) used in the HTTP/1.1
