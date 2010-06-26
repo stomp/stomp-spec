@@ -1,5 +1,8 @@
 # Stomp Protocol Specification, Version 1.1
 
+* Table of contents
+{:toc}
+
 ## DRAFT STATUS
 
 Version 1.1 of the specification is still being developed. This is only
@@ -24,7 +27,7 @@ body. The body is then followed by the null byte (0x00). The examples in
 document will use `^@`, control-@ in ASCII, to represent the null byte. The
 null byte can be optionally be followed by multiple newlines. For more
 details, on how to parse Stomp frames, see the [Augmented
-BNF](#augmented-bnf) section of this document.
+BNF](#augmented_bnf) section of this document.
 
 ### Repeated Header Entries
 
@@ -73,12 +76,12 @@ connections to linger for short time before the connection is reset. This means
 that a client may not fully receive the `ERROR` frame before the socket is
 reset.
 
-<h3 id="frame-CONNECT">CONNECT Frame</h3>
+### CONNECT Frame
 
 Stomp 1.1 clients MUST set the following headers:
 
 * `accept-version` : The versions of the Stomp protocol the client supports.
-  See [Protocol Negotiation](#protocol-negotiation) for more details.
+  See [Protocol Negotiation](#protocol_negotiation) for more details.
 
 * `host` : The host name that the socket was established against. This allows
   the server to implement virtual hosts.
@@ -100,12 +103,12 @@ command to remain backward compatible with Stomp 1.0 servers.
 The reason to frame is being renamed is so that the protocol can more easily
 be differentiated from the HTTP protocol by a protocol sniffer/discriminator.
 
-<h3 id="frame-CONNECTED">CONNECTED Frame</h3>
+### CONNECTED Frame
 
 Stomp 1.1 servers MUST set the following headers:
 
 * `version` : The version of the Stomp protocol the session will be using.
-  See [Protocol Negotiation](#protocol-negotiation) for more details.
+  See [Protocol Negotiation](#protocol_negotiation) for more details.
 
 Stomp 1.1 servers MAY set the following headers
 
@@ -117,7 +120,7 @@ the session id as the base to generate globally unique identifies
 by appending a incrementing counter.
 -->
 
-<h2 id="protocol-negotiation">Protocol Negotiation</h2>
+## Protocol Negotiation
 
 From Stomp 1.1 and onwards, the `CONNECT` frame MUST include the
 `accept-version` header. It should be set to a comma separated list of
@@ -156,18 +159,18 @@ sever should respond with an `ERROR` frame that looks like:
 
 Once the client is connected it may send any of the following frames:
 
-* [SEND](#frame-SEND)
-* [SUBSCRIBE](#frame-SUBSCRIBE)
-* [UNSUBSCRIBE](#frame-UNSUBSCRIBE)
-* [BEGIN](#frame-BEGIN)
-* [COMMIT](#frame-COMMIT)
-* [ABORT](#frame-ABORT)
-* [ACK](#frame-ACK)
-* [DISCONNECT](#frame-DISCONNECT)
+* [SEND](#send)
+* [SUBSCRIBE](#subscribe)
+* [UNSUBSCRIBE](#unsubscribe)
+* [BEGIN](#begin)
+* [COMMIT](#commit)
+* [ABORT](#abort)
+* [ACK](#ack)
+* [DISCONNECT](#disconnect)
 
 ## Client Frames
 
-<h3 id="frame-SEND">SEND</h3>
+### SEND
 
 The `SEND` frame sends a message to a destination in the messaging system. It
 has one required header, `destination`, which indicates where to send the
@@ -196,7 +199,7 @@ there are null characters in the body. The frame still needs to be terminated
 with a null byte and if a `content-length` is not specified, the first null
 byte encountered signals the end of the frame.
 
-<h3 id="frame-SUBSCRIBE">SUBSCRIBE</h3>
+### SUBSCRIBE
 
 The `SUBSCRIBE` frame is used to register to listen to a given destination. Like
 the `SEND` frame, the `SUBSCRIBE` frame requires a `destination` header indicating
@@ -250,7 +253,7 @@ subscription the message relates to. If using
 [selectors](http://activemq.apache.org/selectors.html) this can help clients
 figure out what subscription caused the message to be created.
 
-<h3 id="frame-UNSUBSCRIBE">UNSUBSCRIBE</h3>
+### UNSUBSCRIBE
 
 The `UNSUBSCRIBE` frame is used to remove an existing subscription - to no
 longer receive messages from that destination. It requires either a
@@ -262,7 +265,7 @@ passed an id value). Example:
     
     ^@
 
-<h3 id="frame-BEGIN">BEGIN</h3>
+### BEGIN
 
 `BEGIN` is used to start a transaction. Transactions in this case apply to
 sending and acknowledging - any messages sent or acknowledged during a
@@ -277,7 +280,7 @@ The `transaction` header is required, and the transaction identifier will be
 used for `SEND`, `COMMIT`, `ABORT`, and `ACK` frames to bind them to the named
 transaction.
 
-<h3 id="frame-COMMIT">COMMIT</h3>
+### COMMIT
 
 `COMMIT` is used to commit a transaction in progress.
 
@@ -289,7 +292,7 @@ transaction.
 The `transaction` header is required, you must specify which transaction to
 commit\!
 
-<h3 id="frame-ACK">ACK</h3>
+### ACK
 
 `ACK` is used to acknowledge consumption of a message from a subscription using
 client acknowledgment. When a client has issued a `SUBSCRIBE` frame with the
@@ -310,7 +313,7 @@ acknowledgment should be part of the named transaction.
 
 The `transaction` header is optional.
 
-<h3 id="frame-ABORT">ABORT</h3>
+### ABORT
 
 `ABORT` is used to roll back a transaction in progress.
 
@@ -323,7 +326,7 @@ The `transaction` header is optional.
 The `transaction` header is required, you must specify which transaction to
 abort\!
 
-<h3 id="frame-DISCONNECT">DISCONNECT</h3>
+### DISCONNECT
 
 `DISCONNECT` does a graceful disconnect from the server. It is quite polite to
 use this before closing the socket.
@@ -337,7 +340,7 @@ use this before closing the socket.
 
 Some headers may be used, and have special meaning, with most packets
 
-<h3 id="header-receipt">Receipt</h3>
+### Receipt
 
 Any client frame other than `CONNECT` may specify a `receipt` header with an
 arbitrary value. This will cause the server to acknowledge receipt of the
@@ -356,11 +359,11 @@ value of the `receipt-id` header in the `RECEIPT` packet.
 The server will, on occasion, send frames to the client (in additional to the
 initial `CONNECTED` frame). These frames may be one of:
 
-* [MESSAGE](#frame-MESSAGE)
-* [RECEIPT](#frame-RECEIPT)
-* [ERROR](#frame-ERROR)
+* [MESSAGE](#message)
+* [RECEIPT](#receipt)
+* [ERROR](#error)
 
-<h3 id="frame-MESSAGE">MESSAGE</h3>
+### MESSAGE
 
 `MESSAGE` frames are used to convey messages from subscriptions to the client.
 The `MESSAGE` frame will include a header, `destination`, indicating the
@@ -381,7 +384,7 @@ whether or not there are null characters in the body. The frame still needs
 to be terminated with a null byte, and if a `content-length` is not specified
 the first null byte encountered signals the end of the frame.
 
-<h3 id="frame-RECEIPT">RECEIPT</h3>
+### RECEIPT
 
 Receipts are issued from the server when the client has requested a receipt
 for a given frame. A `RECEIPT` frame will include the header `receipt-id`,
@@ -396,7 +399,7 @@ is a receipt for.
 
 The receipt body will be empty.
 
-<h3 id="frame-ERROR">ERROR</h3>
+### ERROR
 
 The server may send `ERROR` frames if something goes wrong. The error frame
 should contain a `message` header with a short description of the error, and
@@ -424,7 +427,7 @@ whether or not there are null characters in the body. The frame still needs
 to be terminated with a null byte, and if a `content-length` is not specified
 the first null byte encountered signals the end of the frame.
 
-<h2 id="heart-beating">Heart-beating</h2>
+## Heart-beating
 
 Heart-beating can optionally be used to test the healthiness of the
 underlying TCP connection and to make sure that the remote end is alive and
@@ -495,7 +498,7 @@ direction, if heart-beats are expected every `<n>` milliseconds:
   into account an error margin
 
 
-<h2 id="augmented-bnf">Augmented BNF</h2>
+## Augmented BNF
 
 A Stomp session can be more formally described using the 
 Backus-Naur Form (BNF) grammar used in the HTTP/1.1
@@ -541,7 +544,7 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
     text-content        = 1*<any OCTET except NULL>
     binary-content      = 1*OCTECT
 
-<h2 id="license">License</h2>
+## License
 
 This specification is licensed under the 
 [Creative Commons Attribution v2.5](http://creativecommons.org/licenses/by/2.5/) 
