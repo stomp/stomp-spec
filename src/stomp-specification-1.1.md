@@ -20,11 +20,11 @@ the stream. A frame's structure looks like:
 The frame starts with a command string, followed by a newline, followed by
 header entries in `<key>`:`<value>` format. Each header entry is followed by
 a newline. A blank line indicates the end of the headers and beginning of the
-body. The body is then followed by the null byte. The examples in document
-will use `^@`, control-@ in ASCII, to represent the null byte. The null byte
-can be optionally be followed by multiple newlines. For more details, on how
-to parse Stomp frames, see the [Augmented BNF](#augmented-bnf) section of
-this document.
+body. The body is then followed by the null byte (0x00). The examples in
+document will use `^@`, control-@ in ASCII, to represent the null byte. The
+null byte can be optionally be followed by multiple newlines. For more
+details, on how to parse Stomp frames, see the [Augmented
+BNF](#augmented-bnf) section of this document.
 
 ### Repeated Header Entries
 
@@ -52,7 +52,7 @@ A Stomp client initiates the stream or TCP connection to the server. The
 client must then send the `CONNECT` frame.
 
     CONNECT
-    version: 1.1
+    version:1.1
     host:stomp.github.org
               
     ^@
@@ -61,7 +61,7 @@ If the server accepts the connection attempt it will respond with a
 `CONNECTED` frame:
 
     CONNECTED
-    version: 1.1
+    version:1.1
     
     ^@
 
@@ -119,19 +119,19 @@ by appending a incrementing counter.
 
 <h2 id="protocol-negotiation">Protocol Negotiation</h2>
 
-From Stomp 1.1 and onwards, the `CONNECT` and `CONNECTED` frames MUST
-include the `version` header. It should be set to a space separated list of
-incrementing Stomp protocol versions that the client or server support. If the
-version header is missing, it means that only version 1.0 of the protocol is
-supported.
+From Stomp 1.1 and onwards, the `CONNECT` and `CONNECTED` frames MUST include
+the `version` header. It should be set to a comma separated list of
+incrementing Stomp protocol versions that the client or server support. If
+the version header is missing, it means that only version 1.0 of the protocol
+is supported.
 
 The protocol that will be used for the reset of the session will be the
-highest protocol version that both the client and server have in common.  
+highest protocol version that both the client and server have in common.
 
 For example, if the client sends:
 
     CONNECT
-    version:1.0 1.1 2.0
+    version:1.0,1.1,2.0
     host:stomp.github.org
               
     ^@
@@ -139,16 +139,17 @@ For example, if the client sends:
 and the server responds with:
 
     CONNECTED
-    version:1.1 2.1
+    version:1.1,2.1
     
     ^@
 
 Then the reset of the session should use version 1.1 of the protocol.
 
-If the client and server do not share any common protocol versions, then the sever should respond with an `ERROR` frame that looks like:
+If the client and server do not share any common protocol versions, then the
+sever should respond with an `ERROR` frame that looks like:
 
     ERROR
-    version:1.1 2.1
+    version:1.1,2.1
               
     Supported protocol versions are 1.1 2.1^@
 
