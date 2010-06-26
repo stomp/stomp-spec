@@ -52,7 +52,7 @@ A Stomp client initiates the stream or TCP connection to the server. The
 client must then send the `CONNECT` frame.
 
     CONNECT
-    version:1.1
+    accept-version:1.1
     host:stomp.github.org
               
     ^@
@@ -77,17 +77,17 @@ reset.
 
 Stomp 1.1 clients MUST set the following headers:
 
-* `version`: The versions of the Stomp protocol the client supports. See
-  [Protocol Negotiation](#protocol-negotiation) for more details.
+* `accept-version` : The versions of the Stomp protocol the client supports.
+  See [Protocol Negotiation](#protocol-negotiation) for more details.
 
-* `host`: The host name that the socket was established against. This allows
+* `host` : The host name that the socket was established against. This allows
   the server to implement virtual hosts.
 
 Stomp 1.1 clients MAY set the following headers
 
-* `login`: The user id used to authenticate against a secured Stomp server.
+* `login` : The user id used to authenticate against a secured Stomp server.
 
-* `passcode`: The password used to authenticate against a secured Stomp
+* `passcode` : The password used to authenticate against a secured Stomp
   server.
 
 #### Future Compatibility    
@@ -104,12 +104,12 @@ be differentiated from the HTTP protocol by a protocol sniffer/discriminator.
 
 Stomp 1.1 servers MUST set the following headers:
 
-* `version`: The versions of the Stomp protocol the server supports. See
-  [Protocol Negotiation](#protocol-negotiation) for more details.
+* `version` : The version of the Stomp protocol the session will be using.
+  See [Protocol Negotiation](#protocol-negotiation) for more details.
 
 Stomp 1.1 servers MAY set the following headers
 
-* `session`: A session id that uniquely identifies the session.  
+* `session` : A session id that uniquely identifies the session.  
 
 <!--
 TODO: is this the reasoning for the session id? The client can use 
@@ -119,11 +119,11 @@ by appending a incrementing counter.
 
 <h2 id="protocol-negotiation">Protocol Negotiation</h2>
 
-From Stomp 1.1 and onwards, the `CONNECT` and `CONNECTED` frames MUST include
-the `version` header. It should be set to a comma separated list of
-incrementing Stomp protocol versions that the client or server support. If
-the version header is missing, it means that only version 1.0 of the protocol
-is supported.
+From Stomp 1.1 and onwards, the `CONNECT` frame MUST include the
+`accept-version` header. It should be set to a comma separated list of
+incrementing Stomp protocol versions that the client supports. If the
+`accept-version` header is missing, it means that the client only supports
+version 1.0 of the protocol.
 
 The protocol that will be used for the reset of the session will be the
 highest protocol version that both the client and server have in common.
@@ -131,27 +131,26 @@ highest protocol version that both the client and server have in common.
 For example, if the client sends:
 
     CONNECT
-    version:1.0,1.1,2.0
+    accept-version:1.0,1.1,2.0
     host:stomp.github.org
               
     ^@
 
-and the server responds with:
+The server will respond back with the highest version of the protocol that
+it has in common with the client:
 
     CONNECTED
-    version:1.1,2.1
+    version:1.1
     
     ^@
-
-Then the reset of the session should use version 1.1 of the protocol.
 
 If the client and server do not share any common protocol versions, then the
 sever should respond with an `ERROR` frame that looks like:
 
     ERROR
-    version:1.1,2.1
+    version:1.2,2.1
               
-    Supported protocol versions are 1.1 2.1^@
+    Supported protocol versions are 1.2 2.1^@
 
 ## Once Connected
 
