@@ -185,6 +185,12 @@ there are null characters in the body. The frame still needs to be terminated
 with a null byte and if a content-length is not specified, the first null
 byte encountered signals the end of the frame.
 
+An application may add any arbitrary user defined headers to the SEND frame.
+User defined headers are typically used to allow consumers to filter
+messages based on the application defined headers using a selector 
+on a SUBSCRIBE frame.  The user defined headers should be passed through
+in the MESSAGE frame.
+
 <h3 id="frame-SUBSCRIBE">SUBSCRIBE</h3>
 
 The SUBSCRIBE frame is used to register to listen to a given destination. Like
