@@ -218,6 +218,9 @@ messages based on the application defined headers using a selector
 on a SUBSCRIBE frame.  The user defined headers should be passed through
 in the MESSAGE frame.
 
+If the sever cannot successfully process the `SEND` frame frame for any reason,
+the server MUST send the client an ERROR frame and disconnect the client.
+
 ### SUBSCRIBE
 
 The `SUBSCRIBE` frame is used to register to listen to a given destination. Like
@@ -238,6 +241,9 @@ Example:
     ^@
 
 The body of the `SUBSCRIBE` frame is ignored.
+
+If the sever cannot successfully create the subscriptions, for any reason,
+the server MUST send the client an ERROR frame and disconnect the client.
 
 #### SUBSCRIBE `id` Header
 
@@ -413,10 +419,10 @@ the first null byte encountered signals the end of the frame.
 
 ### RECEIPT
 
-Receipts are issued from the server when the client has requested a receipt
-for a given frame. A `RECEIPT` frame will include the header `receipt-id`,
-where the value is the value of the `receipt` header in the frame which this
-is a receipt for.
+A `RECEIPT` frame is sent from the server to the client once a server has has
+successfully processed a client frame that requests a receipt. A `RECEIPT`
+frame will include the header `receipt-id`, where the value is the value of
+the `receipt` header in the frame which this is a receipt for.
 
     RECEIPT
     receipt-id:message-12345
@@ -433,12 +439,15 @@ should contain a `message` header with a short description of the error, and
 the body may contain more detailed information (or may be empty).
 
     ERROR
+    receipt-id:message-12345
     message: malformed packet received
     
     The message:
     -----
     MESSAGE
     destined:/queue/a
+    receipt:message-12345
+    
     
     Hello queue a!
     -----
@@ -446,6 +455,10 @@ the body may contain more detailed information (or may be empty).
     for message propagation.
     ^@
 
+
+If the error is related to a frame that had requested a receipt, the 
+`ERROR` frame SHOULD set the `receipt-id` header to match the value of
+the `receipt` header of the frame which the error is related to.
 
 It is recommended that `ERROR` frames include a `content-length` header which
 is a byte count for the length of the message body. If a `content-length`
