@@ -315,6 +315,10 @@ The `transaction` header is required, and the transaction identifier will be
 used for `SEND`, `COMMIT`, `ABORT`, and `ACK` frames to bind them to the named
 transaction.
 
+Any started transactions which have not been committed will be implicitly aborted
+if the client sends a `DISCONNECT` frame or if the TCP connection fails for
+any reason.
+
 ### COMMIT
 
 `COMMIT` is used to commit a transaction in progress.
