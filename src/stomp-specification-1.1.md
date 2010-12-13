@@ -29,6 +29,12 @@ null byte can be optionally be followed by multiple newlines. For more
 details, on how to parse Stomp frames, see the [Augmented
 BNF](#augmented_bnf) section of this document.
 
+It is important to note that in Stomp 1.1, clients and servers should not trim the 
+white space in header values.  Many Stomp 1.0 brokers did trim the white space.  Stomp 
+1.0 servers would treat a header line like `destination: /queue/alpha` the same as
+`destination:/queue/alpha`.  In Stomp 1.1, clients MUST never pad the header with 
+a space.
+
 ### Repeated Header Entries
 
 Since messaging systems can be organized in store and forward topologies,
