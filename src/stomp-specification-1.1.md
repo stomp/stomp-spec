@@ -224,12 +224,20 @@ is not set, it defaults to `auto`.
 Example:
 
     SUBSCRIBE
-    destination: /queue/foo
-    ack: client
+    id:0
+    destination:/queue/foo
+    ack:client
     
     ^@
 
 The body of the `SUBSCRIBE` frame is ignored.
+
+#### SUBSCRIBE `id` Header
+
+You MUST specify an `id` header to uniquely identify the subscription within
+the stomp connection session.  Since a single connection can have multiple open
+subscriptions with a broker, the `id` header allows the client and broker to 
+relate subsequent `ACK` and `UNSUBSCRIBE` frames to the original subscription.
 
 #### SUBSCRIBE `ack` Header
 
@@ -254,33 +262,42 @@ not cause a previous message to get acknowledged.
 
 #### SUBSCRIBE `selector` Header
 
-Stomp brokers may support the `selector` header which allows you to specify an
-[SQL 92
-selector](http://download.oracle.com/docs/cd/E17477_01/javaee/1.4/api/javax/jms/Message.html)
-on the message headers which acts as a filter for content based routing.
-
-#### SUBSCRIBE `id` Header
-
-You can also specify an `id` header which can then later on be used to
-`UNSUBSCRIBE` from the specific subscription as you may end up with overlapping
-subscriptions using selectors with the same destination. If an `id` header is
-supplied then Stomp brokers should append a `subscription` header to any
-`MESSAGE` frames which are sent to the client so that the client knows which
-subscription the message relates to. If using
-[Wildcards](http://activemq.apache.org/wildcards.html) and
-[selectors](http://activemq.apache.org/selectors.html) this can help clients
-figure out what subscription caused the message to be created.
+Stomp brokers may support the `selector` header which allows you to specify a
+[SQL 92 style WHERE clause](http://download.oracle.com/docs/cd/E17477_01/javaee/1.4/api/javax/jms/Message.html)
+which operates against the message headers.  This allows you to apply a filter 
+on the server side which can be used to do content based routing.
 
 ### UNSUBSCRIBE
 
-The `UNSUBSCRIBE` frame is used to remove an existing subscription - to no
-longer receive messages from that destination. It requires either a
-`destination` header or an `id` header (if the previous `SUBSCRIBE` operation
-passed an id value). Example:
+The `UNSUBSCRIBE` frame is used to remove an existing subscription.  Once the subscription is
+removed the stomp connections will no longer receive messages from that destination. 
+It requires the `id` header matches the `id` value of previous `SUBSCRIBE` operation. 
+Example:
 
     UNSUBSCRIBE
-    destination: /queue/a
+    id:0
     
+    ^@
+
+### ACK
+
+`ACK` is used to acknowledge consumption of a message from a subscription using
+client acknowledgment. When a client has issued a `SUBSCRIBE` frame with the
+`ack` header set to `client` or `client-individual`  any messages received from 
+that destination will not be considered to have been consumed (by the server) 
+until the message has been acknowledged via an `ACK`.
+
+`ACK` has two required header, `message-id`, which must contain a value
+matching the `message-id` for the MESSAGE being acknowledged and `subscription`,
+which must be set to match the value of the subscription`s `id` header. 
+Optionally, a `transaction` header may be specified, indicating that the message
+acknowledgment should be part of the named transaction.
+
+    ACK
+    subscription:0
+    message-id:007
+    transaction:tx1
+
     ^@
 
 ### BEGIN
@@ -290,7 +307,7 @@ sending and acknowledging - any messages sent or acknowledged during a
 transaction will be handled atomically based on the transaction.
 
     BEGIN
-    transaction: <transaction-identifier>
+    transaction:tx1
 
     ^@
 
@@ -303,40 +320,19 @@ transaction.
 `COMMIT` is used to commit a transaction in progress.
 
     COMMIT
-    transaction: <transaction-identifier>
+    transaction:tx1
 
     ^@
 
 The `transaction` header is required, you must specify which transaction to
 commit\!
 
-### ACK
-
-`ACK` is used to acknowledge consumption of a message from a subscription using
-client acknowledgment. When a client has issued a `SUBSCRIBE` frame with the
-`ack` header set to `client` any messages received from that destination will
-not be considered to have been consumed (by the server) until the message has
-been acknowledged via an `ACK`.
-
-`ACK` has one required header, `message-id`, which must contain a value
-matching the `message-id` for the MESSAGE being acknowledged. Additionally, a
-`transaction` header may be specified, indicating that the message
-acknowledgment should be part of the named transaction.
-
-    ACK
-    message-id: <message-identifier>
-    transaction: <transaction-identifier>
-
-    ^@
-
-The `transaction` header is optional.
-
 ### ABORT
 
 `ABORT` is used to roll back a transaction in progress.
 
     ABORT
-    transaction: <transaction-identifier>
+    transaction:tx1
 
     ^@
 
@@ -369,7 +365,7 @@ value of the `receipt-id` header in the `RECEIPT` packet.
     destination:/queue/a
     receipt:message-12345
 
-    Hello a!^@
+    hello queue a^@
 
 
 ## Server Frames 
@@ -383,15 +379,17 @@ initial `CONNECTED` frame). These frames may be one of:
 
 ### MESSAGE
 
-`MESSAGE` frames are used to convey messages from subscriptions to the client.
-The `MESSAGE` frame will include a header, `destination`, indicating the
-destination the message was delivered to. It will also contain a `message-id`
-header with a unique identifier for that message. The frame body contains the
-contents of the message:
+`MESSAGE` frames are used to convey messages from subscriptions to the
+client. The `MESSAGE` frame will include a header, `destination`, indicating
+the destination the message was sent to. It will also contain a `message-id`
+header with a unique identifier for that message. The `subscription` header
+will be set to match the `id` header of the subscription that is receiving
+the message. The frame body contains the contents of the message:
 
     MESSAGE
+    subscription:0
     destination:/queue/a
-    message-id: <message-identifier>
+    message-id:007
     
     hello queue a^@
 
