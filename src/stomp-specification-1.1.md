@@ -188,13 +188,20 @@ message. The body of the `SEND` frame is the message to be sent. For example:
     hello queue a
     ^@
 
-This sends a message to the `/queue/a` destination. This name, by the way, is
-arbitrary, and despite seeming to indicate that the destination is a "queue"
-it does not, in fact, specify any such thing. Destination names are simply
-strings which are mapped to some form of destination on the server - how the
-server translates these is left to the server implementation. See [this note
-on mapping destination strings to JMS
-Destinations](http://activemq.apache.org/stomp.html) for more detail.
+This sends a message to a destination named `/queue/a`. Even though queue and
+topic delivery semantics are the most popular in messing servers, Stomp does
+not define what the delivery semantics of destinations should be. The
+delivery, or "message exchange", semantics of destinations can vary from
+server to server and even from destination to destination. This allows
+servers to be even more creative with the semantics that they can support
+with Stomp. You should consult your Stomp server's documentation to find out
+how to construct a destination name which gives you the delivery semantics
+that your application needs.
+
+The reliability semantics of the message will also be server specific and 
+typically will depend on the destination value being used and other headers
+on the message such as the `transaction` header and other server specific headers
+on the message.
 
 `SEND` supports a `transaction` header which allows for transaction sends.
 
