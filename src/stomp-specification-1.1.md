@@ -38,6 +38,16 @@ values. This causes problems if applications want to send headers that should
 not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad or
 headers with spaces.
 
+To prevent malicious clients from exploiting memory allocation in a 
+server, servers may place maximum limits on:
+
+* the number of frame headers allow in a single frame
+* the maximum length of header lines
+* the maximum size of a frame body
+
+If these limits are exceeded the server should send the client an ERROR
+frame and disconnect the client.
+
 ### Repeated Header Entries
 
 Since messaging systems can be organized in store and forward topologies,
