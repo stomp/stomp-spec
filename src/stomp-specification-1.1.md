@@ -363,6 +363,9 @@ use this before closing the socket.
 
     ^@
 
+A `DISCONNECT` frame should not include a `receipt` header since the server
+will not send the client any more frames once the `DISCONNECT`
+is received.
 
 ## Standard Headers
 
