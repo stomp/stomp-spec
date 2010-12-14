@@ -85,7 +85,16 @@ connections to linger for short time before the connection is reset. This means
 that a client may not fully receive the `ERROR` frame before the socket is
 reset.
 
-### CONNECT Frame
+### CONNECT or STOMP Frame
+
+Stomp servers should handle a `STOMP` frame the same as a `CONNECT` frame.
+STOMP 1.1 clients should continue to use the `CONNECT` command to remain
+backward compatible with STOMP 1.0 servers.
+
+Clients that use the STOMP frame instead of the CONNECT frame will only be
+able to connect to STOMP 1.1 servers but the advantage is that a protocol
+sniffer/discriminator will be able to differentiate the STOMP connection from
+an HTTP connection.
 
 STOMP 1.1 clients MUST set the following headers:
 
@@ -101,16 +110,6 @@ STOMP 1.1 clients MAY set the following headers
 
 * `passcode` : The password used to authenticate against a secured STOMP
   server.
-
-#### Future Compatibility    
-
-In future versions of the specification, the `CONNECT` frame will be renamed
-to `STOMP`. STOMP 1.1 servers should handle a `STOMP` frame the same way as
-the `CONNECT` frame. STOMP 1.1 clients should continue to use the `CONNECT`
-command to remain backward compatible with STOMP 1.0 servers.
-
-The reason to frame is being renamed is so that the protocol can more easily
-be differentiated from the HTTP protocol by a protocol sniffer/discriminator.
 
 ### CONNECTED Frame
 
