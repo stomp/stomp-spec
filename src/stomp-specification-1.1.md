@@ -555,7 +555,6 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
 [rfc2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.1).
 
     NL                  = <US-ASCII new line (line feed) (octect 10)>
-    CHAR                = <any US-ASCII character (octets 0 - 127)>
     OCTET               = <any 8-bit sequence of data>
     DIGIT               = <any US-ASCII digit "0".."9">
     NULL                = <octect 0>
@@ -587,8 +586,8 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
                           | "ERROR"
     
     header              = header-name ":" header-value
-    header-name         = 1*<any CHAR except NL or ":">
-    header-value        = 1*<any CHAR except NL>
+    header-name         = 1*<any OCTET except NL or ":">
+    header-value        = 1*<any OCTET except NL>
     
     content             = text-content | binary-content
     text-content        = 1*<any OCTET except NULL>
