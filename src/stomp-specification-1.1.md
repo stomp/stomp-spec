@@ -29,6 +29,9 @@ null byte can be optionally be followed by multiple newlines. For more
 details, on how to parse STOMP frames, see the [Augmented
 BNF](#augmented_bnf) section of this document.
 
+Only the `SEND`, `MESSAGE`, and `ERROR` frames can have a body. All other
+frames MUST not have a body.
+
 STOMP 1.0 specification included many example frames with padding in the
 headers and many servers and clients were implemented to trim or pad header
 values. This causes problems if applications want to send headers that should
@@ -235,8 +238,6 @@ Example:
     ack:client
     
     ^@
-
-The body of the `SUBSCRIBE` frame is ignored.
 
 If the sever cannot successfully create the subscriptions, for any reason,
 the server MUST send the client an ERROR frame and disconnect the client.
