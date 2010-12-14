@@ -556,7 +556,6 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
 
     NL                  = <US-ASCII new line (line feed) (octect 10)>
     OCTET               = <any 8-bit sequence of data>
-    DIGIT               = <any US-ASCII digit "0".."9">
     NULL                = <octect 0>
     
     frame-stream        = 1*frame
@@ -564,7 +563,7 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
     frame               = command NL
                           *( header NL )
                           NL
-                          [ content ]
+                          *OCTECT
                           NULL
                           *( NL )
     
@@ -578,6 +577,7 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
                           | "ABORT"
                           | "ACK"
                           | "DISCONNECT"
+                          | "CONNECT"
                           | "STOMP"
     
     server-command      = "CONNECTED"
@@ -587,12 +587,8 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
     
     header              = header-name ":" header-value
     header-name         = 1*<any OCTET except NL or ":">
-    header-value        = 1*<any OCTET except NL>
+    header-value        = *<any OCTET except NL>
     
-    content             = text-content | binary-content
-    text-content        = 1*<any OCTET except NULL>
-    binary-content      = 1*OCTECT
-
 ## License
 
 This specification is licensed under the 
