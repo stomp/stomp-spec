@@ -1,5 +1,5 @@
 body, html {
-    font-family:Arial,Verdana,Helvetica,sans-serif;
+    font-family:Georgia, Arial, sans-serif; 
     color: #666666;
 }
 body, html, table, tr, td, tbody {
@@ -12,6 +12,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    font-family: 'Graublau Web', Helvetica, sans-serif;
     overflow: visible;
     color: #993333;
 }
@@ -139,9 +140,7 @@ img {
 }
 code {	
   font-size: .9em;
-  font-family:Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
-	font-weight:bold;
-	font-style:italic
+  font-family: 'Droid Sans Mono', 'Courier New', monospace !important;
 }
 pre {
   background-color: #F8F8FF; 
@@ -159,6 +158,7 @@ pre {
   padding: 1em;
 }
 pre code {	
+	font-family:Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
 	font-weight:normal;
-	font-style:normal
+	font-style:normal;
 }

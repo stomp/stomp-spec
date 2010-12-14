@@ -45,7 +45,7 @@ server, servers may place maximum limits on:
 * the maximum length of header lines
 * the maximum size of a frame body
 
-If these limits are exceeded the server should send the client an ERROR
+If these limits are exceeded the server should send the client an `ERROR`
 frame and disconnect the client.
 
 ### Repeated Header Entries
@@ -101,7 +101,7 @@ Stomp servers should handle a `STOMP` frame the same as a `CONNECT` frame.
 STOMP 1.1 clients should continue to use the `CONNECT` command to remain
 backward compatible with STOMP 1.0 servers.
 
-Clients that use the STOMP frame instead of the CONNECT frame will only be
+Clients that use the `STOMP` frame instead of the `CONNECT` frame will only be
 able to connect to STOMP 1.1 servers but the advantage is that a protocol
 sniffer/discriminator will be able to differentiate the STOMP connection from
 an HTTP connection.
@@ -177,14 +177,14 @@ sever should respond with an `ERROR` frame that looks like:
 
 Once the client is connected it may send any of the following frames:
 
-* [SEND](#send)
-* [SUBSCRIBE](#subscribe)
-* [UNSUBSCRIBE](#unsubscribe)
-* [BEGIN](#begin)
-* [COMMIT](#commit)
-* [ABORT](#abort)
-* [ACK](#ack)
-* [DISCONNECT](#disconnect)
+* [`SEND`](#send)
+* [`SUBSCRIBE`](#subscribe)
+* [`UNSUBSCRIBE`](#unsubscribe)
+* [`BEGIN`](#begin)
+* [`COMMIT`](#commit)
+* [`ABORT`](#abort)
+* [`ACK`](#ack)
+* [`DISCONNECT`](#disconnect)
 
 ## Client Frames
 
@@ -220,14 +220,14 @@ on the message.
 `SEND` frames should include a 
 [`content-length`](#Header_content-length) header if a body is present.
 
-An application may add any arbitrary user defined headers to the SEND frame.
+An application may add any arbitrary user defined headers to the `SEND` frame.
 User defined headers are typically used to allow consumers to filter
 messages based on the application defined headers using a selector 
-on a SUBSCRIBE frame.  The user defined headers MUST be passed through
-in the MESSAGE frame.
+on a `SUBSCRIBE` frame.  The user defined headers MUST be passed through
+in the `MESSAGE` frame.
 
 If the sever cannot successfully process the `SEND` frame frame for any reason,
-the server MUST send the client an ERROR frame and disconnect the client.
+the server MUST send the client an `ERROR` frame and disconnect the client.
 
 ### SUBSCRIBE
 
@@ -248,8 +248,8 @@ Example:
     
     ^@
 
-If the sever cannot successfully create the subscriptions, for any reason,
-the server MUST send the client an ERROR frame and disconnect the client.
+If the sever cannot successfully create the subscription, for any reason,
+the server MUST send the client an `ERROR` frame and disconnect the client.
 
 #### SUBSCRIBE id Header
 
@@ -263,7 +263,7 @@ relate subsequent `ACK` and `UNSUBSCRIBE` frames to the original subscription.
 When the the `ack` mode is `auto`, then the client does not need to send the
 server `ACK` frames for the messages it receives. The server will assume the
 client has received the message as soon as it sends it to the the client. This
-acknowledgment mode cause cause messages being transmitted to the client to
+acknowledgment mode can cause messages being transmitted to the client to
 get dropped.
 
 When the the `ack` mode is `client`, then the client must send the server `ACK`
@@ -275,7 +275,7 @@ on the message specified in the `ACK` frame and all messages sent before the
 messages to the subscription.
 
 When the the `ack` mode is `client-individual`, the ack mode operates just
-like the `client` ack mode except that the ACK frames sent by the client are
+like the `client` ack mode except that the `ACK` frames sent by the client are
 not cumulative. This means that an `ACK` for a subsequent message should
 not cause a previous message to get acknowledged.
 
@@ -308,8 +308,8 @@ that destination will not be considered to have been consumed (by the server)
 until the message has been acknowledged via an `ACK`.
 
 `ACK` has two required header, `message-id`, which must contain a value
-matching the `message-id` for the MESSAGE being acknowledged and `subscription`,
-which must be set to match the value of the subscription`s `id` header. 
+matching the `message-id` for the `MESSAGE` being acknowledged and `subscription`,
+which must be set to match the value of the subscription's `id` header. 
 Optionally, a `transaction` header may be specified, indicating that the message
 acknowledgment should be part of the named transaction.
 
@@ -410,9 +410,9 @@ value of the `receipt-id` header in thehe `RECEIPT` packet.
 The server will, on occasion, send frames to the client (in additional to the
 initial `CONNECTED` frame). These frames may be one of:
 
-* [MESSAGE](#message)
-* [RECEIPT](#receipt)
-* [ERROR](#error)
+* [`MESSAGE`](#message)
+* [`RECEIPT`](#receipt)
+* [`ERROR`](#error)
 
 ### MESSAGE
 
