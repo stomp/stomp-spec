@@ -205,12 +205,8 @@ on the message.
 
 `SEND` supports a `transaction` header which allows for transaction sends.
 
-It is recommended that `SEND` frames include a `content-length` header which is a
-byte count for the length of the message body. If a `content-length` header is
-included, this number of bytes should be read, regardless of whether or not
-there are null characters in the body. The frame still needs to be terminated
-with a null byte and if a `content-length` is not specified, the first null
-byte encountered signals the end of the frame.
+`SEND` frames should include a 
+[`content-length`](#Header__code_content-length__code_) header.
 
 An application may add any arbitrary user defined headers to the SEND frame.
 User defined headers are typically used to allow consumers to filter
@@ -371,12 +367,21 @@ use this before closing the socket.
 
 Some headers may be used, and have special meaning, with most packets
 
-### Receipt
+### Header `content-length`
+
+The `SEND`, `MESSAGE` and `ERROR` frames may carry and should include a
+`content-length` header which is a byte count for the length of the message
+body. If a `content-length` header is included, this number of bytes must be
+read, regardless of whether or not there are null characters in the body. The
+frame still needs to be terminated with a null byte. If a `content-length` is
+not specified, the first null byte encountered signals the end of the frame.
+
+### Header `receipt`
 
 Any client frame other than `CONNECT` may specify a `receipt` header with an
 arbitrary value. This will cause the server to acknowledge receipt of the
 frame with a `RECEIPT` frame which contains the value of this header as the
-value of the `receipt-id` header in the `RECEIPT` packet.
+value of the `receipt-id` header in thehe `RECEIPT` packet.
 
     SEND
     destination:/queue/a
@@ -410,12 +415,8 @@ the message. The frame body contains the contents of the message:
     
     hello queue a^@
 
-It is recommended that `MESSAGE` frames include a `content-length` header which
-is a byte count for the length of the message body. If a `content-length`
-header is included, this number of bytes should be read, regardless of
-whether or not there are null characters in the body. The frame still needs
-to be terminated with a null byte, and if a `content-length` is not specified
-the first null byte encountered signals the end of the frame.
+`MESSAGE` frames should include a 
+[`content-length`](#Header__code_content-length__code_) header.
 
 ### RECEIPT
 
@@ -460,12 +461,8 @@ If the error is related to a frame that had requested a receipt, the
 `ERROR` frame SHOULD set the `receipt-id` header to match the value of
 the `receipt` header of the frame which the error is related to.
 
-It is recommended that `ERROR` frames include a `content-length` header which
-is a byte count for the length of the message body. If a `content-length`
-header is included, this number of bytes should be read, regardless of
-whether or not there are null characters in the body. The frame still needs
-to be terminated with a null byte, and if a `content-length` is not specified
-the first null byte encountered signals the end of the frame.
+`ERROR` frames should include a 
+[`content-length`](#Header__code_content-length__code_) header.
 
 ## Heart-beating
 
