@@ -208,12 +208,12 @@ on the message.
 `SEND` supports a `transaction` header which allows for transaction sends.
 
 `SEND` frames should include a 
-[`content-length`](#Header__code_content-length__code_) header.
+[`content-length`](#Header_content-length) header.
 
 An application may add any arbitrary user defined headers to the SEND frame.
 User defined headers are typically used to allow consumers to filter
 messages based on the application defined headers using a selector 
-on a SUBSCRIBE frame.  The user defined headers should be passed through
+on a SUBSCRIBE frame.  The user defined headers MUST be passed through
 in the MESSAGE frame.
 
 If the sever cannot successfully process the `SEND` frame frame for any reason,
@@ -241,14 +241,14 @@ Example:
 If the sever cannot successfully create the subscriptions, for any reason,
 the server MUST send the client an ERROR frame and disconnect the client.
 
-#### SUBSCRIBE `id` Header
+#### SUBSCRIBE id Header
 
 You MUST specify an `id` header to uniquely identify the subscription within
 the stomp connection session.  Since a single connection can have multiple open
 subscriptions with a broker, the `id` header allows the client and broker to 
 relate subsequent `ACK` and `UNSUBSCRIBE` frames to the original subscription.
 
-#### SUBSCRIBE `ack` Header
+#### SUBSCRIBE ack Header
 
 When the the `ack` mode is `auto`, then the client does not need to send the
 server `ACK` frames for the messages it receives. The server will assume the
@@ -269,12 +269,13 @@ like the `client` ack mode except that the ACK frames sent by the client are
 not cumulative. This means that an `ACK` for a subsequent message should
 not cause a previous message to get acknowledged.
 
-#### SUBSCRIBE `selector` Header
+#### SUBSCRIBE selector Header
 
-STOMP brokers may support the `selector` header which allows you to specify a
-[SQL 92 style WHERE clause](http://download.oracle.com/docs/cd/E17477_01/javaee/1.4/api/javax/jms/Message.html)
-which operates against the message headers.  This allows you to apply a filter 
-on the server side which can be used to do content based routing.
+STOMP brokers may optionally support a selector header which allows you to 
+define a filter which is applied on the server side to limit the messages
+that are delivered to the subscription from the destination.  The syntax 
+for the value of the selector header is server specific, so consult your
+server's documentation for details on how to construct a selector.
 
 ### UNSUBSCRIBE
 
@@ -367,7 +368,7 @@ use this before closing the socket.
 
 Some headers may be used, and have special meaning, with most packets
 
-### Header `content-length`
+### Header content-length
 
 The `SEND`, `MESSAGE` and `ERROR` frames may carry and should include a
 `content-length` header which is a byte count for the length of the message
@@ -376,7 +377,7 @@ read, regardless of whether or not there are null characters in the body. The
 frame still needs to be terminated with a null byte. If a `content-length` is
 not specified, the first null byte encountered signals the end of the frame.
 
-### Header `receipt`
+### Header receipt
 
 Any client frame other than `CONNECT` may specify a `receipt` header with an
 arbitrary value. This will cause the server to acknowledge receipt of the
@@ -416,7 +417,7 @@ the message. The frame body contains the contents of the message:
     hello queue a^@
 
 `MESSAGE` frames should include a 
-[`content-length`](#Header__code_content-length__code_) header.
+[`content-length`](#Header_content-length) header.
 
 ### RECEIPT
 
@@ -462,7 +463,7 @@ If the error is related to a frame that had requested a receipt, the
 the `receipt` header of the frame which the error is related to.
 
 `ERROR` frames should include a 
-[`content-length`](#Header__code_content-length__code_) header.
+[`content-length`](#Header_content-length) header.
 
 ## Heart-beating
 
