@@ -208,7 +208,7 @@ on the message.
 `SEND` supports a `transaction` header which allows for transaction sends.
 
 `SEND` frames should include a 
-[`content-length`](#Header_content-length) header.
+[`content-length`](#Header_content-length) header if a body is present.
 
 An application may add any arbitrary user defined headers to the SEND frame.
 User defined headers are typically used to allow consumers to filter
@@ -373,12 +373,13 @@ Some headers may be used, and have special meaning, with most packets
 
 ### Header content-length
 
-The `SEND`, `MESSAGE` and `ERROR` frames may carry and should include a
-`content-length` header which is a byte count for the length of the message
-body. If a `content-length` header is included, this number of bytes must be
-read, regardless of whether or not there are null characters in the body. The
-frame still needs to be terminated with a null byte. If a `content-length` is
-not specified, the first null byte encountered signals the end of the frame.
+The `SEND`, `MESSAGE` and `ERROR` frames should include a `content-length`
+header if a frame body is present. The header is a byte count for the length
+of the message body. If a `content-length` header is included, this number of
+bytes must be read, regardless of whether or not there are null characters in
+the body. The frame still needs to be terminated with a null byte. If a
+`content-length` is not specified, the first null byte encountered signals
+the end of the frame.
 
 ### Header receipt
 
@@ -420,7 +421,13 @@ the message. The frame body contains the contents of the message:
     hello queue a^@
 
 `MESSAGE` frames should include a 
-[`content-length`](#Header_content-length) header.
+[`content-length`](#Header_content-length) header if a body is present.
+
+`MESSAGE` frames will also include all user defined headers that were present
+when the message was sent to the destination in addition to headers that
+the server specific headers that may get added to the frame.  Consult your
+server's documentation to find out the server specific headers that it adds
+to messages.
 
 ### RECEIPT
 
@@ -461,12 +468,14 @@ the body may contain more detailed information (or may be empty).
     ^@
 
 
-If the error is related to a frame that had requested a receipt, the 
-`ERROR` frame SHOULD set the `receipt-id` header to match the value of
-the `receipt` header of the frame which the error is related to.
+If the error is related to specific frame sent from the client, the server
+should add addition headers to help identify the original frame that caused
+the error. For example, if the frame included a receipt header, the `ERROR`
+frame SHOULD set the `receipt-id` header to match the value of the `receipt`
+header of the frame which the error is related to.
 
 `ERROR` frames should include a 
-[`content-length`](#Header_content-length) header.
+[`content-length`](#Header_content-length) header if a body is present.
 
 ## Heart-beating
 
