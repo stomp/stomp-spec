@@ -1,4 +1,4 @@
-# Stomp Protocol Specification, Version 1.1
+# STOMP Protocol Specification, Version 1.1
 
 * Table of contents
 {:toc}
@@ -8,10 +8,10 @@
 Version 1.1 of the specification is still being developed. This is only
 a draft document.
 
-## Stomp Frames
+## STOMP Frames
 
-Stomp is designed to work best over a stream based communications transport
-like TCP. The client and server will communicate using Stomp frames sent over
+STOMP is designed to work best over a stream based communications transport
+like TCP. The client and server will communicate using STOMP frames sent over
 the stream. A frame's structure looks like:
 
     command
@@ -26,13 +26,13 @@ a newline. A blank line indicates the end of the headers and beginning of the
 body. The body is then followed by the null byte (0x00). The examples in
 document will use `^@`, control-@ in ASCII, to represent the null byte. The
 null byte can be optionally be followed by multiple newlines. For more
-details, on how to parse Stomp frames, see the [Augmented
+details, on how to parse STOMP frames, see the [Augmented
 BNF](#augmented_bnf) section of this document.
 
-Stomp 1.0 specification included many example frames with padding in the
+STOMP 1.0 specification included many example frames with padding in the
 headers and many servers and clients were implemented to trim or pad header
 values. This causes problems if applications want to send headers that should
-not get trimmed. In Stomp 1.1, clients and servers MUST never trim or pad or
+not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad or
 headers with spaces.
 
 ### Repeated Header Entries
@@ -57,7 +57,7 @@ The value of the `foo` header is just `World`.
 
 ## Connecting
 
-A Stomp client initiates the stream or TCP connection to the server. The
+A STOMP client initiates the stream or TCP connection to the server. The
 client must then send the `CONNECT` frame.
 
     CONNECT
@@ -76,7 +76,7 @@ If the server accepts the connection attempt it will respond with a
 
 The sever may reject any connection attempt. The server SHOULD respond back
 with a `ERROR` frame listing why the connection was rejected and then the sever
-will close the connection. Since Stomp servers must support clients which
+will close the connection. Since STOMP servers must support clients which
 rapidly connect and disconnect, a server will likely only allow closed
 connections to linger for short time before the connection is reset. This means
 that a client may not fully receive the `ERROR` frame before the socket is
@@ -84,39 +84,39 @@ reset.
 
 ### CONNECT Frame
 
-Stomp 1.1 clients MUST set the following headers:
+STOMP 1.1 clients MUST set the following headers:
 
-* `accept-version` : The versions of the Stomp protocol the client supports.
+* `accept-version` : The versions of the STOMP protocol the client supports.
   See [Protocol Negotiation](#protocol_negotiation) for more details.
 
 * `host` : The host name that the socket was established against. This allows
   the server to implement virtual hosts.
 
-Stomp 1.1 clients MAY set the following headers
+STOMP 1.1 clients MAY set the following headers
 
-* `login` : The user id used to authenticate against a secured Stomp server.
+* `login` : The user id used to authenticate against a secured STOMP server.
 
-* `passcode` : The password used to authenticate against a secured Stomp
+* `passcode` : The password used to authenticate against a secured STOMP
   server.
 
 #### Future Compatibility    
 
 In future versions of the specification, the `CONNECT` frame will be renamed
-to `STOMP`. Stomp 1.1 servers should handle a `STOMP` frame the same way as
-the `CONNECT` frame. Stomp 1.1 clients should continue to use the `CONNECT`
-command to remain backward compatible with Stomp 1.0 servers.
+to `STOMP`. STOMP 1.1 servers should handle a `STOMP` frame the same way as
+the `CONNECT` frame. STOMP 1.1 clients should continue to use the `CONNECT`
+command to remain backward compatible with STOMP 1.0 servers.
 
 The reason to frame is being renamed is so that the protocol can more easily
 be differentiated from the HTTP protocol by a protocol sniffer/discriminator.
 
 ### CONNECTED Frame
 
-Stomp 1.1 servers MUST set the following headers:
+STOMP 1.1 servers MUST set the following headers:
 
-* `version` : The version of the Stomp protocol the session will be using.
+* `version` : The version of the STOMP protocol the session will be using.
   See [Protocol Negotiation](#protocol_negotiation) for more details.
 
-Stomp 1.1 servers MAY set the following headers
+STOMP 1.1 servers MAY set the following headers
 
 * `session` : A session id that uniquely identifies the session.  
 
@@ -128,9 +128,9 @@ by appending a incrementing counter.
 
 ## Protocol Negotiation
 
-From Stomp 1.1 and onwards, the `CONNECT` frame MUST include the
+From STOMP 1.1 and onwards, the `CONNECT` frame MUST include the
 `accept-version` header. It should be set to a comma separated list of
-incrementing Stomp protocol versions that the client supports. If the
+incrementing STOMP protocol versions that the client supports. If the
 `accept-version` header is missing, it means that the client only supports
 version 1.0 of the protocol.
 
@@ -189,12 +189,12 @@ message. The body of the `SEND` frame is the message to be sent. For example:
     ^@
 
 This sends a message to a destination named `/queue/a`. Even though queue and
-topic delivery semantics are the most popular in messing servers, Stomp does
+topic delivery semantics are the most popular in messing servers, STOMP does
 not define what the delivery semantics of destinations should be. The
 delivery, or "message exchange", semantics of destinations can vary from
 server to server and even from destination to destination. This allows
 servers to be even more creative with the semantics that they can support
-with Stomp. You should consult your Stomp server's documentation to find out
+with STOMP. You should consult your STOMP server's documentation to find out
 how to construct a destination name which gives you the delivery semantics
 that your application needs.
 
@@ -275,7 +275,7 @@ not cause a previous message to get acknowledged.
 
 #### SUBSCRIBE `selector` Header
 
-Stomp brokers may support the `selector` header which allows you to specify a
+STOMP brokers may support the `selector` header which allows you to specify a
 [SQL 92 style WHERE clause](http://download.oracle.com/docs/cd/E17477_01/javaee/1.4/api/javax/jms/Message.html)
 which operates against the message headers.  This allows you to apply a filter 
 on the server side which can be used to do content based routing.
@@ -475,7 +475,7 @@ kicking.
 
 In order to enable heart-beating, each party has to declare what it can do
 and what it would like the other party to do. This happens at the very
-beginning of the Stomp session, by adding a `heart-beat` header to the
+beginning of the STOMP session, by adding a `heart-beat` header to the
 `CONNECT` and `CONNECTED` frames.
 
 When used, the `heart-beat` header MUST contain two positive integers
@@ -540,7 +540,7 @@ direction, if heart-beats are expected every `<n>` milliseconds:
 
 ## Augmented BNF
 
-A Stomp session can be more formally described using the 
+A STOMP session can be more formally described using the 
 Backus-Naur Form (BNF) grammar used in the HTTP/1.1
 [rfc2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.1).
 

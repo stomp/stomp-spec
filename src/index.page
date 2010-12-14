@@ -1,5 +1,5 @@
 ---
-title: Stomp
+title: STOMP
 --- name:overview
 
 The Simple Text Oriented Messaging Protocol
@@ -12,10 +12,10 @@ The Simple Text Oriented Messaging Protocol
     
 .right
   :markdown
-    Stomp is the Simple (or Streaming) Text Orientated Messaging Protocol.
+    STOMP is the Simple (or Streaming) Text Orientated Messaging Protocol.
 
-    Stomp provides an interoperable wire format so that Stomp clients can
-    communicate with any Stomp message broker to provide easy and widespread
+    STOMP provides an interoperable wire format so that STOMP clients can
+    communicate with any STOMP message broker to provide easy and widespread
     messaging interoperability among many languages, platforms and brokers.
 
 .left
@@ -24,15 +24,15 @@ The Simple Text Oriented Messaging Protocol
     
 .right
   :markdown
-    Stomp is a very simple and easy to implement protocol, coming from the HTTP
+    STOMP is a very simple and easy to implement protocol, coming from the HTTP
     school of design; the server side may be hard to implement well, but it is very
     easy to write a client to get yourself connected. For example you can use
-    Telnet to login to any Stomp broker and interact with it\!
+    Telnet to login to any STOMP broker and interact with it\!
 
-    Many developers have told us that they have managed to write a Stomp client in
+    Many developers have told us that they have managed to write a STOMP client in
     a couple of _hours_ to in their particular language, runtime or platform
-    into the Stomp network. So if your favored language/runtime of choice does not
-    offer a good enough Stomp client don't be afraid to write one.
+    into the STOMP network. So if your favored language/runtime of choice does not
+    offer a good enough STOMP client don't be afraid to write one.
   
 .left
   :markdown
@@ -50,7 +50,7 @@ The Simple Text Oriented Messaging Protocol
   
 .right
   :markdown
-    If your are a Stomp implementer, we would we love you to join the specification discussions.
+    If your are a STOMP implementer, we would we love you to join the specification discussions.
 
     The main mailing list is hosted at the [stomp-spec google group](http://groups.google.com/group/stomp-spec).
 
