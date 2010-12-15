@@ -168,3 +168,13 @@ pre code {
 	font-weight:normal;
 	font-style:normal;
 }
+
+
+table.clients td {
+
+  border:1px solid #DDDDDD;
+  padding:10px;
+  
+}
+
+table.clients td p { margin:0px; }

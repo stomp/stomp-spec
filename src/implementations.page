@@ -1,0 +1,154 @@
+---
+title: Implementations
+--- name:overview
+
+The Simple Text Oriented Messaging Protocol
+
+--- name:content pipeline:jade
+
+:markdown
+  # Servers
+
+  The following is a list of the various STOMP compliant message 
+  servers which can be used with any of the STOMP clients.
+
+  * [Apache ActiveMQ](http://activemq.apache.org/) is considered by many to be
+    the STOMP 1.0 reference implementation.
+
+  * [Apache Apollo](http://activemq.apache.org/apollo) an redesigned version of 
+    ActiveMQ focused on STOMP messaging.
+
+  * [CoilMQ](http://code.google.com/p/coilmq/) is a lightweight pure Python Stomp
+    broker inspired by StompServer.
+
+  * [Gozirra](http://www.germane-software.com/software/Java/Gozirra/) is a
+    lightweight Java Stomp broker
+
+  * [HornetQ](http://www.jboss.org/hornetq) puts the buzz in messaging
+
+  * [MorbidQ](http://www.morbidq.com/) is a STOMP publish/subscribe server with absolutely 
+    no potential to cluster. It supports publish/subscribe topics, and runs as a 
+    single node.
+
+  * [Sprinkle](http://www.thuswise.org/sprinkle/index.html) is written in Python 
+    and runs on Unix type platforms.
+
+  * [StompConnect](http://stomp.codehaus.org/StompConnect) provides a bridge to
+    any other JMS provider. This means that all major commercial and open source
+    message brokers can be used with Stomp!
+
+  * [StompServer](http://stompserver.rubyforge.org/) is a lightweight pure Ruby
+    Stomp server
+
+  # Clients
+  Pick the right Stomp client for your particular language or platform.
+
+br
+table.clients
+  tr
+    th Language
+    th Libraries
+    
+  - def language(name:String)(func: =>Unit) 
+    tr
+      td
+        em #{name}
+      td
+        !~~ capture(func)
+    
+  - language("C")
+    :markdown
+      * [libstomp](http://stomp.codehaus.org/C) is an APR based c library
+      
+  - language("Dynamic C")
+    :markdown
+      * [dstomp](http://code.google.com/p/dstomp/) is a STOMP client library
+        written in Dynamic C for Rabbit
+
+  - language("C")
+    :markdown
+      * [libstomp](http://stomp.codehaus.org/C) is an APR based c library
+
+  - language("Dynamic C")
+    :markdown
+      * [dstomp](http://code.google.com/p/dstomp/) is a STOMP client library
+        written in Dynamic C for Rabbit
+
+  - language("C++")
+    :markdown
+      * [Apache CMS](http://activemq.apache.org/cms/): is a JMS-like API for C++.
+
+  - language("C# and .Net")
+    :markdown
+      * [Apache NMS](http://activemq.apache.org/nms/): is a JMS-like API for .Net
+
+  - language("Delphi and FreePascal")
+    :markdown
+      * [delphistompclient](http://code.google.com/p/delphistompclient/): is a
+        STOMP client for Embarcadero Delphi and FreePascal. [more
+        info](http://www.danieleteti.it/?page_id=214)
+
+  - language("Erlang")
+    :markdown
+      * [stomp.erl](http://www.hccp.org/erlang-stomp-client.html) is a STOMP client
+        for Erlang
+
+  - language("Flash")
+    :markdown
+      * [as3-stomp](http://code.google.com/p/as3-stomp/) is an actionscript 3
+        implementation of the STOMP protocol. [more
+        info](http://flexonrails.net/?cat=26)
+
+  - language("haXe")
+    :markdown
+      * [hxStomp](hxstomp|http://code.google.com/p/hxstomp/) is a TCP socket-based
+        Stomp protocol client library written for the [Haxe](http://www.haxe.org)
+        language.
+
+  - language("Java")
+    :markdown
+      * [Gozirra](http://www.germane-software.com/software/Java/Gozirra/)
+
+  - language("Objective-C")
+    :markdown
+      * [objc-stomp](https://github.com/juretta/objc-stomp) is a simple STOMP
+        client based on AsynSocket. [more
+        info](http://dev.coravy.com/wiki/display/OpenSource/Stomp+client+for+Objective-C)
+
+  - language("Perl")
+    :markdown
+      * [Net::STOMP::Client](http://search.cpan.org/~lcons/Net-STOMP-Client-0.9.4/lib/Net/STOMP/Client.pm)
+        Perl module is available on CPAN 
+      * [Net::Stomp](http://search.cpan.org/~ash/Net-Stomp-0.38/lib/Net/Stomp.pm)
+        Perl module is available on CPAN
+
+  - language("PHP")
+    :markdown
+      * [stomp](http://www.php.net/manual/en/book.stomp.php) official php extension
+        available at [pecl](http://pecl.php.net/package/stomp)
+      * [stomp-php](http://stomp.fusesource.org/documentation/php/book.html) is the
+        [FuseSource](http://fusesource.org) PHP client implementation
+      * [Zend\_Queue\_Stomp](http://framework.zend.com/manual/en/zend.queue.stomp.html)
+        for Zend PHP clients
+      * [simplisticstompclient](http://code.google.com/p/simplisticstompclient/) is
+        a simpler STOMP client for PHP
+
+  - language("Pike")
+    :markdown
+      * [Public.Protocols.Stomp](http://modules.gotpike.org/module_info.html?module_id=24)
+
+  - language("Python")
+    :markdown
+      * [stompy](http://www.makemyshow.com/stompy.shtml)
+      * [stomp.py](http://code.google.com/p/stomppy/)
+      * [pyactivemq](http://code.google.com/p/pyactivemq/)
+      * [stomper](http://code.google.com/p/stomper/)
+
+  - language("Ruby and Rails")
+    :markdown
+      * [stomp gem](http://rubyforge.org/projects/stomp/) it's source is at
+        http://gitorious.org/stomp
+      * [activemessaging](http://code.google.com/p/activemessaging/) s an attempt
+        to bring the simplicity and elegance of Rails development to the world of
+        messaging
+
