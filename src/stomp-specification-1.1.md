@@ -1,6 +1,5 @@
 # STOMP Protocol Specification, Version 1.1
 
-* Table of contents
 {:toc}
 
 ## DRAFT STATUS
@@ -25,7 +24,7 @@ header entries in `<key>`:`<value>` format. Each header entry is followed by
 a newline. A blank line indicates the end of the headers and beginning of the
 body. The body is then followed by the null byte (0x00). The examples in
 document will use `^@`, control-@ in ASCII, to represent the null byte. The
-null byte can be optionally be followed by multiple newlines. For more
+null byte can be optionally followed by multiple newlines. For more
 details, on how to parse STOMP frames, see the [Augmented
 BNF](#augmented_bnf) section of this document.
 
@@ -97,7 +96,7 @@ reset.
 
 ### CONNECT or STOMP Frame
 
-Stomp servers should handle a `STOMP` frame the same as a `CONNECT` frame.
+STOMP servers should handle a `STOMP` frame the same as a `CONNECT` frame.
 STOMP 1.1 clients should continue to use the `CONNECT` command to remain
 backward compatible with STOMP 1.0 servers.
 
@@ -251,10 +250,14 @@ Example:
 If the sever cannot successfully create the subscription, for any reason,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
+STOMP servers may optionally support additional headers which allows you to
+further customize the delivery semantics of the subscriptions. Consult your
+server's documentation for details.
+
 #### SUBSCRIBE id Header
 
 You MUST specify an `id` header to uniquely identify the subscription within
-the stomp connection session.  Since a single connection can have multiple open
+the STOMP connection session.  Since a single connection can have multiple open
 subscriptions with a broker, the `id` header allows the client and broker to 
 relate subsequent `ACK` and `UNSUBSCRIBE` frames to the original subscription.
 
@@ -279,18 +282,10 @@ like the `client` ack mode except that the `ACK` frames sent by the client are
 not cumulative. This means that an `ACK` for a subsequent message should
 not cause a previous message to get acknowledged.
 
-#### SUBSCRIBE selector Header
-
-STOMP brokers may optionally support a selector header which allows you to 
-define a filter which is applied on the server side to limit the messages
-that are delivered to the subscription from the destination.  The syntax 
-for the value of the selector header is server specific, so consult your
-server's documentation for details on how to construct a selector.
-
 ### UNSUBSCRIBE
 
 The `UNSUBSCRIBE` frame is used to remove an existing subscription.  Once the subscription is
-removed the stomp connections will no longer receive messages from that destination. 
+removed the STOMP connections will no longer receive messages from that destination. 
 It requires the `id` header matches the `id` value of previous `SUBSCRIBE` operation. 
 Example:
 
@@ -379,7 +374,7 @@ is received.
 
 ## Standard Headers
 
-Some headers may be used, and have special meaning, with most packets
+Some headers may be used, and have special meaning, with most frames.
 
 ### Header content-length
 
@@ -393,10 +388,10 @@ the end of the frame.
 
 ### Header receipt
 
-Any client frame other than `CONNECT` may specify a `receipt` header with an
-arbitrary value. This will cause the server to acknowledge receipt of the
-frame with a `RECEIPT` frame which contains the value of this header as the
-value of the `receipt-id` header in thehe `RECEIPT` packet.
+Any client frame other than `CONNECT` and `DISCONNECT` may specify a `receipt`
+header with an arbitrary value. This will cause the server to acknowledge
+receipt of the frame with a `RECEIPT` frame which contains the value of this
+header as the value of the `receipt-id` header in the `RECEIPT` frame.
 
     SEND
     destination:/queue/a
@@ -462,7 +457,7 @@ the body may contain more detailed information (or may be empty).
 
     ERROR
     receipt-id:message-12345
-    message: malformed packet received
+    message: malformed frame received
     
     The message:
     -----
