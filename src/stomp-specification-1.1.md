@@ -234,9 +234,7 @@ The `SUBSCRIBE` frame is used to register to listen to a given destination. Like
 the `SEND` frame, the `SUBSCRIBE` frame requires a `destination` header indicating
 which destination to subscribe to. Any messages received on the subscription
 will henceforth be delivered as `MESSAGE` frames from the server to the client.
-The `ack` header is to control the message acknowledgement mode. The valid
-values for `ack` are `auto`, `client`, or `client-individual`. If the header
-is not set, it defaults to `auto`.
+The `ack` header controls the message acknowledgement mode.
 
 Example:
 
@@ -250,9 +248,9 @@ Example:
 If the sever cannot successfully create the subscription, for any reason,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
-STOMP servers may optionally support additional headers which allows you to
-further customize the delivery semantics of the subscriptions. Consult your
-server's documentation for details.
+STOMP servers may support additional server specific headers to customize the
+delivery semantics of the subscription. Consult your server's documentation for
+details.
 
 #### SUBSCRIBE id Header
 
@@ -263,11 +261,14 @@ relate subsequent `ACK` and `UNSUBSCRIBE` frames to the original subscription.
 
 #### SUBSCRIBE ack Header
 
+The valid values for the `ack` header are `auto`, `client`, or
+`client-individual`. If the header is not set, it defaults to `auto`.
+
 When the the `ack` mode is `auto`, then the client does not need to send the
 server `ACK` frames for the messages it receives. The server will assume the
 client has received the message as soon as it sends it to the the client. This
-acknowledgment mode can cause messages being transmitted to the client to
-get dropped.
+acknowledgment mode can cause messages being transmitted to the client to get
+dropped.
 
 When the the `ack` mode is `client`, then the client must send the server `ACK`
 frames for the messages it processes. If the connection fails before a client
