@@ -184,14 +184,15 @@ sever should respond with an `ERROR` frame that looks like:
 
 Once the client is connected it may send any of the following frames:
 
-* [`SEND`](#send)
-* [`SUBSCRIBE`](#subscribe)
-* [`UNSUBSCRIBE`](#unsubscribe)
-* [`BEGIN`](#begin)
-* [`COMMIT`](#commit)
-* [`ABORT`](#abort)
-* [`ACK`](#ack)
-* [`DISCONNECT`](#disconnect)
+* [`SEND`](#SEND)
+* [`SUBSCRIBE`](#SUBSCRIBE)
+* [`UNSUBSCRIBE`](#UNSUBSCRIBE)
+* [`BEGIN`](#BEGIN)
+* [`COMMIT`](#COMMIT)
+* [`ABORT`](#ABORT)
+* [`ACK`](#ACK)
+* [`NACK`](#NACK)
+* [`DISCONNECT`](#DISCONNECT)
 
 ## Client Frames
 
@@ -264,10 +265,11 @@ details.
 
 #### SUBSCRIBE id Header
 
-You MUST specify an `id` header to uniquely identify the subscription within
-the STOMP connection session.  Since a single connection can have multiple open
-subscriptions with a broker, the `id` header allows the client and broker to 
-relate subsequent `ACK` and `UNSUBSCRIBE` frames to the original subscription.
+You MUST specify an `id` header to uniquely identify the subscription within the
+STOMP connection session. Since a single connection can have multiple open
+subscriptions with a broker, the `id` header allows the client and broker to
+relate subsequent `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original
+subscription.
 
 #### SUBSCRIBE ack Header
 
@@ -288,10 +290,10 @@ by the client will be treated as a cumulative `ACK`. This means the `ACK` operat
 on the message specified in the `ACK` frame and all messages sent before the
 messages to the subscription.
 
-When the the `ack` mode is `client-individual`, the ack mode operates just
-like the `client` ack mode except that the `ACK` frames sent by the client are
-not cumulative. This means that an `ACK` for a subsequent message should
-not cause a previous message to get acknowledged.
+When the the `ack` mode is `client-individual`, the ack mode operates just like
+the `client` ack mode except that the `ACK` or `NACK` frames sent by the client
+are not cumulative. This means that an `ACK` or `NACK` for a subsequent message
+should not cause a previous message to get acknowledged.
 
 ### UNSUBSCRIBE
 
@@ -308,10 +310,9 @@ Example:
 ### ACK
 
 `ACK` is used to acknowledge consumption of a message from a subscription using
-client acknowledgment. When a client has issued a `SUBSCRIBE` frame with the
-`ack` header set to `client` or `client-individual`  any messages received from 
-that destination will not be considered to have been consumed (by the server) 
-until the message has been acknowledged via an `ACK`.
+`client` or `client-individual` acknowledgment. Any messages received from such
+a subscription will not be considered to have been consumed until the message
+has been acknowledged via an `ACK` or a `NACK`.
 
 `ACK` has two required header, `message-id`, which must contain a value
 matching the `message-id` for the `MESSAGE` being acknowledged and `subscription`,
@@ -326,6 +327,20 @@ acknowledgment should be part of the named transaction.
 
     ^@
 
+### NACK
+
+`NAK` is somehow the opposite of `ACK`. It is used to tell the server that the
+client did not consume the message. The server can then either send it to a
+different client, discard it, or put it in a dead letter queue. The exact
+behavior is server specific.
+
+`NAK` takes exactly the same headers as `ACK`: `message-id` (mandatory),
+`subscription` (mandatory) and `transaction` (optional).
+
+`NAK` applies either to one single message (if the subscription's ack
+mode is `client-individual`) or to all messages sent before and not yet
+`ACK`'ed or `NAK`'ed.
+
 ### BEGIN
 
 `BEGIN` is used to start a transaction. Transactions in this case apply to
@@ -338,8 +353,8 @@ transaction will be handled atomically based on the transaction.
     ^@
 
 The `transaction` header is required, and the transaction identifier will be
-used for `SEND`, `COMMIT`, `ABORT`, and `ACK` frames to bind them to the named
-transaction.
+used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NAK` frames to bind them to the
+named transaction.
 
 Any started transactions which have not been committed will be implicitly aborted
 if the client sends a `DISCONNECT` frame or if the TCP connection fails for
@@ -432,9 +447,9 @@ header as the value of the `receipt-id` header in the `RECEIPT` frame.
 The server will, on occasion, send frames to the client (in additional to the
 initial `CONNECTED` frame). These frames may be one of:
 
-* [`MESSAGE`](#message)
-* [`RECEIPT`](#receipt)
-* [`ERROR`](#error)
+* [`MESSAGE`](#MESSAGE)
+* [`RECEIPT`](#RECEIPT)
+* [`ERROR`](#ERROR)
 
 ### MESSAGE
 
@@ -612,6 +627,7 @@ Backus-Naur Form (BNF) grammar used in the HTTP/1.1
                           | "COMMIT"
                           | "ABORT"
                           | "ACK"
+                          | "NACK"
                           | "DISCONNECT"
                           | "CONNECT"
                           | "STOMP"
