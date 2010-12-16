@@ -20,13 +20,26 @@ the stream. A frame's structure looks like:
     Body^@
 
 The frame starts with a command string, followed by a newline, followed by
-header entries in `<key>`:`<value>` format. Each header entry is followed by
+header entries in `<key>:<value>` format. Each header entry is followed by
 a newline. A blank line indicates the end of the headers and beginning of the
 body. The body is then followed by the null byte (0x00). The examples in
 document will use `^@`, control-@ in ASCII, to represent the null byte. The
 null byte can be optionally followed by multiple newlines. For more
 details, on how to parse STOMP frames, see the [Augmented
 BNF](#augmented_bnf) section of this document.
+
+The headers are encoded in UTF-8. Since the colon and newline characters are
+used to delimit the keys and values, c style string literal escapes are used
+to encode any colons and newlines that may need to be transported within the
+headers. When decoding frame headers, the following transformations should
+get applied:
+
+* `\n` translates to newline (octect 10)
+* `\c` translates to `:`
+* `\\` translates to `\`
+
+Conversely when encoding frame headers, the reverse transformation should be
+applied.
 
 Only the `SEND`, `MESSAGE`, and `ERROR` frames can have a body. All other
 frames MUST not have a body.
@@ -131,12 +144,6 @@ STOMP 1.1 servers MAY set the following headers
 
 * `session` : A session id that uniquely identifies the session.  
 
-<!--
-TODO: is this the reasoning for the session id? The client can use 
-the session id as the base to generate globally unique identifies 
-by appending a incrementing counter.
--->
-
 ## Protocol Negotiation
 
 From STOMP 1.1 and onwards, the `CONNECT` frame MUST include the
@@ -169,6 +176,7 @@ sever should respond with an `ERROR` frame that looks like:
 
     ERROR
     version:1.2,2.1
+    content-type:text/plain
               
     Supported protocol versions are 1.2 2.1^@
 
@@ -195,6 +203,7 @@ message. The body of the `SEND` frame is the message to be sent. For example:
 
     SEND
     destination:/queue/a
+    content-type:text/plain
     
     hello queue a
     ^@
@@ -217,7 +226,8 @@ on the message.
 `SEND` supports a `transaction` header which allows for transaction sends.
 
 `SEND` frames should include a 
-[`content-length`](#Header_content-length) header if a body is present.
+[`content-length`](#Header_content-length) and 
+[`content-type`](#Header_content-type) header if a body is present.
 
 An application may add any arbitrary user defined headers to the `SEND` frame.
 User defined headers are typically used to allow consumers to filter
@@ -387,6 +397,23 @@ the body. The frame still needs to be terminated with a null byte. If a
 `content-length` is not specified, the first null byte encountered signals
 the end of the frame.
 
+### Header content-type
+
+The `SEND`, `MESSAGE` and `ERROR` frames should include a `content-type`
+header if a frame body is present. It should be set to a mime type which
+describes the format of the body to help the receiver of the frame interpret
+it's contents. If the `content-type` header is not set, the receiver should
+consider the body to be a binary blob.
+
+The implied text encoding for mime types starting with `text/` is UTF-8. If
+you are using a text based mime type with a different encoding then you
+should append `;charset=<encoding>` to the mime type. For example,
+`text/html;charset=utf-16` should be used if your sending a html body in
+UTF-16 encoding. The `;charset=<encoding>` should also get appended to any
+non `text/` mime types which can be interpreted as text. A good example of
+this would be a UTF-8 encoded XML. It's `content-type` should get set to
+`application/xml;charset=utf-8`
+
 ### Header receipt
 
 Any client frame other than `CONNECT` and `DISCONNECT` may specify a `receipt`
@@ -399,7 +426,6 @@ header as the value of the `receipt-id` header in the `RECEIPT` frame.
     receipt:message-12345
 
     hello queue a^@
-
 
 ## Server Frames 
 
@@ -421,13 +447,15 @@ the message. The frame body contains the contents of the message:
 
     MESSAGE
     subscription:0
-    destination:/queue/a
     message-id:007
+    destination:/queue/a
+    content-type:text/plain
     
     hello queue a^@
 
 `MESSAGE` frames should include a 
-[`content-length`](#Header_content-length) header if a body is present.
+[`content-length`](#Header_content-length) and 
+[`content-type`](#Header_content-type) header if a body is present.
 
 `MESSAGE` frames will also include all user defined headers that were present
 when the message was sent to the destination in addition to headers that
@@ -458,6 +486,7 @@ the body may contain more detailed information (or may be empty).
 
     ERROR
     receipt-id:message-12345
+    content-type:text/plain
     message: malformed frame received
     
     The message:
@@ -481,7 +510,8 @@ frame SHOULD set the `receipt-id` header to match the value of the `receipt`
 header of the frame which the error is related to.
 
 `ERROR` frames should include a 
-[`content-length`](#Header_content-length) header if a body is present.
+[`content-length`](#Header_content-length) and 
+[`content-type`](#Header_content-type) header if a body is present.
 
 ## Heart-beating
 
