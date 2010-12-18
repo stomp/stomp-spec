@@ -338,17 +338,17 @@ acknowledgment should be part of the named transaction.
 
 ### NACK
 
-`NAK` is somehow the opposite of `ACK`. It is used to tell the server that the
+`NACK` is somehow the opposite of `ACK`. It is used to tell the server that the
 client did not consume the message. The server can then either send it to a
 different client, discard it, or put it in a dead letter queue. The exact
 behavior is server specific.
 
-`NAK` takes exactly the same headers as `ACK`: `message-id` (mandatory),
+`NACK` takes exactly the same headers as `ACK`: `message-id` (mandatory),
 `subscription` (mandatory) and `transaction` (optional).
 
-`NAK` applies either to one single message (if the subscription's ack
+`NACK` applies either to one single message (if the subscription's ack
 mode is `client-individual`) or to all messages sent before and not yet
-`ACK`'ed or `NAK`'ed.
+`ACK`'ed or `NACK`'ed.
 
 ### BEGIN
 
@@ -362,7 +362,7 @@ transaction will be handled atomically based on the transaction.
     ^@
 
 The `transaction` header is required, and the transaction identifier will be
-used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NAK` frames to bind them to the
+used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NACK` frames to bind them to the
 named transaction.
 
 Any started transactions which have not been committed will be implicitly aborted
