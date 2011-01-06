@@ -396,16 +396,20 @@ abort\!
 
 ### DISCONNECT
 
-`DISCONNECT` does a graceful disconnect from the server. It is quite polite to
-use this before closing the socket.
+A client can disconnect from the server at anytime by closing his socket but
+but there is no guarantee that frames sent previously have been accepted
+for processing by the server.  To do a graceful shutdown where the client
+is assured that all previous frames have been received by the server, the
+client should send a `DISCONNECT` frame with a `receipt` header set, then
+wait for the `RECEIPT` frame response to the `DISCONNECT` and then 
+the client should close the socket.
 
     DISCONNECT
-
+    receipt:77
     ^@
 
-A `DISCONNECT` frame should not include a `receipt` header since the server
-will not send the client any more frames once the `DISCONNECT`
-is received.
+Clients MUST not send any more frames on a connection after the 
+`DISCONNECT` frame is sent.
 
 ## Standard Headers
 
@@ -440,7 +444,7 @@ this would be a UTF-8 encoded XML. It's `content-type` should get set to
 
 ### Header receipt
 
-Any client frame other than `CONNECT` and `DISCONNECT` may specify a `receipt`
+Any client frame other than `CONNECT` may specify a `receipt`
 header with an arbitrary value. This will cause the server to acknowledge
 receipt of the frame with a `RECEIPT` frame which contains the value of this
 header as the value of the `receipt-id` header in the `RECEIPT` frame.
