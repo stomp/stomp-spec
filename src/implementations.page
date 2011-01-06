@@ -117,9 +117,9 @@ table.clients
 
   - language("Perl")
     :markdown
-      * [Net::STOMP::Client](http://search.cpan.org/~lcons/Net-STOMP-Client-0.9.4/lib/Net/STOMP/Client.pm)
+      * [Net::STOMP::Client](http://search.cpan.org/dist/Net-STOMP-Client/)
         Perl module is available on CPAN 
-      * [Net::Stomp](http://search.cpan.org/~ash/Net-Stomp-0.38/lib/Net/Stomp.pm)
+      * [Net::Stomp](http://search.cpan.org/dist/Net-Stomp/)
         Perl module is available on CPAN
 
   - language("PHP")
