@@ -7,6 +7,15 @@
 Version 1.1 of the specification is still being developed. This is only
 a draft document.
 
+## Overview
+
+STOMP is a simple interoperable wire format designed for asynchronous
+message passing between clients via mediating servers.
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in RFC 2119.
+
 ## STOMP Frames
 
 STOMP is designed to work best over a stream based communications transport
