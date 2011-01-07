@@ -1,6 +1,6 @@
 # STOMP Protocol Specification, Version 1.1
 
-{:toc}
+{:toc:2-5}
 
 ## DRAFT STATUS
 
