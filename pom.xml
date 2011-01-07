@@ -109,6 +109,13 @@
         <configuration>
           <warSourceDirectory>${basedir}/src</warSourceDirectory>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.fusesource.scalamd</groupId>
+            <artifactId>scalamd</artifactId>
+            <version>${scalamd-version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
       
       <plugin>
