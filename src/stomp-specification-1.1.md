@@ -390,7 +390,7 @@ commit\!
 
 
 The `transaction` header is required and must specify the id of the transaction to
-commit\!
+abort\!
 
 ### DISCONNECT
 
