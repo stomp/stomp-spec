@@ -54,7 +54,7 @@ frames MUST not have a body.
 The STOMP 1.0 specification included many example frames with padding in the
 headers and many servers and clients were implemented to trim or pad header
 values. This causes problems if applications want to send headers that should
-not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad or
+not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad
 headers with spaces.
 
 To prevent malicious clients from exploiting memory allocation in a 
