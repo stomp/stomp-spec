@@ -130,8 +130,11 @@ STOMP 1.1 clients MUST set the following headers:
 * `accept-version` : The versions of the STOMP protocol the client supports.
   See [Protocol Negotiation](#protocol_negotiation) for more details.
 
-* `host` : The host name that the socket was established against. This allows
-  the server to implement virtual hosts.
+* `host` : The name of a virtual host that the client wishes to connect to.
+  It is recommended clients set this to the host name that the socket
+  was established against, or to any name of their choosing. If this
+  header does not match a known virtual host, servers supporting virtual
+  hosting MAY select a default virtual host or reject the connection.
 
 STOMP 1.1 clients MAY set the following headers:
 
