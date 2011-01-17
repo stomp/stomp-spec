@@ -45,6 +45,7 @@ frame headers, the following transformations MUST get applied:
 * `\c` translates to `:`
 * `\\` translates to `\`
 
+Undefined escape sequences such as '\r' MUST be treated as a fatal protocol error.
 Conversely when encoding frame headers, the reverse transformation MUST be
 applied.
 
@@ -445,6 +446,10 @@ UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
 non `text/` mime types which can be interpreted as text. A good example of
 this would be a UTF-8 encoded XML. It's `content-type` SHOULD get set to
 `application/xml;charset=utf-8`
+
+All STOMP clients and servers MUST support UTF-8 encoding and decoding.  Therefore, 
+for maximum interoperability in a heterogeneous computing environment, it is
+RECOMMENDED that text based content be encoded with UTF-8.
 
 ### Header receipt
 
