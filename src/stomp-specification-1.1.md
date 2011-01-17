@@ -55,7 +55,7 @@ frames MUST NOT have a body.
 The STOMP 1.0 specification included many example frames with padding in the
 headers and many servers and clients were implemented to trim or pad header
 values. This causes problems if applications want to send headers that SHOULD
-not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad or
+not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad
 headers with spaces.
 
 To prevent malicious clients from exploiting memory allocation in a 
@@ -131,8 +131,11 @@ STOMP 1.1 clients MUST set the following headers:
 * `accept-version` : The versions of the STOMP protocol the client supports.
   See [Protocol Negotiation](#protocol_negotiation) for more details.
 
-* `host` : The host name that the socket was established against. This allows
-  the server to implement virtual hosts.
+* `host` : The name of a virtual host that the client wishes to connect to.
+  It is recommended clients set this to the host name that the socket
+  was established against, or to any name of their choosing. If this
+  header does not match a known virtual host, servers supporting virtual
+  hosting MAY select a default virtual host or reject the connection.
 
 STOMP 1.1 clients MAY set the following headers:
 
