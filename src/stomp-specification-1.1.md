@@ -39,43 +39,43 @@ BNF](#augmented_bnf) section of this document.
 The headers are encoded in UTF-8. Since the colon and newline characters are
 used to delimit the keys and values, c style string literal escapes are used
 to encode any colons and newlines that are included within the headers. When decoding 
-frame headers, the following transformations should get applied:
+frame headers, the following transformations MUST get applied:
 
 * `\n` translates to newline (octect 10)
 * `\c` translates to `:`
 * `\\` translates to `\`
 
-Conversely when encoding frame headers, the reverse transformation should be
+Conversely when encoding frame headers, the reverse transformation MUST be
 applied.
 
 Only the `SEND`, `MESSAGE`, and `ERROR` frames can have a body. All other
-frames MUST not have a body.
+frames MUST NOT have a body.
 
 The STOMP 1.0 specification included many example frames with padding in the
 headers and many servers and clients were implemented to trim or pad header
-values. This causes problems if applications want to send headers that should
+values. This causes problems if applications want to send headers that SHOULD
 not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad or
 headers with spaces.
 
 To prevent malicious clients from exploiting memory allocation in a 
-server, servers may place maximum limits on:
+server, servers MAY place maximum limits on:
 
 * the number of frame headers allowed in a single frame
 * the maximum length of header lines
 * the maximum size of a frame body
 
-If these limits are exceeded the server should send the client an `ERROR`
+If these limits are exceeded the server SHOULD send the client an `ERROR`
 frame and disconnect the client.
 
 ### Repeated Header Entries
 
 Since messaging systems can be organized in store and forward topologies,
-similar to SMTP, a message may traverse several messaging servers before
-reaching a consumer. The intermediate server may 'update' header values in the
+similar to SMTP, a message MAY traverse several messaging servers before
+reaching a consumer. The intermediate server MAY 'update' header values in the
 message by prepending headers to the message.
 
 If the client receives repeated frame header entries, only the first header
-entry should be used as the value of header entry. Subsequent values are only
+entry SHOULD be used as the value of header entry. Subsequent values are only
 use to maintain a history of state changes of the header. For example, if the
 client receives:
 
@@ -106,18 +106,18 @@ If the server accepts the connection attempt it will respond with a
     
     ^@
 
-The sever may reject any connection attempt. The server SHOULD respond back
+The sever MAY reject any connection attempt. The server SHOULD respond back
 with an `ERROR` frame listing why the connection was rejected and then close the 
-connection. Since STOMP servers must support clients which rapidly connect and 
+connection. Since STOMP servers MUST support clients which rapidly connect and 
 disconnect, a server will likely only allow closed
 connections to linger for short time before the connection is reset. This means
-that a client may not fully receive the `ERROR` frame before the socket is
+that a client MAY NOT fully receive the `ERROR` frame before the socket is
 reset.
 
 ### CONNECT or STOMP Frame
 
-STOMP servers should handle a `STOMP` frame in the same manner as a `CONNECT` frame.
-STOMP 1.1 clients should continue to use the `CONNECT` command to remain
+STOMP servers SHOULD handle a `STOMP` frame in the same manner as a `CONNECT` frame.
+STOMP 1.1 clients SHOULD continue to use the `CONNECT` command to remain
 backward compatible with STOMP 1.0 servers.
 
 Clients that use the `STOMP` frame instead of the `CONNECT` frame will only be
@@ -154,7 +154,7 @@ STOMP 1.1 servers MAY set the following headers:
 ## Protocol Negotiation
 
 From STOMP 1.1 and onwards, the `CONNECT` frame MUST include the
-`accept-version` header. It should be set to a comma separated list of
+`accept-version` header. It SHOULD be set to a comma separated list of
 incrementing STOMP protocol versions that the client supports. If the
 `accept-version` header is missing, it means that the client only supports
 version 1.0 of the protocol.
@@ -179,7 +179,7 @@ it has in common with the client:
     ^@
 
 If the client and server do not share any common protocol versions, then the
-sever should respond with an `ERROR` frame similar to:
+sever SHOULD respond with an `ERROR` frame similar to:
 
     ERROR
     version:1.2,2.1
@@ -189,7 +189,7 @@ sever should respond with an `ERROR` frame similar to:
 
 ## Once Connected
 
-Once the client is connected it may send any of the following frames:
+Once the client is connected it MAY send any of the following frames:
 
 * [`SEND`](#SEND)
 * [`SUBSCRIBE`](#SUBSCRIBE)
@@ -206,7 +206,7 @@ Once the client is connected it may send any of the following frames:
 ### SEND
 
 The `SEND` frame sends a message to a destination in the messaging system. It
-has one required header, `destination`, which indicates where to send the
+has one REQUIRED header, `destination`, which indicates where to send the
 message. The body of the `SEND` frame is the message to be sent. For example:
 
     SEND
@@ -232,11 +232,11 @@ such as the `transaction` header or other server specific message headers.
 
 `SEND` supports a `transaction` header which allows for transactional sends.
 
-`SEND` frames should include a 
+`SEND` frames SHOULD include a 
 [`content-length`](#Header_content-length) header and a 
 [`content-type`](#Header_content-type) header if a body is present.
 
-An application may add any arbitrary user defined headers to the `SEND` frame.
+An application MAY add any arbitrary user defined headers to the `SEND` frame.
 User defined headers are typically used to allow consumers to filter
 messages based on the application defined headers using a selector 
 on a `SUBSCRIBE` frame. The user defined headers MUST be passed through
@@ -266,13 +266,13 @@ Example:
 If the sever cannot successfully create the subscription, 
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
-STOMP servers may support additional server specific headers to customize the
+STOMP servers MAY support additional server specific headers to customize the
 delivery semantics of the subscription. Consult your server's documentation for
 details.
 
 #### SUBSCRIBE id Header
 
-An `id` header must be included in the frame to uniquely identify the subscription within the
+An `id` header MUST be included in the frame to uniquely identify the subscription within the
 STOMP connection session. Since a single connection can have multiple open
 subscriptions with a broker, the `id` header allows the client and broker to
 relate subsequent `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original
@@ -289,10 +289,10 @@ client has received the message as soon as it sends it to the the client. This
 acknowledgment mode can cause messages being transmitted to the client to get
 dropped.
 
-When the the `ack` mode is `client`, then the client must send the server `ACK`
+When the the `ack` mode is `client`, then the client MUST send the server `ACK`
 frames for the messages it processes. If the connection fails before a client
 sends an `ACK` for the message the server will assume the message has not been
-processed and may redeliver the message to another client. The `ACK` frames sent
+processed and MAY redeliver the message to another client. The `ACK` frames sent
 by the client will be treated as a cumulative `ACK`. This means the `ACK` operates
 on the message specified in the `ACK` frame and all messages sent before the
 messages to the subscription.
@@ -300,7 +300,7 @@ messages to the subscription.
 When the the `ack` mode is `client-individual`, the ack mode operates just like
 the `client` ack mode except that the `ACK` or `NACK` frames sent by the client
 are not cumulative. This means that an `ACK` or `NACK` for a subsequent message
-should not cause a previous message to get acknowledged.
+SHOULD NOT cause a previous message to get acknowledged.
 
 ### UNSUBSCRIBE
 
@@ -321,11 +321,11 @@ Example:
 a subscription will not be considered to have been consumed until the message
 has been acknowledged via an `ACK` or a `NACK`.
 
-`ACK` has two required headers: `message-id`, which must contain a value
+`ACK` has two REQUIRED headers: `message-id`, which MUST contain a value
 matching the `message-id` for the `MESSAGE` being acknowledged and `subscription`,
-which must be set to match the value of the subscription's `id` header. 
-Optionally, a `transaction` header may be specified, indicating that the message
-acknowledgment should be part of the named transaction.
+which MUST be set to match the value of the subscription's `id` header. 
+Optionally, a `transaction` header MAY be specified, indicating that the message
+acknowledgment SHOULD be part of the named transaction.
 
     ACK
     subscription:0
@@ -342,7 +342,7 @@ different client, discard it, or put it in a dead letter queue. The exact
 behavior is server specific.
 
 `NACK` takes the same headers as `ACK`: `message-id` (mandatory),
-`subscription` (mandatory) and `transaction` (optional).
+`subscription` (mandatory) and `transaction` (OPTIONAL).
 
 `NACK` applies either to one single message (if the subscription's ack
 mode is `client-individual`) or to all messages sent before and not yet
@@ -359,7 +359,7 @@ transaction will be handled atomically based on the transaction.
 
     ^@
 
-The `transaction` header is required, and the transaction identifier will be
+The `transaction` header is REQUIRED, and the transaction identifier will be
 used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NACK` frames to bind them to the
 named transaction.
 
@@ -376,7 +376,7 @@ any reason.
 
     ^@
 
-The `transaction` header is required and must specify the id of the transaction to
+The `transaction` header is REQUIRED and MUST specify the id of the transaction to
 commit\!
 
 ### ABORT
@@ -389,7 +389,7 @@ commit\!
     ^@
 
 
-The `transaction` header is required and must specify the id of the transaction to
+The `transaction` header is REQUIRED and MUST specify the id of the transaction to
 abort\!
 
 ### DISCONNECT
@@ -397,7 +397,7 @@ abort\!
 A client can disconnect from the server at anytime by closing his socket but
 but there is no guarantee that the previously sent frames have been received
 by the server. To do a graceful shutdown, where the client is assured that all
-previous frames have been received by the server, the client should:
+previous frames have been received by the server, the client SHOULD:
 
 1. send a `DISCONNECT` frame with a `receipt` header set.  Example:
 
@@ -413,42 +413,42 @@ previous frames have been received by the server, the client should:
         
 3. close the socket.
 
-Clients MUST not send any more frames after the `DISCONNECT` frame is sent.
+Clients MUST NOT send any more frames after the `DISCONNECT` frame is sent.
 
 ## Standard Headers
 
-Some headers may be used, and have special meaning, with most frames.
+Some headers MAY be used, and have special meaning, with most frames.
 
 ### Header content-length
 
-The `SEND`, `MESSAGE` and `ERROR` frames should include a `content-length`
+The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-length`
 header if a frame body is present. The header is a byte count for the length
 of the message body. If a `content-length` header is included, this number of
-bytes must be read, regardless of whether or not there are null characters in
+bytes MUST be read, regardless of whether or not there are null characters in
 the body. The frame still needs to be terminated with a null byte. If a
 `content-length` is not specified, the first null byte encountered signals
 the end of the frame.
 
 ### Header content-type
 
-The `SEND`, `MESSAGE` and `ERROR` frames should include a `content-type`
-header if a frame body is present. It should be set to a mime type which
+The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-type`
+header if a frame body is present. It SHOULD be set to a mime type which
 describes the format of the body to help the receiver of the frame interpret
-it's contents. If the `content-type` header is not set, the receiver should
+it's contents. If the `content-type` header is not set, the receiver SHOULD
 consider the body to be a binary blob.
 
 The implied text encoding for mime types starting with `text/` is UTF-8. If
 you are using a text based mime type with a different encoding then you
-should append `;charset=<encoding>` to the mime type. For example,
-`text/html;charset=utf-16` should be used if your sending an html body in
-UTF-16 encoding. The `;charset=<encoding>` should also get appended to any
+SHOULD append `;charset=<encoding>` to the mime type. For example,
+`text/html;charset=utf-16` SHOULD be used if your sending an html body in
+UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
 non `text/` mime types which can be interpreted as text. A good example of
-this would be a UTF-8 encoded XML. It's `content-type` should get set to
+this would be a UTF-8 encoded XML. It's `content-type` SHOULD get set to
 `application/xml;charset=utf-8`
 
 ### Header receipt
 
-Any client frame other than `CONNECT` may specify a `receipt`
+Any client frame other than `CONNECT` MAY specify a `receipt`
 header with an arbitrary value. This will cause the server to acknowledge
 receipt of the frame with a `RECEIPT` frame which contains the value of this
 header as the value of the `receipt-id` header in the `RECEIPT` frame.
@@ -462,7 +462,7 @@ header as the value of the `receipt-id` header in the `RECEIPT` frame.
 ## Server Frames 
 
 The server will, on occasion, send frames to the client (in addition to the
-initial `CONNECTED` frame). These frames may be one of:
+initial `CONNECTED` frame). These frames MAY be one of:
 
 * [`MESSAGE`](#MESSAGE)
 * [`RECEIPT`](#RECEIPT)
@@ -485,13 +485,13 @@ the message. The frame body contains the contents of the message:
     
     hello queue a^@
 
-`MESSAGE` frames should include a 
+`MESSAGE` frames SHOULD include a 
 [`content-length`](#Header_content-length) header and a 
 [`content-type`](#Header_content-type) header if a body is present.
 
 `MESSAGE` frames will also include all user defined headers that were present
 when the message was sent to the destination in addition to the server specific headers 
-that may get added to the frame.  Consult your server's documentation to find out the 
+that MAY get added to the frame.  Consult your server's documentation to find out the 
 server specific headers that it adds to messages.
 
 ### RECEIPT
@@ -511,9 +511,9 @@ The receipt body will be empty.
 
 ### ERROR
 
-The server may send `ERROR` frames if something goes wrong. The error frame
-should contain a `message` header with a short description of the error, and
-the body may contain more detailed information (or may be empty).
+The server MAY send `ERROR` frames if something goes wrong. The error frame
+SHOULD contain a `message` header with a short description of the error, and
+the body MAY contain more detailed information (or MAY be empty).
 
     ERROR
     receipt-id:message-12345
@@ -529,18 +529,18 @@ the body may contain more detailed information (or may be empty).
     
     Hello queue a!
     -----
-    Did not contain a destination header, which is required 
+    Did not contain a destination header, which is REQUIRED 
     for message propagation.
     ^@
 
 
 If the error is related to specific frame sent from the client, the server
-should add additional headers to help identify the original frame that caused
+SHOULD add additional headers to help identify the original frame that caused
 the error. For example, if the frame included a receipt header, the `ERROR`
 frame SHOULD set the `receipt-id` header to match the value of the `receipt`
 header of the frame which the error is related to.
 
-`ERROR` frames should include a 
+`ERROR` frames SHOULD include a 
 [`content-length`](#Header_content-length) head and a
 [`content-type`](#Header_content-type) header if a body is present.
 
@@ -573,7 +573,7 @@ to get (incoming heart-beats):
 
 * otherwise it is the desired number of milliseconds between heart-beats
 
-The `heart-beat` header is optional. A missing `heart-beat` header MUST be
+The `heart-beat` header is OPTIONAL. A missing `heart-beat` header MUST be
 treated the same way as a "heart-beat:0,0" header, that is: the party cannot
 send and does not want to receive heart-beats.
 
