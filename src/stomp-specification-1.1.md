@@ -33,8 +33,8 @@ entry is terminated by a newline. A blank line indicates the end of the headers
 and the beginning of the body. The body is then followed by the null byte (0x00). 
 The examples in this document will use `^@`, control-@ in ASCII, to represent the 
 null byte. The null byte can be optionally followed by multiple newlines. For more
-details, on how to parse STOMP frames, see the [Augmented
-BNF](#augmented_bnf) section of this document.
+details, on how to parse STOMP frames, see the [Augmented BNF](#Augmented_BNF) section 
+of this document.
 
 The headers are encoded in UTF-8. Since the colon and newline characters are
 used to delimit the keys and values, c style string literal escapes are used
