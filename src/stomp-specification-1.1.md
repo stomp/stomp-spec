@@ -638,7 +638,7 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
     frame               = command NL
                           *( header NL )
                           NL
-                          *OCTECT
+                          *OCTET
                           NULL
                           *( NL )
     
