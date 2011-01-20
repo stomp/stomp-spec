@@ -39,7 +39,7 @@ of this document.
 The headers are encoded in UTF-8. Since the colon and newline characters are
 used to delimit the keys and values, c style string literal escapes are used
 to encode any colons and newlines that are included within the headers. When decoding 
-frame headers, the following transformations MUST get applied:
+frame headers, the following transformations MUST be applied:
 
 * `\n` translates to newline (octect 10)
 * `\c` translates to `:`
