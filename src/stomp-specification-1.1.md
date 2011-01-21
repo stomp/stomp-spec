@@ -632,18 +632,18 @@ A STOMP session can be more formally described using the
 Backus-Naur Form (BNF) grammar used in HTTP/1.1
 [rfc2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.1).
 
-    NL                  = <US-ASCII new line (line feed) (octect 10)>
+    LF                  = <US-ASCII new line (line feed) (octect 10)>
     OCTET               = <any 8-bit sequence of data>
     NULL                = <octect 0>
     
     frame-stream        = 1*frame
     
-    frame               = command NL
-                          *( header NL )
-                          NL
+    frame               = command LF
+                          *( header LF )
+                          LF
                           *OCTET
                           NULL
-                          *( NL )
+                          *( LF )
     
     command             = client-command | server-command
     
@@ -665,8 +665,8 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
                           | "ERROR"
     
     header              = header-name ":" header-value
-    header-name         = 1*<any OCTET except NL or ":">
-    header-value        = *<any OCTET except NL>
+    header-name         = 1*<any OCTET except LF or ":">
+    header-value        = *<any OCTET except LF>
     
 ## License
 
