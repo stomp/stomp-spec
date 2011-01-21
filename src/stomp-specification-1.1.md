@@ -18,8 +18,10 @@ document are to be interpreted as described in RFC 2119.
 
 ## STOMP Frames
 
-The client and server will communicate using STOMP frames sent over
-the stream. A frame's structure looks like:
+STOMP is a frame based protocol which assumes a reliable 2-way streaming
+network protocol (such as TCP) underneath. The client and server will
+communicate using STOMP frames sent over the stream. A frame's structure
+looks like:
 
     command
     header1:value1
@@ -27,27 +29,27 @@ the stream. A frame's structure looks like:
     
     Body^@
 
-The frame starts with a command string terminated by a newline. Following the 
-command are one or more header entries in `<key>:<value>` format. Each header 
-entry is terminated by a newline. A blank line indicates the end of the headers 
-and the beginning of the body. The body is then followed by the null byte (0x00). 
-The examples in this document will use `^@`, control-@ in ASCII, to represent the 
-null byte. The null byte can be optionally followed by multiple newlines. For more
-details, on how to parse STOMP frames, see the [Augmented BNF](#Augmented_BNF) section 
-of this document.
+The frame starts with a command string terminated by a newline. Following the
+command are one or more header entries in `<key>:<value>` format. Each header
+entry is terminated by a newline. A blank line indicates the end of the
+headers and the beginning of the body. The body is then followed by the null
+byte (0x00). The examples in this document will use `^@`, control-@ in ASCII,
+to represent the null byte. The null byte can be optionally followed by
+multiple newlines. For more details, on how to parse STOMP frames, see the
+[Augmented BNF](#Augmented_BNF) section of this document.
 
 The headers are encoded in UTF-8. Since the colon and newline characters are
 used to delimit the keys and values, c style string literal escapes are used
-to encode any colons and newlines that are included within the headers. When decoding 
-frame headers, the following transformations MUST be applied:
+to encode any colons and newlines that are included within the headers. When
+decoding frame headers, the following transformations MUST be applied:
 
 * `\n` translates to newline (octect 10)
 * `\c` translates to `:`
 * `\\` translates to `\`
 
-Undefined escape sequences such as '\r' MUST be treated as a fatal protocol error.
-Conversely when encoding frame headers, the reverse transformation MUST be
-applied.
+Undefined escape sequences such as '\r' MUST be treated as a fatal protocol
+error. Conversely when encoding frame headers, the reverse transformation
+MUST be applied.
 
 Only the `SEND`, `MESSAGE`, and `ERROR` frames can have a body. All other
 frames MUST NOT have a body.
@@ -71,9 +73,10 @@ frame and disconnect the client.
 ### Repeated Header Entries
 
 Since messaging systems can be organized in store and forward topologies,
-similar to SMTP, a message MAY traverse several messaging servers before
-reaching a consumer. The intermediate server MAY 'update' header values in the
-message by prepending headers to the message.
+similar to SMTP, a message may traverse several messaging servers before
+reaching a consumer. The intermediate server MAY 'update' header values by
+either prepending headers to the message or modifying a header in-place in
+the message.
 
 If the client receives repeated frame header entries, only the first header
 entry SHOULD be used as the value of header entry. Subsequent values are only
@@ -107,22 +110,21 @@ If the server accepts the connection attempt it will respond with a
     
     ^@
 
-The sever MAY reject any connection attempt. The server SHOULD respond back
-with an `ERROR` frame listing why the connection was rejected and then close the 
-connection. Since STOMP servers MUST support clients which rapidly connect and 
-disconnect, a server will likely only allow closed
-connections to linger for short time before the connection is reset. This means
-that a client MAY NOT fully receive the `ERROR` frame before the socket is
-reset.
+The sever can reject any connection attempt. The server SHOULD respond back
+with an `ERROR` frame listing why the connection was rejected and then close
+the connection. STOMP servers MUST support clients which rapidly connect and
+disconnect. This implies a server will likely only allow closed connections
+to linger for short time before the connection is reset. This means that a
+client may not receive the `ERROR` frame before the socket is reset.
 
 ### CONNECT or STOMP Frame
 
-STOMP servers SHOULD handle a `STOMP` frame in the same manner as a `CONNECT` frame.
-STOMP 1.1 clients SHOULD continue to use the `CONNECT` command to remain
-backward compatible with STOMP 1.0 servers.
+STOMP servers SHOULD handle a `STOMP` frame in the same manner as a `CONNECT`
+frame. STOMP 1.1 clients SHOULD continue to use the `CONNECT` command to
+remain backward compatible with STOMP 1.0 servers.
 
-Clients that use the `STOMP` frame instead of the `CONNECT` frame will only be
-able to connect to STOMP 1.1 servers but the advantage is that a protocol
+Clients that use the `STOMP` frame instead of the `CONNECT` frame will only
+be able to connect to STOMP 1.1 servers but the advantage is that a protocol
 sniffer/discriminator will be able to differentiate the STOMP connection from
 an HTTP connection.
 
@@ -193,7 +195,8 @@ sever SHOULD respond with an `ERROR` frame similar to:
 
 ## Once Connected
 
-Once the client is connected it MAY send any of the following frames:
+A client MAY send a frame not in this list, but for such a frame a
+STOMP 1.1 server MAY respond with an ERROR frame.
 
 * [`SEND`](#SEND)
 * [`SUBSCRIBE`](#SUBSCRIBE)
@@ -225,10 +228,10 @@ topic delivery semantics are the most popular in messing servers, STOMP does
 not define what the delivery semantics of destinations should be. The
 delivery, or "message exchange", semantics of destinations can vary from
 server to server and even from destination to destination. This allows
-servers to be creative with the semantics that they can support
-with STOMP. You should consult your STOMP server's documentation to find out
-how to construct a destination name which gives you the delivery semantics
-that your application needs.
+servers to be creative with the semantics that they can support with STOMP.
+You should consult your STOMP server's documentation to find out how to
+construct a destination name which gives you the delivery semantics that your
+application needs.
 
 The reliability semantics of the message are also server specific and will 
 depend on the destination value being used and the other message headers 
@@ -251,12 +254,12 @@ the server MUST send the client an `ERROR` frame and disconnect the client.
 
 ### SUBSCRIBE
 
-The `SUBSCRIBE` frame is used to register to listen to a given destination. Like
-the `SEND` frame, the `SUBSCRIBE` frame requires a `destination` header indicating
-the destination to which the client wants to subscribe. Any messages received on the 
-subscribed destination will henceforth be delivered as `MESSAGE` frames from the 
-server to the client.
-The `ack` header controls the message acknowledgement mode.
+The `SUBSCRIBE` frame is used to register to listen to a given destination.
+Like the `SEND` frame, the `SUBSCRIBE` frame requires a `destination` header
+indicating the destination to which the client wants to subscribe. Any
+messages received on the subscribed destination will henceforth be delivered
+as `MESSAGE` frames from the server to the client. The `ack` header controls
+the message acknowledgement mode.
 
 Example:
 
@@ -289,29 +292,28 @@ The valid values for the `ack` header are `auto`, `client`, or
 
 When the the `ack` mode is `auto`, then the client does not need to send the
 server `ACK` frames for the messages it receives. The server will assume the
-client has received the message as soon as it sends it to the the client. This
-acknowledgment mode can cause messages being transmitted to the client to get
-dropped.
+client has received the message as soon as it sends it to the the client.
+This acknowledgment mode can cause messages being transmitted to the client
+to get dropped.
 
-When the the `ack` mode is `client`, then the client MUST send the server `ACK`
-frames for the messages it processes. If the connection fails before a client
-sends an `ACK` for the message the server will assume the message has not been
-processed and MAY redeliver the message to another client. The `ACK` frames sent
-by the client will be treated as a cumulative `ACK`. This means the `ACK` operates
-on the message specified in the `ACK` frame and all messages sent before the
-messages to the subscription.
+When the the `ack` mode is `client`, then the client MUST send the server
+`ACK` frames for the messages it processes. If the connection fails before a
+client sends an `ACK` for the message the server will assume the message has
+not been processed and MAY redeliver the message to another client. The `ACK`
+frames sent by the client will be treated as a cumulative `ACK`. This means the `ACK` operates on the message specified in the `ACK` frame
+and all messages sent to the subscription before the `ACK`-ed message.
 
-When the the `ack` mode is `client-individual`, the ack mode operates just like
-the `client` ack mode except that the `ACK` or `NACK` frames sent by the client
-are not cumulative. This means that an `ACK` or `NACK` for a subsequent message
-MUST NOT cause a previous message to get acknowledged.
+When the the `ack` mode is `client-individual`, the ack mode operates just
+like the `client` ack mode except that the `ACK` or `NACK` frames sent by the
+client are not cumulative. This means that an `ACK` or `NACK` for a
+subsequent message MUST NOT cause a previous message to get acknowledged.
 
 ### UNSUBSCRIBE
 
-The `UNSUBSCRIBE` frame is used to remove an existing subscription.  Once the subscription is
-removed the STOMP connections will no longer receive messages from that destination. 
-It requires that the `id` header matches the `id` value of previous `SUBSCRIBE` operation. 
-Example:
+The `UNSUBSCRIBE` frame is used to remove an existing subscription. Once the
+subscription is removed the STOMP connections will no longer receive messages
+from that destination. It requires that the `id` header matches the `id`
+value of previous `SUBSCRIBE` operation. Example:
 
     UNSUBSCRIBE
     id:0
@@ -320,16 +322,16 @@ Example:
 
 ### ACK
 
-`ACK` is used to acknowledge consumption of a message from a subscription using
-`client` or `client-individual` acknowledgment. Any messages received from such
-a subscription will not be considered to have been consumed until the message
-has been acknowledged via an `ACK` or a `NACK`.
+`ACK` is used to acknowledge consumption of a message from a subscription
+using `client` or `client-individual` acknowledgment. Any messages received
+from such a subscription will not be considered to have been consumed until
+the message has been acknowledged via an `ACK` or a `NACK`.
 
 `ACK` has two REQUIRED headers: `message-id`, which MUST contain a value
-matching the `message-id` for the `MESSAGE` being acknowledged and `subscription`,
-which MUST be set to match the value of the subscription's `id` header. 
-Optionally, a `transaction` header MAY be specified, indicating that the message
-acknowledgment SHOULD be part of the named transaction.
+matching the `message-id` for the `MESSAGE` being acknowledged and
+`subscription`, which MUST be set to match the value of the subscription's
+`id` header. Optionally, a `transaction` header MAY be specified, indicating
+that the message acknowledgment SHOULD be part of the named transaction.
 
     ACK
     subscription:0
@@ -341,16 +343,16 @@ acknowledgment SHOULD be part of the named transaction.
 ### NACK
 
 `NACK` is the opposite of `ACK`. It is used to tell the server that the
-client did not consume the message. The server can then either send the message to a
-different client, discard it, or put it in a dead letter queue. The exact
-behavior is server specific.
+client did not consume the message. The server can then either send the
+message to a different client, discard it, or put it in a dead letter queue.
+The exact behavior is server specific.
 
 `NACK` takes the same headers as `ACK`: `message-id` (mandatory),
 `subscription` (mandatory) and `transaction` (OPTIONAL).
 
-`NACK` applies either to one single message (if the subscription's ack
-mode is `client-individual`) or to all messages sent before and not yet
-`ACK`'ed or `NACK`'ed.
+`NACK` applies either to one single message (if the subscription's ack mode
+is `client-individual`) or to all messages sent before and not yet `ACK`'ed
+or `NACK`'ed.
 
 ### BEGIN
 
@@ -364,12 +366,12 @@ transaction will be handled atomically based on the transaction.
     ^@
 
 The `transaction` header is REQUIRED, and the transaction identifier will be
-used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NACK` frames to bind them to the
-named transaction.
+used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NACK` frames to bind them to
+the named transaction.
 
-Any started transactions which have not been committed will be implicitly aborted
-if the client sends a `DISCONNECT` frame or if the TCP connection fails for
-any reason.
+Any started transactions which have not been committed will be implicitly
+aborted if the client sends a `DISCONNECT` frame or if the TCP connection
+fails for any reason.
 
 ### COMMIT
 
@@ -399,8 +401,8 @@ abort\!
 ### DISCONNECT
 
 A client can disconnect from the server at anytime by closing his socket but
-there is no guarantee that the previously sent frames have been received
-by the server. To do a graceful shutdown, where the client is assured that all
+there is no guarantee that the previously sent frames have been received by
+the server. To do a graceful shutdown, where the client is assured that all
 previous frames have been received by the server, the client SHOULD:
 
 1. send a `DISCONNECT` frame with a `receipt` header set.  Example:
@@ -498,9 +500,10 @@ the message. The frame body contains the contents of the message:
 [`content-type`](#Header_content-type) header if a body is present.
 
 `MESSAGE` frames will also include all user defined headers that were present
-when the message was sent to the destination in addition to the server specific headers 
-that MAY get added to the frame.  Consult your server's documentation to find out the 
-server specific headers that it adds to messages.
+when the message was sent to the destination in addition to the server
+specific headers that MAY get added to the frame. Consult your server's
+documentation to find out the server specific headers that it adds to
+messages.
 
 ### RECEIPT
 
