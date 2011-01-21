@@ -47,7 +47,7 @@ decoding frame headers, the following transformations MUST be applied:
 * `\c` translates to `:`
 * `\\` translates to `\`
 
-Undefined escape sequences such as '\r' MUST be treated as a fatal protocol
+Undefined escape sequences such as `\r` MUST be treated as a fatal protocol
 error. Conversely when encoding frame headers, the reverse transformation
 MUST be applied.
 
@@ -196,7 +196,7 @@ sever SHOULD respond with an `ERROR` frame similar to:
 ## Once Connected
 
 A client MAY send a frame not in this list, but for such a frame a
-STOMP 1.1 server MAY respond with an ERROR frame.
+STOMP 1.1 server MAY respond with an `ERROR` frame.
 
 * [`SEND`](#SEND)
 * [`SUBSCRIBE`](#SUBSCRIBE)
