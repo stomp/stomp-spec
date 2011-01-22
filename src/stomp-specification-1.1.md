@@ -43,13 +43,13 @@ used to delimit the keys and values, c style string literal escapes are used
 to encode any colons and newlines that are included within the headers. When
 decoding frame headers, the following transformations MUST be applied:
 
-* `\n` translates to newline (octect 10)
-* `\c` translates to `:`
-* `\\` translates to `\`
+* `\n` (octet 92 and 110) translates to newline (octet 10)
+* `\c` (octet 92 and 99) translates to `:` (octet 58)
+* `\\` (octet 92 and 92) translates to `\` (octet 92)
 
-Undefined escape sequences such as `\r` MUST be treated as a fatal protocol
-error. Conversely when encoding frame headers, the reverse transformation
-MUST be applied.
+Undefined escape sequences such as `\r` (octet 92 and 114) MUST be treated as
+a fatal protocol error. Conversely when encoding frame headers, the reverse
+transformation MUST be applied.
 
 Only the `SEND`, `MESSAGE`, and `ERROR` frames can have a body. All other
 frames MUST NOT have a body.
@@ -632,9 +632,9 @@ A STOMP session can be more formally described using the
 Backus-Naur Form (BNF) grammar used in HTTP/1.1
 [rfc2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.1).
 
-    LF                  = <US-ASCII new line (line feed) (octect 10)>
+    LF                  = <US-ASCII new line (line feed) (octet 10)>
     OCTET               = <any 8-bit sequence of data>
-    NULL                = <octect 0>
+    NULL                = <octet 0>
     
     frame-stream        = 1*frame
     
