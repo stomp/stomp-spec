@@ -80,7 +80,7 @@ the message.
 
 If the client receives repeated frame header entries, only the first header
 entry SHOULD be used as the value of header entry. Subsequent values are only
-use to maintain a history of state changes of the header. For example, if the
+used to maintain a history of state changes of the header. For example, if the
 client receives:
 
     MESSAGE
