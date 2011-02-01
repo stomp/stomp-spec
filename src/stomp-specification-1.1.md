@@ -12,6 +12,8 @@ STOMP has been in active use for several years and is supported by many
 message brokers and client libraries. This specification defines the STOMP 1.1
 protocol and is an update to [STOMP 1.0](http://stomp.codehaus.org/Protocol).
 
+Please send feedback to the stomp-spec@googlegroups.com mailing list.
+
 ## DRAFT STATUS
 
 Version 1.1 of the specification is still being developed. This is only a
@@ -72,9 +74,9 @@ particular, that there are not many constraints on the architecture of servers
 and many features such as destination naming and reliability semantics are
 implementation specific.
 
-In this specification we will notes features which are not defined for STOMP
-1.1. You should consult your STOMP server's documentation for the
-implementation specific details of these features.
+In this specification we will note features of servers which are not
+explicitly defined by STOMP 1.1. You should consult your STOMP server's
+documentation for the implementation specific details of these features.
 
 ## Conformance
 
