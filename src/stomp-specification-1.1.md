@@ -2,19 +2,92 @@
 
 {:toc:2-5}
 
+## Abstract
+
+STOMP is a simple interoperable protocol designed for asynchronous message
+passing between clients via mediating servers. It defines a text based
+wire-format for messages passed between these clients and servers.
+
+STOMP has been in active use for several years and is supported by many
+message brokers and client libraries. This specification defines the STOMP 1.1
+protocol and is an update to [STOMP 1.0](http://stomp.codehaus.org/Protocol).
+
 ## DRAFT STATUS
 
-Version 1.1 of the specification is still being developed. This is only
-a draft document.
+Version 1.1 of the specification is still being developed. This is only a
+draft document.
 
 ## Overview
 
-STOMP is a simple interoperable wire format designed for asynchronous
-message passing between clients via mediating servers.
+### Background
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in RFC 2119.
+### Protocol Overview
+
+STOMP is a frame based protocol, with frames modelled on HTTP. A frame
+consists of a command, a set of optional headers and an optional body. STOMP
+is text based but also allows for the transmission of binary messages. The
+default encoding for STOMP is UTF-8, but it supports the specification of
+alternative encodings for message bodies.
+
+A STOMP server is modelled as a set of destinations to which messages can be
+sent. The STOMP protocol treats destinations as opaque string and their syntax
+is server implementation specific. Additionally STOMP does not define what the
+delivery semantics of destinations should be. The delivery, or "message
+exchange", semantics of destinations can vary from server to server and even
+from destination to destination. This allows servers to be creative with the
+semantics that they can support with STOMP.
+
+A STOMP client is a user-agent which can act in two (possibly simultaneous)
+modes:
+
+* As a producer, sending messages to a destination on the server via a `SEND`
+  frame
+
+* As a consumer, sending a `SUBSCRIBE` frame for a given destination and
+  receiving messages from the server as `MESSAGE` frames.
+
+### Changes in the Protocol
+
+STOMP 1.1 is designed to be backwards compatible with STOMP 1.0 while
+introducing several new features not present in STOMP 1.0:
+
+* protocol negotiation to allow for interoperability between clients and
+  servers supporting successive versions of STOMP
+
+* heartbeats to allow for reliable detection of disconnecting clients and
+  servers
+
+* `NACK` frames for negative acknowledgment of message receipt
+
+* Support for virtual hosting
+
+### Design Philosophy
+
+The main philosophies driving the design of STOMP are simplicity and
+interoperability.
+
+STOMP is designed to be a lightweight protocol that is easy to implement both
+on the client and server side in a wide range of languages. This implies, in
+particular, that there are not many constraints on the architecture of servers
+and many features such as destination naming and reliability semantics are
+implementation specific.
+
+In this specification we will notes features which are not defined for STOMP
+1.1. You should consult your STOMP server's documentation for the
+implementation specific details of these features.
+
+## Conformance
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in RFC 2119.
+
+Implementations may impose implementation-specific limits on unconstrained
+inputs, e.g. to prevent denial of service attacks, to guard against running
+out of memory, or to work around platform-specific limitations.
+
+The conformance classes defined by this specification are STOMP clients and
+STOMP servers.
 
 ## STOMP Frames
 
@@ -26,7 +99,7 @@ looks like:
     command
     header1:value1
     header2:value2
-    
+
     Body^@
 
 The frame starts with a command string terminated by a newline. Following the
@@ -60,7 +133,7 @@ values. This causes problems if applications want to send headers that SHOULD
 not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad
 headers with spaces.
 
-To prevent malicious clients from exploiting memory allocation in a 
+To prevent malicious clients from exploiting memory allocation in a
 server, servers MAY place maximum limits on:
 
 * the number of frame headers allowed in a single frame
@@ -86,20 +159,20 @@ client receives:
     MESSAGE
     foo:World
     foo:Hello
-    
+
     ^@
 
 The value of the `foo` header is just `World`.
 
 ## Connecting
 
-A STOMP client initiates the stream or TCP connection to the server by sending 
+A STOMP client initiates the stream or TCP connection to the server by sending
 the `CONNECT` frame:
 
     CONNECT
     accept-version:1.1
     host:stomp.github.org
-              
+
     ^@
 
 If the server accepts the connection attempt it will respond with a
@@ -107,7 +180,7 @@ If the server accepts the connection attempt it will respond with a
 
     CONNECTED
     version:1.1
-    
+
     ^@
 
 The sever can reject any connection attempt. The server SHOULD respond back
@@ -155,7 +228,7 @@ STOMP 1.1 servers MUST set the following headers:
 
 STOMP 1.1 servers MAY set the following headers:
 
-* `session` : A session id that uniquely identifies the session.  
+* `session` : A session id that uniquely identifies the session.
 
 ## Protocol Negotiation
 
@@ -173,7 +246,7 @@ For example, if the client sends:
     CONNECT
     accept-version:1.0,1.1,2.0
     host:stomp.github.org
-              
+
     ^@
 
 The server will respond back with the highest version of the protocol that
@@ -181,7 +254,7 @@ it has in common with the client:
 
     CONNECTED
     version:1.1
-    
+
     ^@
 
 If the client and server do not share any common protocol versions, then the
@@ -190,7 +263,7 @@ sever SHOULD respond with an `ERROR` frame similar to:
     ERROR
     version:1.2,2.1
     content-type:text/plain
-              
+
     Supported protocol versions are 1.2 2.1^@
 
 ## Once Connected
@@ -219,33 +292,29 @@ message. The body of the `SEND` frame is the message to be sent. For example:
     SEND
     destination:/queue/a
     content-type:text/plain
-    
+
     hello queue a
     ^@
 
-This sends a message to a destination named `/queue/a`. Even though queue and
-topic delivery semantics are the most popular in messing servers, STOMP does
-not define what the delivery semantics of destinations should be. The
-delivery, or "message exchange", semantics of destinations can vary from
-server to server and even from destination to destination. This allows
-servers to be creative with the semantics that they can support with STOMP.
-You should consult your STOMP server's documentation to find out how to
-construct a destination name which gives you the delivery semantics that your
-application needs.
+This sends a message to a destination named `/queue/a`. Note that STOMP treats
+this destination as an opaque string and no delivery semantics are assumed by
+the name of a destination. You should consult your STOMP server's
+documentation to find out how to construct a destination name which gives you
+the delivery semantics that your application needs.
 
-The reliability semantics of the message are also server specific and will 
-depend on the destination value being used and the other message headers 
+The reliability semantics of the message are also server specific and will
+depend on the destination value being used and the other message headers
 such as the `transaction` header or other server specific message headers.
 
 `SEND` supports a `transaction` header which allows for transactional sends.
 
-`SEND` frames SHOULD include a 
-[`content-length`](#Header_content-length) header and a 
+`SEND` frames SHOULD include a
+[`content-length`](#Header_content-length) header and a
 [`content-type`](#Header_content-type) header if a body is present.
 
 An application MAY add any arbitrary user defined headers to the `SEND` frame.
 User defined headers are typically used to allow consumers to filter
-messages based on the application defined headers using a selector 
+messages based on the application defined headers using a selector
 on a `SUBSCRIBE` frame. The user defined headers MUST be passed through
 in the `MESSAGE` frame.
 
@@ -267,10 +336,10 @@ Example:
     id:0
     destination:/queue/foo
     ack:client
-    
+
     ^@
 
-If the sever cannot successfully create the subscription, 
+If the sever cannot successfully create the subscription,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
 STOMP servers MAY support additional server specific headers to customize the
@@ -317,7 +386,7 @@ value of previous `SUBSCRIBE` operation. Example:
 
     UNSUBSCRIBE
     id:0
-    
+
     ^@
 
 ### ACK
@@ -416,7 +485,7 @@ previous frames have been received by the server, the client SHOULD:
         RECEIPT
         receipt-id:77
         ^@
-        
+
 3. close the socket.
 
 Clients MUST NOT send any more frames after the `DISCONNECT` frame is sent.
@@ -452,7 +521,7 @@ non `text/` mime types which can be interpreted as text. A good example of
 this would be a UTF-8 encoded XML. It's `content-type` SHOULD get set to
 `application/xml;charset=utf-8`
 
-All STOMP clients and servers MUST support UTF-8 encoding and decoding.  Therefore, 
+All STOMP clients and servers MUST support UTF-8 encoding and decoding.  Therefore,
 for maximum interoperability in a heterogeneous computing environment, it is
 RECOMMENDED that text based content be encoded with UTF-8.
 
@@ -469,7 +538,7 @@ header as the value of the `receipt-id` header in the `RECEIPT` frame.
 
     hello queue a^@
 
-## Server Frames 
+## Server Frames
 
 The server will, on occasion, send frames to the client (in addition to the
 initial `CONNECTED` frame). These frames MAY be one of:
@@ -492,11 +561,11 @@ the message. The frame body contains the contents of the message:
     message-id:007
     destination:/queue/a
     content-type:text/plain
-    
+
     hello queue a^@
 
-`MESSAGE` frames SHOULD include a 
-[`content-length`](#Header_content-length) header and a 
+`MESSAGE` frames SHOULD include a
+[`content-length`](#Header_content-length) header and a
 [`content-type`](#Header_content-type) header if a body is present.
 
 `MESSAGE` frames will also include all user defined headers that were present
@@ -530,17 +599,17 @@ the body MAY contain more detailed information (or MAY be empty).
     receipt-id:message-12345
     content-type:text/plain
     message: malformed frame received
-    
+
     The message:
     -----
     MESSAGE
     destined:/queue/a
     receipt:message-12345
-    
-    
+
+
     Hello queue a!
     -----
-    Did not contain a destination header, which is REQUIRED 
+    Did not contain a destination header, which is REQUIRED
     for message propagation.
     ^@
 
@@ -551,7 +620,7 @@ the error. For example, if the frame included a receipt header, the `ERROR`
 frame SHOULD set the `receipt-id` header to match the value of the `receipt`
 header of the frame which the error is related to.
 
-`ERROR` frames SHOULD include a 
+`ERROR` frames SHOULD include a
 [`content-length`](#Header_content-length) head and a
 [`content-type`](#Header_content-type) header if a body is present.
 
@@ -570,9 +639,9 @@ When used, the `heart-beat` header MUST contain two positive integers
 separated by a comma.
 
 The first number represents what the sender of the frame can do (outgoing
-heart-beats): 
- 
-* 0 means it cannot send heart-beats 
+heart-beats):
+
+* 0 means it cannot send heart-beats
 
 * otherwise it is the smallest number of milliseconds between heart-beats
   that it can guarantee
@@ -628,25 +697,25 @@ direction, if heart-beats are expected every `<n>` milliseconds:
 
 ## Augmented BNF
 
-A STOMP session can be more formally described using the 
+A STOMP session can be more formally described using the
 Backus-Naur Form (BNF) grammar used in HTTP/1.1
 [rfc2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.1).
 
     LF                  = <US-ASCII new line (line feed) (octet 10)>
     OCTET               = <any 8-bit sequence of data>
     NULL                = <octet 0>
-    
+
     frame-stream        = 1*frame
-    
+
     frame               = command LF
                           *( header LF )
                           LF
                           *OCTET
                           NULL
                           *( LF )
-    
+
     command             = client-command | server-command
-    
+
     client-command      = "SEND"
                           | "SUBSCRIBE"
                           | "UNSUBSCRIBE"
@@ -658,18 +727,18 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
                           | "DISCONNECT"
                           | "CONNECT"
                           | "STOMP"
-    
+
     server-command      = "CONNECTED"
                           | "MESSAGE"
                           | "RECEIPT"
                           | "ERROR"
-    
+
     header              = header-name ":" header-value
     header-name         = 1*<any OCTET except LF or ":">
     header-value        = *<any OCTET except LF>
-    
+
 ## License
 
-This specification is licensed under the 
-[Creative Commons Attribution v2.5](http://creativecommons.org/licenses/by/2.5/) 
+This specification is licensed under the
+[Creative Commons Attribution v2.5](http://creativecommons.org/licenses/by/2.5/)
 license.
