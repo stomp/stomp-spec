@@ -23,6 +23,10 @@ draft document.
 
 ### Background
 
+STOMP was originally designed as ...
+
+[To be completed by someone who was there !!!]
+
 ### Protocol Overview
 
 STOMP is a frame based protocol, with frames modelled on HTTP. A frame
