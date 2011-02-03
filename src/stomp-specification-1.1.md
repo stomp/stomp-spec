@@ -23,9 +23,22 @@ draft document.
 
 ### Background
 
-STOMP was originally designed as ...
+STOMP arose from a need to connect to enterprise message brokers from
+scripting languages such as Ruby, Python and Perl.  In such an
+environment it is typically logically simple operations that are
+carried out such as 'reliably send a single message and disconnect'
+or 'consume all messages on a given destination'.
 
-[To be completed by someone who was there !!!]
+It is an alternative to other open messaging protocols such as AMQP
+and  implementation specific wire protocols used in JMS brokers such
+as OpenWire.  It distinguishes itself by covering a small subset of
+commonly used messaging operations rather than providing a
+comprehensive messaging API.
+
+More recently STOMP has matured into a protocol which can be used past
+these simple use cases in terms of the wire-level features it now
+offers, but still maintains its core design principles of simplicity
+and interoperability.
 
 ### Protocol Overview
 
