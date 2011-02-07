@@ -115,7 +115,7 @@ network protocol (such as TCP) underneath. The client and server will
 communicate using STOMP frames sent over the stream. A frame's structure
 looks like:
 
-    command
+    COMMAND
     header1:value1
     header2:value2
 
@@ -130,10 +130,12 @@ to represent the null byte. The null byte can be optionally followed by
 multiple newlines. For more details, on how to parse STOMP frames, see the
 [Augmented BNF](#Augmented_BNF) section of this document.
 
-The headers are encoded in UTF-8. Since the colon and newline characters are
-used to delimit the keys and values, c style string literal escapes are used
-to encode any colons and newlines that are included within the headers. When
-decoding frame headers, the following transformations MUST be applied:
+All commands and header names referenced in this document are case sensitive.
+The commands and headers are encoded in UTF-8. Since the colon and newline
+characters are used to delimit the keys and values, c style string literal
+escapes are used to encode any colons and newlines that are found within the
+UTF-8 encoded headers. When decoding frame headers, the following
+transformations MUST be applied:
 
 * `\n` (octet 92 and 110) translates to newline (octet 10)
 * `\c` (octet 92 and 99) translates to `:` (octet 58)
