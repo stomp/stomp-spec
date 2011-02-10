@@ -756,7 +756,7 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
 
     header              = header-name ":" header-value
     header-name         = 1*<any OCTET except LF or ":">
-    header-value        = *<any OCTET except LF>
+    header-value        = *<any OCTET except LF or ":">
 
 ## License
 
