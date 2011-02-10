@@ -27,11 +27,11 @@
   <description>The Stomp Website</description>
 
   <properties>
-    <scala-version>2.8.0</scala-version>
-    <scala-plugin-version>2.14</scala-plugin-version>
-    <scalate-version>1.3.2</scalate-version>
-    <scalamd-version>1.4</scalamd-version>
-    <slf4j-version>1.6.0</slf4j-version>
+    <scala-version>2.8.1</scala-version>
+    <scala-plugin-version>2.15.1</scala-plugin-version>
+    <scalate-version>1.4.0</scalate-version>
+    <scalamd-version>1.5</scalamd-version>
+    <slf4j-version>1.6.1</slf4j-version>
   </properties>
 
   <dependencies>
@@ -109,13 +109,6 @@
         <configuration>
           <warSourceDirectory>${basedir}/src</warSourceDirectory>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.fusesource.scalamd</groupId>
-            <artifactId>scalamd</artifactId>
-            <version>${scalamd-version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       
       <plugin>
