@@ -132,7 +132,7 @@ multiple newlines. For more details, on how to parse STOMP frames, see the
 
 All commands and header names referenced in this document are case sensitive.
 
-#### Value Encoding
+### Value Encoding
 
 The commands and headers are encoded in UTF-8. All frames except the `CONNECT`
 and `CONNECTED` frames will also escape any colon or newline octets found in
@@ -164,7 +164,7 @@ values. This causes problems if applications want to send headers that SHOULD
 not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad
 headers with spaces.
 
-#### Size Limits
+### Size Limits
 
 To prevent malicious clients from exploiting memory allocation in a
 server, servers MAY place maximum limits on:
