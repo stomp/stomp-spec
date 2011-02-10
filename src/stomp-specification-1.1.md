@@ -131,11 +131,21 @@ multiple newlines. For more details, on how to parse STOMP frames, see the
 [Augmented BNF](#Augmented_BNF) section of this document.
 
 All commands and header names referenced in this document are case sensitive.
-The commands and headers are encoded in UTF-8. Since the colon and newline
-characters are used to delimit the keys and values, c style string literal
-escapes are used to encode any colons and newlines that are found within the
-UTF-8 encoded headers. When decoding frame headers, the following
-transformations MUST be applied:
+
+#### Value Encoding
+
+The commands and headers are encoded in UTF-8. All frames except the `CONNECT`
+and `CONNECTED` frames will also escape any colon or newline octets found in
+the resulting UTF-8 encoded headers.
+
+Escaping is needed to allow header keys and values to contain those frame
+header delimiting octets as values. The `CONNECT` and `CONNECTED` frames do not
+escape the colon or newline octets in order to remain backward compatible with
+STOMP 1.0.
+
+C style string literal escapes are used to encode any colons and newlines that
+are found within the UTF-8 encoded headers. When decoding frame headers, the
+following transformations MUST be applied:
 
 * `\n` (octet 92 and 110) translates to newline (octet 10)
 * `\c` (octet 92 and 99) translates to `:` (octet 58)
@@ -153,6 +163,8 @@ headers and many servers and clients were implemented to trim or pad header
 values. This causes problems if applications want to send headers that SHOULD
 not get trimmed. In STOMP 1.1, clients and servers MUST never trim or pad
 headers with spaces.
+
+#### Size Limits
 
 To prevent malicious clients from exploiting memory allocation in a
 server, servers MAY place maximum limits on:
