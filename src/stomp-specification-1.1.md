@@ -120,6 +120,19 @@ the session id as the base to generate globally unique identifies
 by appending a incrementing counter.
 -->
 
+* `server`  : A field that contains information about the STOMP server.
+  The field MUST contain a server-name field and MAY be followed by optional 
+  comment feilds delimited by a space character.
+
+  The server-name field consists of a name token followed by an optional version
+  number token.
+
+    `server      = name ["/" version] *(comment)`
+
+  Example:
+
+    `server:Apache/1.3.9`
+
 ## Protocol Negotiation
 
 From Stomp 1.1 and onwards, the `CONNECT` frame MUST include the
