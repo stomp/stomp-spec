@@ -15,7 +15,7 @@ The Simple Text Oriented Messaging Protocol
   * [Apache ActiveMQ](http://activemq.apache.org/) is considered by many to be
     the STOMP 1.0 reference implementation.
 
-  * [Apache Apollo](http://activemq.apache.org/apollo) an redesigned version of 
+  * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
     ActiveMQ focused on STOMP messaging.
 
   * [CoilMQ](http://code.google.com/p/coilmq/) is a lightweight pure Python Stomp
@@ -29,6 +29,9 @@ The Simple Text Oriented Messaging Protocol
   * [MorbidQ](http://www.morbidq.com/) is a STOMP publish/subscribe server with absolutely 
     no potential to cluster. It supports publish/subscribe topics, and runs as a 
     single node.
+
+  * [RabbitMQ](http://www.rabbitmq.com/plugins.html#rabbitmq-stomp) an Erlang-based,
+    multi-protocol broker with full support for STOMP via a plugin.
 
   * [Sprinkle](http://www.thuswise.org/sprinkle/index.html) is written in Python 
     and runs on Unix type platforms.
