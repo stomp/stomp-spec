@@ -668,7 +668,7 @@ frame SHOULD set the `receipt-id` header to match the value of the `receipt`
 header of the frame which the error is related to.
 
 `ERROR` frames SHOULD include a
-[`content-length`](#Header_content-length) head and a
+[`content-length`](#Header_content-length) header and a
 [`content-type`](#Header_content-type) header if a body is present.
 
 ## Heart-beating
