@@ -515,7 +515,7 @@ abort\!
 
 ### DISCONNECT
 
-A client can disconnect from the server at anytime by closing his socket but
+A client can disconnect from the server at anytime by closing the socket but
 there is no guarantee that the previously sent frames have been received by
 the server. To do a graceful shutdown, where the client is assured that all
 previous frames have been received by the server, the client SHOULD:
@@ -644,6 +644,7 @@ the body MAY contain more detailed information (or MAY be empty).
     ERROR
     receipt-id:message-12345
     content-type:text/plain
+    content-length:171
     message: malformed frame received
 
     The message:
