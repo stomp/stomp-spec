@@ -20,12 +20,12 @@ import org.fusesource.scalate.sbt._
 
 class Project(info: ProjectInfo) extends DefaultWebProject(info) with SiteGenWebProject {
 
-  lazy val fusesource_snapshot_repo = "FuseSource Snapshots" at
-           "http://repo.fusesource.com/nexus/content/repositories/snapshots"
+  // lazy val fusesource_snapshot_repo = "FuseSource Snapshots" at
+  //         "http://repo.fusesource.com/nexus/content/repositories/snapshots"
 
-  lazy val scalate_core     = "org.fusesource.scalate" % "scalate-core"     % "1.4.0" 
-  lazy val scalate_wikitext = "org.fusesource.scalate" % "scalate-wikitext" % "1.4.0" 
-  lazy val scalate_page     = "org.fusesource.scalate" % "scalate-page"     % "1.4.0" 
+  lazy val scalate_core     = "org.fusesource.scalate" % "scalate-core"     % "1.4.1" 
+  lazy val scalate_wikitext = "org.fusesource.scalate" % "scalate-wikitext" % "1.4.1" 
+  lazy val scalate_page     = "org.fusesource.scalate" % "scalate-page"     % "1.4.1" 
   lazy val scalamd          = "org.fusesource.scalamd" % "scalamd"          % "1.5" 
   lazy val slf4j            = "org.slf4j"              % "slf4j-nop"        % "1.6.1"
 
