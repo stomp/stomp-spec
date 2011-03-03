@@ -543,12 +543,12 @@ Some headers MAY be used, and have special meaning, with most frames.
 ### Header content-length
 
 The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-length`
-header if a frame body is present. If the frame's body contains NULL octets,
-the corresponding frame's header MUST include a `content-length` header. The
-header is a byte count for the length of the message body. If a
-`content-length` header is included, this number of bytes MUST be read,
-regardless of whether or not there are null characters in the body. The frame
-still needs to be terminated with a null byte.
+header if a frame body is present. If a frame's body contains NULL octets, the
+frame MUST include a `content-length` header. The header is a byte count for
+the length of the message body. If a `content-length` header is included, this
+number of bytes MUST be read, regardless of whether or not there are null
+characters in the body. The frame still needs to be terminated with a null
+byte.
 
 ### Header content-type
 
