@@ -10,14 +10,9 @@ wire-format for messages passed between these clients and servers.
 
 STOMP has been in active use for several years and is supported by many
 message brokers and client libraries. This specification defines the STOMP 1.1
-protocol and is an update to [STOMP 1.0](http://stomp.codehaus.org/Protocol).
+protocol and is an update to [STOMP 1.0](stomp-specification-1.0.html).
 
 Please send feedback to the stomp-spec@googlegroups.com mailing list.
-
-## DRAFT STATUS
-
-Version 1.1 of the specification is still being developed. This is only a
-draft document.
 
 ## Overview
 

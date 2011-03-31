@@ -7,7 +7,7 @@ The Simple Text Oriented Messaging Protocol
 --- name:content pipeline:jade
 
 :markdown
-  # Servers
+  # STOMP 1.0 Servers
 
   The following is a list of the various STOMP compliant message 
   servers which can be used with any of the STOMP clients.
@@ -43,7 +43,7 @@ The Simple Text Oriented Messaging Protocol
   * [StompServer](http://stompserver.rubyforge.org/) is a lightweight pure Ruby
     Stomp server
 
-  # Clients
+  # STOMP 1.0 Clients
   Pick the right Stomp client for your particular language or platform.
 
 br

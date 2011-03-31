@@ -42,6 +42,10 @@ The Simple Text Oriented Messaging Protocol
   :markdown
     The latest version of the specification can be found at:
     
+    * [STOMP 1.1](stomp-specification-1.1.html) Released on 3/31/2011
+
+    The older version of the specification can also be accessed at:
+    
     * [STOMP 1.0](stomp-specification-1.0.html)
 
 .left

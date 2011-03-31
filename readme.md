@@ -11,7 +11,7 @@ messaging interoperability among many languages, platforms and brokers.
 This git repository hosts the released and in progress STOMP specifications.  The
 lasted released specification is located at:
 
-[src/stomp-specification-1.0.md](src/stomp-specification-1.0.md)
+[src/stomp-specification-1.1.md](src/stomp-specification-1.1.md)
 
 ## Website Generation
 
