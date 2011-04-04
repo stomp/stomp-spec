@@ -5,12 +5,40 @@ title: Implementations
 The Simple Text Oriented Messaging Protocol
 
 --- name:content pipeline:jade
+- def language(name:String)(func: =>Unit) 
+  tr
+    td
+      em #{name}
+    td
+      !~~ capture(func)
+:markdown
+  # STOMP 1.1 Servers
+
+  The following is a list of the various STOMP 1.1 compliant message 
+  servers.
+
+  * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
+    ActiveMQ focused on STOMP messaging.
+
+  # STOMP 1.1 Clients
+  Pick the right Stomp client for your particular language or platform.
+
+br
+table.clients
+  tr
+    th Language
+    th Libraries
+
+  - language("Ruby and Rails")
+    :markdown
+      * [onstomp gem](https://rubygems.org/gems/onstomp) it's source is at
+        https://github.com/meadvillerb/onstomp
 
 :markdown
   # STOMP 1.0 Servers
 
-  The following is a list of the various STOMP compliant message 
-  servers which can be used with any of the STOMP clients.
+  The following is a list of the various STOMP 1.0 compliant message 
+  servers.
 
   * [Apache ActiveMQ](http://activemq.apache.org/) is considered by many to be
     the STOMP 1.0 reference implementation.
@@ -51,13 +79,6 @@ table.clients
   tr
     th Language
     th Libraries
-    
-  - def language(name:String)(func: =>Unit) 
-    tr
-      td
-        em #{name}
-      td
-        !~~ capture(func)
     
   - language("C")
     :markdown
