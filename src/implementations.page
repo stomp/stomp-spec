@@ -154,4 +154,6 @@ table.clients
       * [activemessaging](http://code.google.com/p/activemessaging/) s an attempt
         to bring the simplicity and elegance of Rails development to the world of
         messaging
+      * [onstomp gem](https://rubygems.org/gems/onstomp) it's source is at
+        https://github.com/meadvillerb/onstomp
 
