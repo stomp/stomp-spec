@@ -145,6 +145,10 @@ table.clients
         Perl module is available on CPAN 
       * [Net::Stomp](http://search.cpan.org/dist/Net-Stomp/)
         Perl module is available on CPAN
+      * [AnyEvent::STOMP](http://search.cpan.org/dist/AnyEvent-STOMP/)
+        Perl module is available on CPAN
+      * [POE::Component::Client::Stomp](http://search.cpan.org/dist/POE-Component-Client-Stomp/)
+        Perl module is available on CPAN
 
   - language("PHP")
     :markdown
