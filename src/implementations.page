@@ -89,15 +89,6 @@ table.clients
       * [dstomp](http://code.google.com/p/dstomp/) is a STOMP client library
         written in Dynamic C for Rabbit
 
-  - language("C")
-    :markdown
-      * [libstomp](http://stomp.codehaus.org/C) is an APR based c library
-
-  - language("Dynamic C")
-    :markdown
-      * [dstomp](http://code.google.com/p/dstomp/) is a STOMP client library
-        written in Dynamic C for Rabbit
-
   - language("C++")
     :markdown
       * [Apache CMS](http://activemq.apache.org/cms/): is a JMS-like API for C++.
