@@ -29,6 +29,11 @@ table.clients
     th Language
     th Libraries
 
+  - language("Perl")
+    :markdown
+      * [Net::STOMP::Client](http://search.cpan.org/dist/Net-STOMP-Client/)
+        Perl module is available on CPAN 
+        
   - language("Ruby and Rails")
     :markdown
       * [onstomp gem](https://rubygems.org/gems/onstomp) it's source is at
