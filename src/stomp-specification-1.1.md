@@ -211,7 +211,7 @@ If the server accepts the connection attempt it will respond with a
 
     ^@
 
-The sever can reject any connection attempt. The server SHOULD respond back
+The server can reject any connection attempt. The server SHOULD respond back
 with an `ERROR` frame listing why the connection was rejected and then close
 the connection. STOMP servers MUST support clients which rapidly connect and
 disconnect. This implies a server will likely only allow closed connections
