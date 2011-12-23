@@ -34,10 +34,14 @@ table.clients
       * [Net::STOMP::Client](http://search.cpan.org/dist/Net-STOMP-Client/)
         Perl module is available on CPAN 
         
-  - language("Ruby and Rails")
+  - language("Ruby on Rails")
     :markdown
       * [onstomp gem](https://rubygems.org/gems/onstomp) it's source is at
         https://github.com/meadvillerb/onstomp
+
+  - language("Python")
+    :markdown
+      * [stomp.py](http://code.google.com/p/stomppy/)
 
 :markdown
   # STOMP 1.0 Servers
@@ -168,7 +172,7 @@ table.clients
       * [pyactivemq](http://code.google.com/p/pyactivemq/)
       * [stomper](http://code.google.com/p/stomper/)
 
-  - language("Ruby and Rails")
+  - language("Ruby on Rails")
     :markdown
       * [stomp gem](http://rubyforge.org/projects/stomp/) it's source is at
         http://gitorious.org/stomp
