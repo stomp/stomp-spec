@@ -38,6 +38,14 @@ table.clients
     :markdown
       * [onstomp gem](https://rubygems.org/gems/onstomp) it's source is at
         https://github.com/meadvillerb/onstomp
+      * [stomp gem](https://github.com/morellon/stomp) source and documentation
+        at https://github.com/morellon/stomp
+        
+  - language("go")
+    :markdown
+      * [stompngo package](https://github.com/gmallard/stompngo) source 
+        and documentation at https://github.com/gmallard/stompngo, examples
+        to https://github.com/gmallard/stompngo_examples
 
 :markdown
   # STOMP 1.0 Servers
