@@ -27,9 +27,9 @@
   <description>The Stomp Website</description>
 
   <properties>
-    <scala-version>2.8.1</scala-version>
+    <scala-version>2.9.1</scala-version>
     <scala-plugin-version>2.15.1</scala-plugin-version>
-    <scalate-version>1.4.1</scalate-version>
+    <scalate-version>1.5.3</scalate-version>
     <scalamd-version>1.5</scalamd-version>
     <slf4j-version>1.6.1</slf4j-version>
   </properties>
