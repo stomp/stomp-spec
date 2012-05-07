@@ -38,8 +38,8 @@ table.clients
     :markdown
       * [onstomp gem](https://rubygems.org/gems/onstomp) it's source is at
         https://github.com/meadvillerb/onstomp
-      * [stomp gem](https://github.com/morellon/stomp) source and documentation
-        at https://github.com/morellon/stomp
+      * [stomp gem](https://rubygems.org/gems/stomp) The canonical stomp 
+        repository is available at https://github.com/stompgem/stomp
         
   - language("go")
     :markdown
@@ -182,8 +182,8 @@ table.clients
 
   - language("Ruby on Rails")
     :markdown
-      * [stomp gem](http://rubyforge.org/projects/stomp/) it's source is at
-        http://gitorious.org/stomp
+      * [stomp gem](https://rubygems.org/gems/stomp) The canonical stomp 
+        repository is available at https://github.com/stompgem/stomp
       * [activemessaging](http://code.google.com/p/activemessaging/) s an attempt
         to bring the simplicity and elegance of Rails development to the world of
         messaging
