@@ -617,7 +617,7 @@ messages.
 
 ### RECEIPT
 
-A `RECEIPT` frame is sent from the server to the client once a server has has
+A `RECEIPT` frame is sent from the server to the client once a server has
 successfully processed a client frame that requests a receipt. A `RECEIPT`
 frame will include the header `receipt-id`, where the value is the value of
 the `receipt` header in the frame which this is a receipt for.
