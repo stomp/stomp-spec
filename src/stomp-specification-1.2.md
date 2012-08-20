@@ -780,5 +780,5 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
 ## License
 
 This specification is licensed under the
-[Creative Commons Attribution v2.5](http://creativecommons.org/licenses/by/2.5/)
+[Creative Commons Attribution v3.0](http://creativecommons.org/licenses/by/3.0/)
 license.
