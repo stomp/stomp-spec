@@ -111,7 +111,7 @@ looks like:
     Body^@
 
 The frame starts with a command string terminated by a newline. Following the
-command are one or more header entries in `<key>:<value>` format. Each header
+command are zero or more header entries in `<key>:<value>` format. Each header
 entry is terminated by a newline. A blank line indicates the end of the
 headers and the beginning of the body. The body is then followed by the null
 byte (0x00). The examples in this document will use `^@`, control-@ in ASCII,
@@ -243,6 +243,8 @@ STOMP 1.2 clients MAY set the following headers:
 * `passcode` : The password used to authenticate against a secured STOMP
   server.
 
+* `heart-beat` : The [Heart-beating](#Heart-beating) settings.
+
 ### CONNECTED Frame
 
 STOMP 1.2 servers MUST set the following headers:
@@ -251,6 +253,8 @@ STOMP 1.2 servers MUST set the following headers:
   See [Protocol Negotiation](#protocol_negotiation) for more details.
 
 STOMP 1.2 servers MAY set the following headers:
+
+* `heart-beat` : The [Heart-beating](#Heart-beating) settings.
 
 * `session` : A session id that uniquely identifies the session.
 
@@ -587,8 +591,8 @@ initial `CONNECTED` frame). These frames MAY be one of:
 ### MESSAGE
 
 `MESSAGE` frames are used to convey messages from subscriptions to the
-client. The `MESSAGE` frame will include a `destination` header indicating
-the destination the message was sent to. It will also contain a `message-id`
+client. The `MESSAGE` frame MUST include a `destination` header indicating
+the destination the message was sent to. It MUST also contain a `message-id`
 header with a unique identifier for that message. The `subscription` header
 will be set to match the `id` header of the subscription that is receiving
 the message. The frame body contains the contents of the message:
