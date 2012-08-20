@@ -549,18 +549,18 @@ byte.
 
 ### Header content-type
 
-The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-type`
-header if a frame body is present. It SHOULD be set to a mime type which
-describes the format of the body to help the receiver of the frame interpret
-its contents. If the `content-type` header is not set, the receiver SHOULD
+If a frame body is present, the `SEND`, `MESSAGE` and `ERROR` frames SHOULD
+include a `content-type` header to help the receiver of the frame interpret
+its body. If the `content-type` header is set, its value MUST be a MIME type
+which describes the format of the body. Otherwise, the receiver SHOULD
 consider the body to be a binary blob.
 
-The implied text encoding for mime types starting with `text/` is UTF-8. If
-you are using a text based mime type with a different encoding then you
-SHOULD append `;charset=<encoding>` to the mime type. For example,
+The implied text encoding for MIME types starting with `text/` is UTF-8. If
+you are using a text based MIME type with a different encoding then you
+SHOULD append `;charset=<encoding>` to the MIME type. For example,
 `text/html;charset=utf-16` SHOULD be used if your sending an html body in
 UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
-non `text/` mime types which can be interpreted as text. A good example of
+non `text/` MIME types which can be interpreted as text. A good example of
 this would be a UTF-8 encoded XML. Its `content-type` SHOULD get set to
 `application/xml;charset=utf-8`
 
