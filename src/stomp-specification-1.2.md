@@ -355,7 +355,7 @@ messages based on the application defined headers using a selector
 on a `SUBSCRIBE` frame. The user defined headers MUST be passed through
 in the `MESSAGE` frame.
 
-If the sever cannot successfully process the `SEND` frame frame for any reason,
+If the sever cannot successfully process the `SEND` frame for any reason,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
 ### SUBSCRIBE
@@ -406,8 +406,9 @@ When the the `ack` mode is `client`, then the client MUST send the server
 `ACK` frames for the messages it processes. If the connection fails before a
 client sends an `ACK` for the message the server will assume the message has
 not been processed and MAY redeliver the message to another client. The `ACK`
-frames sent by the client will be treated as a cumulative `ACK`. This means the `ACK` operates on the message specified in the `ACK` frame
-and all messages sent to the subscription before the `ACK`-ed message.
+frames sent by the client will be treated as a cumulative `ACK`. This means
+the `ACK` operates on the message specified in the `ACK` frame and all
+messages sent to the subscription before the `ACK`'ed message.
 
 When the the `ack` mode is `client-individual`, the ack mode operates just
 like the `client` ack mode except that the `ACK` or `NACK` frames sent by the
@@ -499,7 +500,6 @@ commit\!
     transaction:tx1
 
     ^@
-
 
 The `transaction` header is REQUIRED and MUST specify the id of the transaction to
 abort\!
@@ -623,7 +623,6 @@ the `receipt` header in the frame which this is a receipt for.
 
     ^@
 
-
 The receipt body will be empty.
 
 ### ERROR
@@ -644,13 +643,11 @@ the body MAY contain more detailed information (or MAY be empty).
     destined:/queue/a
     receipt:message-12345
 
-
     Hello queue a!
     -----
     Did not contain a destination header, which is REQUIRED
     for message propagation.
     ^@
-
 
 If the error is related to specific frame sent from the client, the server
 SHOULD add additional headers to help identify the original frame that caused
@@ -731,7 +728,6 @@ direction, if heart-beats are expected every `<n>` milliseconds:
 
 * because of timing inaccuracies, the receiver SHOULD be tolerant and take
   into account an error margin
-
 
 ## Augmented BNF
 
