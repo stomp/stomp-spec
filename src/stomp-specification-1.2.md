@@ -19,14 +19,14 @@ Please send feedback to the stomp-spec@googlegroups.com mailing list.
 ### Background
 
 STOMP arose from a need to connect to enterprise message brokers from
-scripting languages such as Ruby, Python and Perl.  In such an
+scripting languages such as Ruby, Python and Perl. In such an
 environment it is typically logically simple operations that are
 carried out such as 'reliably send a single message and disconnect'
 or 'consume all messages on a given destination'.
 
 It is an alternative to other open messaging protocols such as AMQP
-and  implementation specific wire protocols used in JMS brokers such
-as OpenWire.  It distinguishes itself by covering a small subset of
+and implementation specific wire protocols used in JMS brokers such
+as OpenWire. It distinguishes itself by covering a small subset of
 commonly used messaging operations rather than providing a
 comprehensive messaging API.
 
@@ -258,7 +258,7 @@ STOMP 1.2 servers MAY set the following headers:
 
 * `session` : A session id that uniquely identifies the session.
 
-* `server`  : A field that contains information about the STOMP server.
+* `server` : A field that contains information about the STOMP server.
   The field MUST contain a server-name field and MAY be followed by optional 
   comment feilds delimited by a space character.
 
@@ -515,7 +515,7 @@ there is no guarantee that the previously sent frames have been received by
 the server. To do a graceful shutdown, where the client is assured that all
 previous frames have been received by the server, the client SHOULD:
 
-1. send a `DISCONNECT` frame with a `receipt` header set.  Example:
+1. send a `DISCONNECT` frame with a `receipt` header set. Example:
 
         DISCONNECT
         receipt:77
@@ -562,7 +562,7 @@ non `text/` mime types which can be interpreted as text. A good example of
 this would be a UTF-8 encoded XML. It's `content-type` SHOULD get set to
 `application/xml;charset=utf-8`
 
-All STOMP clients and servers MUST support UTF-8 encoding and decoding.  Therefore,
+All STOMP clients and servers MUST support UTF-8 encoding and decoding. Therefore,
 for maximum interoperability in a heterogeneous computing environment, it is
 RECOMMENDED that text based content be encoded with UTF-8.
 
