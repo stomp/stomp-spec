@@ -88,7 +88,7 @@ documentation for the implementation specific details of these features.
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in RFC 2119.
+interpreted as described in [RFC 2119](http://tools.ietf.org/html/rfc2119).
 
 Implementations may impose implementation-specific limits on unconstrained
 inputs, e.g. to prevent denial of service attacks, to guard against running
@@ -228,7 +228,7 @@ an HTTP connection.
 STOMP 1.2 clients MUST set the following headers:
 
 * `accept-version` : The versions of the STOMP protocol the client supports.
-  See [Protocol Negotiation](#protocol_negotiation) for more details.
+  See [Protocol Negotiation](#Protocol_Negotiation) for more details.
 
 * `host` : The name of a virtual host that the client wishes to connect to.
   It is recommended clients set this to the host name that the socket
@@ -250,7 +250,7 @@ STOMP 1.2 clients MAY set the following headers:
 STOMP 1.2 servers MUST set the following headers:
 
 * `version` : The version of the STOMP protocol the session will be using.
-  See [Protocol Negotiation](#protocol_negotiation) for more details.
+  See [Protocol Negotiation](#Protocol_Negotiation) for more details.
 
 STOMP 1.2 servers MAY set the following headers:
 
@@ -737,7 +737,7 @@ direction, if heart-beats are expected every `<n>` milliseconds:
 
 A STOMP session can be more formally described using the
 Backus-Naur Form (BNF) grammar used in HTTP/1.1
-[rfc2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.1).
+[RFC 2616](http://tools.ietf.org/html/rfc2616#section-2.1).
 
     LF                  = <US-ASCII new line (line feed) (octet 10)>
     OCTET               = <any 8-bit sequence of data>
