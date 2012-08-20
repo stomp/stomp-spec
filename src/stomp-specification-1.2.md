@@ -730,7 +730,7 @@ direction, if heart-beats are expected every `<n>` milliseconds:
   newline byte (0x0A)
 
 * if, inside a time window of at least `<n>` milliseconds, the receiver did
-  not receive any new data, it CAN consider the connection as dead
+  not receive any new data, it MAY consider the connection as dead
 
 * because of timing inaccuracies, the receiver SHOULD be tolerant and take
   into account an error margin
