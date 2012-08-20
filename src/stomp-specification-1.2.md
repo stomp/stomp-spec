@@ -552,7 +552,7 @@ byte.
 The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-type`
 header if a frame body is present. It SHOULD be set to a mime type which
 describes the format of the body to help the receiver of the frame interpret
-it's contents. If the `content-type` header is not set, the receiver SHOULD
+its contents. If the `content-type` header is not set, the receiver SHOULD
 consider the body to be a binary blob.
 
 The implied text encoding for mime types starting with `text/` is UTF-8. If
@@ -561,7 +561,7 @@ SHOULD append `;charset=<encoding>` to the mime type. For example,
 `text/html;charset=utf-16` SHOULD be used if your sending an html body in
 UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
 non `text/` mime types which can be interpreted as text. A good example of
-this would be a UTF-8 encoded XML. It's `content-type` SHOULD get set to
+this would be a UTF-8 encoded XML. Its `content-type` SHOULD get set to
 `application/xml;charset=utf-8`
 
 All STOMP clients and servers MUST support UTF-8 encoding and decoding. Therefore,
