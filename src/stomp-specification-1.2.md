@@ -169,14 +169,16 @@ frame and disconnect the client.
 
 Since messaging systems can be organized in store and forward topologies,
 similar to SMTP, a message may traverse several messaging servers before
-reaching a consumer. The intermediate server MAY 'update' header values by
-either prepending headers to the message or modifying a header in-place in
-the message.
+reaching a consumer. A STOMP server MAY 'update' header values by either
+prepending headers to the message or modifying a header in-place in the
+message.
 
-If the client receives repeated frame header entries, only the first header
-entry SHOULD be used as the value of header entry. Subsequent values are only
-used to maintain a history of state changes of the header. For example, if the
-client receives:
+If a client or a server receives repeated frame header entries, only the
+first header entry SHOULD be used as the value of header entry. Subsequent
+values are only used to maintain a history of state changes of the header
+and MAY be ignored.
+
+For example, if the client receives:
 
     MESSAGE
     foo:World
