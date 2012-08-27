@@ -121,9 +121,9 @@ looks like:
 The frame starts with a command string terminated by a newline. Following the
 command are zero or more header entries in `<key>:<value>` format. Each header
 entry is terminated by a newline. A blank line indicates the end of the
-headers and the beginning of the body. The body is then followed by the null
-byte (0x00). The examples in this document will use `^@`, control-@ in ASCII,
-to represent the null byte. The null byte can be optionally followed by
+headers and the beginning of the body. The body is then followed by the NULL
+octet (0x00). The examples in this document will use `^@`, control-@ in ASCII,
+to represent the NULL octet. The NULL octet can be optionally followed by
 multiple newlines. For more details, on how to parse STOMP frames, see the
 [Augmented BNF](#Augmented_BNF) section of this document.
 
@@ -549,11 +549,11 @@ Some headers MAY be used, and have special meaning, with most frames.
 
 The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-length`
 header if a frame body is present. If a frame's body contains NULL octets, the
-frame MUST include a `content-length` header. The header is a byte count for
+frame MUST include a `content-length` header. The header is an octet count for
 the length of the message body. If a `content-length` header is included, this
-number of bytes MUST be read, regardless of whether or not there are null
-characters in the body. The frame still needs to be terminated with a null
-byte.
+number of octets MUST be read, regardless of whether or not there are NULL
+octets in the body. The frame still needs to be terminated with a NULL
+octet.
 
 ### Header content-type
 
@@ -751,7 +751,7 @@ direction, if heart-beats are expected every `<n>` milliseconds:
   `<n>` milliseconds
 
 * if the sender has no real STOMP frame to send, it MUST send a single
-  newline byte (0x0A)
+  newline octet (0x0A)
 
 * if, inside a time window of at least `<n>` milliseconds, the receiver did
   not receive any new data, it MAY consider the connection as dead
