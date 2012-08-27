@@ -150,7 +150,7 @@ Undefined escape sequences such as `\r` (octet 92 and 114) MUST be treated as
 a fatal protocol error. Conversely when encoding frame headers, the reverse
 transformation MUST be applied.
 
-Only the `SEND`, `MESSAGE`, and `ERROR` frames can have a body. All other
+Only the `SEND`, `MESSAGE`, and `ERROR` frames MAY have a body. All other
 frames MUST NOT have a body.
 
 The STOMP 1.0 specification included many example frames with padding in the
