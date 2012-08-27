@@ -65,9 +65,15 @@ modes:
 STOMP 1.2 is fully backwards compatible with STOMP 1.1. It introduces no new
 features but focuses on clarifying some areas of the specification such as:
 
-* sequential processing of frames
+* repeated frame header entries
 
-* scope and uniqueness of identifiers
+* use of the `content-type` header
+
+* mandatory support of the `STOMP` frame by servers
+
+* sequential processing of frames (FIXME)
+
+* scope and uniqueness of identifiers (FIXME)
 
 ### Design Philosophy
 
@@ -216,14 +222,12 @@ client may not receive the `ERROR` frame before the socket is reset.
 
 ### CONNECT or STOMP Frame
 
-STOMP servers SHOULD handle a `STOMP` frame in the same manner as a `CONNECT`
+STOMP servers MUST handle a `STOMP` frame in the same manner as a `CONNECT`
 frame. STOMP 1.2 clients SHOULD continue to use the `CONNECT` command to
 remain backward compatible with STOMP 1.0 servers.
 
-FIXME: see issue #49 and change text accordingly.
-
 Clients that use the `STOMP` frame instead of the `CONNECT` frame will only
-be able to connect to STOMP 1.1 servers but the advantage is that a protocol
+be able to connect to STOMP 1.2 servers but the advantage is that a protocol
 sniffer/discriminator will be able to differentiate the STOMP connection from
 an HTTP connection.
 
