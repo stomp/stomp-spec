@@ -71,6 +71,8 @@ features but focuses on clarifying some areas of the specification such as:
 
 * mandatory support of the `STOMP` frame by servers
 
+* connection lingering
+
 * sequential processing of frames (FIXME)
 
 * scope and uniqueness of identifiers (FIXME)
@@ -169,7 +171,7 @@ server, servers MAY place maximum limits on:
 * the maximum size of a frame body
 
 If these limits are exceeded the server SHOULD send the client an `ERROR`
-frame and disconnect the client.
+frame and then close the connection.
 
 ### Repeated Header Entries
 
@@ -214,11 +216,8 @@ If the server accepts the connection attempt it will respond with a
     ^@
 
 The server can reject any connection attempt. The server SHOULD respond back
-with an `ERROR` frame listing why the connection was rejected and then close
-the connection. STOMP servers MUST support clients which rapidly connect and
-disconnect. This implies a server will likely only allow closed connections
-to linger for short time before the connection is reset. This means that a
-client may not receive the `ERROR` frame before the socket is reset.
+with an `ERROR` frame explaining why the connection was rejected and then close
+the connection.
 
 ### CONNECT or STOMP Frame
 
@@ -305,7 +304,8 @@ it has in common with the client:
     ^@
 
 If the client and server do not share any common protocol versions, then the
-sever SHOULD respond with an `ERROR` frame similar to:
+sever SHOULD respond with an `ERROR` frame similar to the following and then
+close the connection:
 
     ERROR
     version:1.2,2.1
@@ -315,8 +315,8 @@ sever SHOULD respond with an `ERROR` frame similar to:
 
 ## Once Connected
 
-A client MAY send a frame not in this list, but for such a frame a
-STOMP 1.2 server MAY respond with an `ERROR` frame.
+A client MAY send a frame not in this list, but for such a frame a STOMP 1.2
+server MAY respond with an `ERROR` frame and then close the connection.
 
 * [`SEND`](#SEND)
 * [`SUBSCRIBE`](#SUBSCRIBE)
@@ -366,7 +366,7 @@ on a `SUBSCRIBE` frame. The user defined headers MUST be passed through
 in the `MESSAGE` frame.
 
 If the sever cannot successfully process the `SEND` frame for any reason,
-the server MUST send the client an `ERROR` frame and disconnect the client.
+the server MUST send the client an `ERROR` frame and then close the connection.
 
 ### SUBSCRIBE
 
@@ -387,7 +387,7 @@ Example:
     ^@
 
 If the sever cannot successfully create the subscription,
-the server MUST send the client an `ERROR` frame and disconnect the client.
+the server MUST send the client an `ERROR` frame and then close the connection.
 
 STOMP servers MAY support additional server specific headers to customize the
 delivery semantics of the subscription. Consult your server's documentation for
@@ -535,6 +535,10 @@ previous frames have been received by the server, the client SHOULD:
 
 3. close the socket.
 
+Note that, if the server closes its end of the socket too quickly, the
+client might never receive the expected `RECEIPT` frame. See the
+[Connection Lingering](#Connection_Lingering) section for more information.
+
 Clients MUST NOT send any more frames after the `DISCONNECT` frame is sent.
 
 ## Standard Headers
@@ -637,9 +641,13 @@ The receipt body will be empty.
 
 ### ERROR
 
-The server MAY send `ERROR` frames if something goes wrong. The error frame
-SHOULD contain a `message` header with a short description of the error, and
-the body MAY contain more detailed information (or MAY be empty).
+The server MAY send `ERROR` frames if something goes wrong. In this case, it
+MUST then close the connection just after sending the `ERROR` frame. See the
+next section about [connection lingering](#Connection_Lingering).
+
+The `ERROR` frame SHOULD contain a `message` header with a short description
+of the error, and the body MAY contain more detailed information (or MAY be
+empty).
 
     ERROR
     receipt-id:message-12345
@@ -659,7 +667,7 @@ the body MAY contain more detailed information (or MAY be empty).
     for message propagation.
     ^@
 
-If the error is related to specific frame sent from the client, the server
+If the error is related to a specific frame sent from the client, the server
 SHOULD add additional headers to help identify the original frame that caused
 the error. For example, if the frame included a receipt header, the `ERROR`
 frame SHOULD set the `receipt-id` header to match the value of the `receipt`
@@ -668,6 +676,18 @@ header of the frame which the error is related to.
 `ERROR` frames SHOULD include a
 [`content-length`](#Header_content-length) header and a
 [`content-type`](#Header_content-type) header if a body is present.
+
+### Connection Lingering
+
+STOMP servers must be able to support clients which rapidly connect and
+disconnect.
+
+This implies a server will likely only allow closed connections to linger
+for short time before the connection is reset.
+
+As a consequence, a client may not receive the last frame sent by the server
+(for instance an `ERROR` frame or the `RECEIPT` frame in reply to a
+`DISCONNECT` frame) before the socket is reset.
 
 ## Heart-beating
 
