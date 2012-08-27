@@ -265,7 +265,7 @@ STOMP 1.2 servers MAY set the following headers:
 
 * `server` : A field that contains information about the STOMP server.
   The field MUST contain a server-name field and MAY be followed by optional 
-  comment feilds delimited by a space character.
+  comment fields delimited by a space character.
 
   The server-name field consists of a name token followed by an optional version
   number token.
@@ -375,7 +375,7 @@ Like the `SEND` frame, the `SUBSCRIBE` frame requires a `destination` header
 indicating the destination to which the client wants to subscribe. Any
 messages received on the subscribed destination will henceforth be delivered
 as `MESSAGE` frames from the server to the client. The `ack` header controls
-the message acknowledgement mode.
+the message acknowledgment mode.
 
 Example:
 
