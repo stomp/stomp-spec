@@ -69,7 +69,7 @@ features but focuses on clarifying some areas of the specification such as:
 
 * use of the `content-type` header
 
-* mandatory support of the `STOMP` frame by servers
+* required support of the `STOMP` frame by servers
 
 * connection lingering
 
@@ -464,8 +464,8 @@ client did not consume the message. The server can then either send the
 message to a different client, discard it, or put it in a dead letter queue.
 The exact behavior is server specific.
 
-`NACK` takes the same headers as `ACK`: `message-id` (mandatory),
-`subscription` (mandatory) and `transaction` (OPTIONAL).
+`NACK` takes the same headers as `ACK`: `message-id` (REQUIRED),
+`subscription` (REQUIRED) and `transaction` (OPTIONAL).
 
 `NACK` applies either to one single message (if the subscription's ack mode
 is `client-individual`) or to all messages sent before and not yet `ACK`'ed
