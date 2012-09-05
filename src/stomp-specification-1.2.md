@@ -75,7 +75,7 @@ features but focuses on clarifying some areas of the specification such as:
 
 * sequential processing of frames (FIXME)
 
-* scope and uniqueness of identifiers (FIXME)
+* scope and uniqueness of transaction identifiers (FIXME)
 
 ### Design Philosophy
 
@@ -484,7 +484,7 @@ transaction will be handled atomically based on the transaction.
 
 The `transaction` header is REQUIRED, and the transaction identifier will be
 used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NACK` frames to bind them to
-the named transaction.
+the named transaction. Transaction identifiers MUST be unique per connection.
 
 Any started transactions which have not been committed will be implicitly
 aborted if the client sends a `DISCONNECT` frame or if the TCP connection
@@ -500,7 +500,7 @@ fails for any reason.
     ^@
 
 The `transaction` header is REQUIRED and MUST specify the id of the transaction to
-commit\!
+commit.
 
 ### ABORT
 
@@ -512,7 +512,7 @@ commit\!
     ^@
 
 The `transaction` header is REQUIRED and MUST specify the id of the transaction to
-abort\!
+abort.
 
 ### DISCONNECT
 
