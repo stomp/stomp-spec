@@ -243,7 +243,7 @@ STOMP 1.2 clients MUST set the following headers:
 
 STOMP 1.2 clients MAY set the following headers:
 
-* `login` : The user id used to authenticate against a secured STOMP server.
+* `login` : The user identifier used to authenticate against a secured STOMP server.
 
 * `passcode` : The password used to authenticate against a secured STOMP
   server.
@@ -261,7 +261,7 @@ STOMP 1.2 servers MAY set the following headers:
 
 * `heart-beat` : The [Heart-beating](#Heart-beating) settings.
 
-* `session` : A session id that uniquely identifies the session.
+* `session` : A session identifier that uniquely identifies the session.
 
 * `server` : A field that contains information about the STOMP server.
   The field MUST contain a server-name field and MAY be followed by optional 
@@ -507,8 +507,8 @@ fails for any reason.
 
     ^@
 
-The `transaction` header is REQUIRED and MUST specify the id of the transaction to
-commit.
+The `transaction` header is REQUIRED and MUST specify the identifier of the
+transaction to commit.
 
 ### ABORT
 
@@ -519,8 +519,8 @@ commit.
 
     ^@
 
-The `transaction` header is REQUIRED and MUST specify the id of the transaction to
-abort.
+The `transaction` header is REQUIRED and MUST specify the identifier of the
+transaction to abort.
 
 ### DISCONNECT
 
