@@ -75,7 +75,7 @@ features but focuses on clarifying some areas of the specification such as:
 
 * sequential processing of frames (FIXME)
 
-* scope and uniqueness of transaction identifiers (FIXME)
+* scope and uniqueness of subscription and transaction identifiers (FIXME)
 
 ### Design Philosophy
 
@@ -395,11 +395,13 @@ details.
 
 #### SUBSCRIBE id Header
 
-An `id` header MUST be included in the frame to uniquely identify the subscription within the
-STOMP connection session. Since a single connection can have multiple open
-subscriptions with a server, the `id` header allows the client and server to
-relate subsequent `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original
-subscription.
+Since a single connection can have multiple open subscriptions with a
+server, an `id` header MUST be included in the frame to uniquely identify
+the subscription. The `id` header allows the client and server to relate
+subsequent `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original subscription.
+
+Within the same connection, different subscriptions MUST use different
+subscription identifiers.
 
 #### SUBSCRIBE ack Header
 
@@ -429,8 +431,14 @@ subsequent message MUST NOT cause a previous message to get acknowledged.
 
 The `UNSUBSCRIBE` frame is used to remove an existing subscription. Once the
 subscription is removed the STOMP connections will no longer receive messages
-from that destination. It requires that the `id` header matches the `id`
-value of previous `SUBSCRIBE` operation. Example:
+from that destination.
+
+Since a single connection can have multiple open subscriptions with a
+server, an `id` header MUST be included in the frame to uniquely identify
+the subscription to remove. This header MUST match the subscription
+identifier of an existing subscription.
+
+Example:
 
     UNSUBSCRIBE
     id:0
@@ -600,12 +608,18 @@ initial `CONNECTED` frame). These frames MAY be one of:
 
 ### MESSAGE
 
-`MESSAGE` frames are used to convey messages from subscriptions to the
-client. The `MESSAGE` frame MUST include a `destination` header indicating
-the destination the message was sent to. It MUST also contain a `message-id`
-header with a unique identifier for that message. The `subscription` header
-will be set to match the `id` header of the subscription that is receiving
-the message. The frame body contains the contents of the message:
+`MESSAGE` frames are used to convey messages from subscriptions to the client.
+
+The `MESSAGE` frame MUST include a `destination` header indicating the
+destination the message was sent to. If the message has been sent using
+STOMP, this `destination` header SHOULD be identical to the one used in the
+corresponding `SEND` frame.
+
+The `MESSAGE` frame MUST also contain a `message-id` header with a unique
+identifier for that message and a `subscription` header matching the
+identifier of the subscription that is receiving the message.
+
+The frame body contains the contents of the message:
 
     MESSAGE
     subscription:0
