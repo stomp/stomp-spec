@@ -144,11 +144,12 @@ C style string literal escapes are used to encode any colons and newlines that
 are found within the UTF-8 encoded headers. When decoding frame headers, the
 following transformations MUST be applied:
 
+* `\r` (octet 92 and 114) translates to carriage return (octet 13)
 * `\n` (octet 92 and 110) translates to newline (octet 10)
 * `\c` (octet 92 and 99) translates to `:` (octet 58)
 * `\\` (octet 92 and 92) translates to `\` (octet 92)
 
-Undefined escape sequences such as `\r` (octet 92 and 114) MUST be treated as
+Undefined escape sequences such as `\t` (octet 92 and 116) MUST be treated as
 a fatal protocol error. Conversely when encoding frame headers, the reverse
 transformation MUST be applied.
 
@@ -780,17 +781,19 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
 [RFC 2616](http://tools.ietf.org/html/rfc2616#section-2.1).
 
     LF                  = <US-ASCII new line (line feed) (octet 10)>
+    CR                  = <US-ASCII carriage return (octet 13)>
+    EOL                 = [CR] LF 
     OCTET               = <any 8-bit sequence of data>
     NULL                = <octet 0>
 
     frame-stream        = 1*frame
 
-    frame               = command LF
-                          *( header LF )
-                          LF
+    frame               = command EOL
+                          *( header EOL )
+                          EOL
                           *OCTET
                           NULL
-                          *( LF )
+                          *( EOL )
 
     command             = client-command | server-command
 
@@ -812,8 +815,8 @@ Backus-Naur Form (BNF) grammar used in HTTP/1.1
                           | "ERROR"
 
     header              = header-name ":" header-value
-    header-name         = 1*<any OCTET except LF or ":">
-    header-value        = *<any OCTET except LF or ":">
+    header-name         = 1*<any OCTET except CR or LF or ":">
+    header-value        = *<any OCTET except CR or LF or ":">
 
 ## License
 
