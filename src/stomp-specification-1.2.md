@@ -491,7 +491,7 @@ or `NACK`'ed.
 
 `BEGIN` is used to start a transaction. Transactions in this case apply to
 sending and acknowledging - any messages sent or acknowledged during a
-transaction will be handled atomically based on the transaction.
+transaction will be processed atomically based on the transaction.
 
     BEGIN
     transaction:tx1
@@ -594,10 +594,10 @@ RECOMMENDED that text based content be encoded with UTF-8.
 
 ### Header receipt
 
-Any client frame other than `CONNECT` MAY specify a `receipt`
-header with an arbitrary value. This will cause the server to acknowledge
-receipt of the frame with a `RECEIPT` frame which contains the value of this
-header as the value of the `receipt-id` header in the `RECEIPT` frame.
+Any client frame other than `CONNECT` MAY specify a `receipt` header with an
+arbitrary value. This will cause the server to acknowledge the processing of
+the client frame with a `RECEIPT` frame (see the [RECEIPT](#RECEIPT) frame
+for more details).
 
     SEND
     destination:/queue/a
@@ -651,7 +651,7 @@ messages.
 
 A `RECEIPT` frame is sent from the server to the client once a server has
 successfully processed a client frame that requests a receipt. A `RECEIPT`
-frame will include the header `receipt-id`, where the value is the value of
+frame MUST include the header `receipt-id`, where the value is the value of
 the `receipt` header in the frame which this is a receipt for.
 
     RECEIPT
@@ -659,7 +659,7 @@ the `receipt` header in the frame which this is a receipt for.
 
     ^@
 
-The receipt body will be empty.
+The body of the `RECEIPT` frame MUST be empty.
 
 ### ERROR
 
