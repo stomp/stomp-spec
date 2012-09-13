@@ -159,14 +159,16 @@ Undefined escape sequences such as `\t` (octet 92 and 116) MUST be treated as
 a fatal protocol error. Conversely when encoding frame headers, the reverse
 transformation MUST be applied.
 
-Only the `SEND`, `MESSAGE`, and `ERROR` frames MAY have a body. All other
-frames MUST NOT have a body.
-
 The STOMP 1.0 specification included many example frames with padding in the
 headers and many servers and clients were implemented to trim or pad header
 values. This causes problems if applications want to send headers that SHOULD
 not get trimmed. In STOMP 1.2, clients and servers MUST never trim or pad
 headers with spaces.
+
+### Body
+
+Only the `SEND`, `MESSAGE`, and `ERROR` frames MAY have a body. All other
+frames MUST NOT have a body.
 
 ### Size Limits
 
@@ -658,8 +660,6 @@ the `receipt` header in the frame which this is a receipt for.
     receipt-id:message-12345
 
     ^@
-
-The body of the `RECEIPT` frame MUST be empty.
 
 ### ERROR
 
