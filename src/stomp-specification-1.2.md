@@ -62,8 +62,12 @@ modes:
 
 ### Changes in the Protocol
 
-STOMP 1.2 is fully backwards compatible with STOMP 1.1. It introduces no new
-features but focuses on clarifying some areas of the specification such as:
+STOMP 1.2 is mostly backwards compatible with STOMP 1.1. The only incompatible
+change is the possibility to end frame lines with carriage return plus line feed
+instead of only line feed.
+
+Apart from this, STOMP 1.2 introduces no new features but focuses on clarifying
+some areas of the specification such as:
 
 * repeated frame header entries
 
@@ -118,34 +122,36 @@ looks like:
 
     Body^@
 
-The frame starts with a command string terminated by a newline. Following the
-command are zero or more header entries in `<key>:<value>` format. Each header
-entry is terminated by a newline. A blank line indicates the end of the
-headers and the beginning of the body. The body is then followed by the NULL
-octet (0x00). The examples in this document will use `^@`, control-@ in ASCII,
-to represent the NULL octet. The NULL octet can be optionally followed by
-multiple newlines. For more details, on how to parse STOMP frames, see the
-[Augmented BNF](#Augmented_BNF) section of this document.
+The frame starts with a command string terminated by an end-of-line (EOL),
+which consists of an OPTIONAL carriage return (octet 13) followed by a
+REQUIRED line feed (octet 10). Following the command are zero or more header
+entries in `<key>:<value>` format. Each header entry is terminated by an
+EOL. A blank line indicates the end of the headers and the beginning of the
+body. The body is then followed by the NULL octet. The examples in this
+document will use `^@`, control-@ in ASCII, to represent the NULL octet. The
+NULL octet can be optionally followed by multiple EOLs. For more details, on
+how to parse STOMP frames, see the [Augmented BNF](#Augmented_BNF) section
+of this document.
 
 All commands and header names referenced in this document are case sensitive.
 
 ### Value Encoding
 
 The commands and headers are encoded in UTF-8. All frames except the `CONNECT`
-and `CONNECTED` frames will also escape any colon or newline octets found in
-the resulting UTF-8 encoded headers.
+and `CONNECTED` frames will also escape any carriage return, line feed or colon
+found in the resulting UTF-8 encoded headers.
 
 Escaping is needed to allow header keys and values to contain those frame
 header delimiting octets as values. The `CONNECT` and `CONNECTED` frames do not
-escape the colon or newline octets in order to remain backward compatible with
-STOMP 1.0.
+escape the carriage return, line feed or colon octets in order to remain backward
+compatible with STOMP 1.0.
 
-C style string literal escapes are used to encode any colons and newlines that
-are found within the UTF-8 encoded headers. When decoding frame headers, the
-following transformations MUST be applied:
+C style string literal escapes are used to encode any carriage return, line feed
+or colon that are found within the UTF-8 encoded headers. When decoding frame headers,
+the following transformations MUST be applied:
 
 * `\r` (octet 92 and 114) translates to carriage return (octet 13)
-* `\n` (octet 92 and 110) translates to newline (octet 10)
+* `\n` (octet 92 and 110) translates to line feed (octet 10)
 * `\c` (octet 92 and 99) translates to `:` (octet 58)
 * `\\` (octet 92 and 92) translates to `\` (octet 92)
 
@@ -765,8 +771,7 @@ direction, if heart-beats are expected every `<n>` milliseconds:
 * the sender MUST send new data over the network connection at least every
   `<n>` milliseconds
 
-* if the sender has no real STOMP frame to send, it MUST send a single
-  newline octet (0x0A)
+* if the sender has no real STOMP frame to send, it MUST send an end-of-line (EOL)
 
 * if, inside a time window of at least `<n>` milliseconds, the receiver did
   not receive any new data, it MAY consider the connection as dead
@@ -780,11 +785,11 @@ A STOMP session can be more formally described using the
 Backus-Naur Form (BNF) grammar used in HTTP/1.1
 [RFC 2616](http://tools.ietf.org/html/rfc2616#section-2.1).
 
-    LF                  = <US-ASCII new line (line feed) (octet 10)>
+    NULL                = <US-ASCII null (octet 0)>
+    LF                  = <US-ASCII line feed (aka newline) (octet 10)>
     CR                  = <US-ASCII carriage return (octet 13)>
     EOL                 = [CR] LF 
     OCTET               = <any 8-bit sequence of data>
-    NULL                = <octet 0>
 
     frame-stream        = 1*frame
 
