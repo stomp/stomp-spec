@@ -405,7 +405,8 @@ details.
 Since a single connection can have multiple open subscriptions with a
 server, an `id` header MUST be included in the frame to uniquely identify
 the subscription. The `id` header allows the client and server to relate
-subsequent `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original subscription.
+subsequent `MESSAGE`, `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original
+subscription.
 
 Within the same connection, different subscriptions MUST use different
 subscription identifiers.
