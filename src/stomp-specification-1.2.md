@@ -439,7 +439,7 @@ subsequent message MUST NOT cause a previous message to get acknowledged.
 
 The `UNSUBSCRIBE` frame is used to remove an existing subscription. Once the
 subscription is removed the STOMP connections will no longer receive messages
-from that destination.
+from that subscription.
 
 Since a single connection can have multiple open subscriptions with a
 server, an `id` header MUST be included in the frame to uniquely identify
