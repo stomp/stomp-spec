@@ -62,11 +62,15 @@ modes:
 
 ### Changes in the Protocol
 
-STOMP 1.2 is mostly backwards compatible with STOMP 1.1. The only incompatible
-change is the possibility to end frame lines with carriage return plus line feed
-instead of only line feed.
+STOMP 1.2 is mostly backwards compatible with STOMP 1.1. There are only two
+incompatible changes:
 
-Apart from this, STOMP 1.2 introduces no new features but focuses on clarifying
+* it is now possible to end frame lines with carriage return plus line feed
+  instead of only line feed
+
+* message acknowledgment has been simplified and now uses a dedicated header
+
+Apart from these, STOMP 1.2 introduces no new features but focuses on clarifying
 some areas of the specification such as:
 
 * repeated frame header entries
@@ -77,9 +81,9 @@ some areas of the specification such as:
 
 * connection lingering
 
-* sequential processing of frames (FIXME)
+* scope and uniqueness of subscription and transaction identifiers
 
-* scope and uniqueness of subscription and transaction identifiers (FIXME)
+* sequential processing of frames (FIXME: not yet done...)
 
 ### Design Philosophy
 
@@ -407,8 +411,7 @@ details.
 Since a single connection can have multiple open subscriptions with a
 server, an `id` header MUST be included in the frame to uniquely identify
 the subscription. The `id` header allows the client and server to relate
-subsequent `MESSAGE`, `ACK`, `NACK` or `UNSUBSCRIBE` frames to the original
-subscription.
+subsequent `MESSAGE` or `UNSUBSCRIBE` frames to the original subscription.
 
 Within the same connection, different subscriptions MUST use different
 subscription identifiers.
@@ -426,16 +429,20 @@ to get dropped.
 
 When the the `ack` mode is `client`, then the client MUST send the server
 `ACK` frames for the messages it processes. If the connection fails before a
-client sends an `ACK` for the message the server will assume the message has
-not been processed and MAY redeliver the message to another client. The `ACK`
-frames sent by the client will be treated as a cumulative `ACK`. This means
-the `ACK` operates on the message specified in the `ACK` frame and all
-messages sent to the subscription before the `ACK`'ed message.
+client sends an `ACK` frame for the message the server will assume the message
+has not been processed and MAY redeliver the message to another client. The
+`ACK` frames sent by the client will be treated as a cumulative acknowledgment.
+This means the acknowledgment operates on the message specified in the `ACK`
+frame and all messages sent to the subscription before the `ACK`'ed message.
 
-When the the `ack` mode is `client-individual`, the ack mode operates just
-like the `client` ack mode except that the `ACK` or `NACK` frames sent by the
-client are not cumulative. This means that an `ACK` or `NACK` for a
-subsequent message MUST NOT cause a previous message to get acknowledged.
+In case the client did not process some messages, it SHOULD send `NACK` frames
+to tell the server it did not consume these messages.
+
+When the the `ack` mode is `client-individual`, the acknowledgment operates just
+like the `client` acknowledgment mode except that the `ACK` or `NACK` frames
+sent by the client are not cumulative. This means that an `ACK` or `NACK`
+frame for a subsequent message MUST NOT cause a previous message to get
+acknowledged.
 
 ### UNSUBSCRIBE
 
@@ -460,17 +467,15 @@ Example:
 `ACK` is used to acknowledge consumption of a message from a subscription
 using `client` or `client-individual` acknowledgment. Any messages received
 from such a subscription will not be considered to have been consumed until
-the message has been acknowledged via an `ACK` or a `NACK`.
+the message has been acknowledged via an `ACK`.
 
-`ACK` has two REQUIRED headers: `message-id`, which MUST contain a value
-matching the `message-id` for the `MESSAGE` being acknowledged and
-`subscription`, which MUST be set to match the value of the subscription's
-`id` header. Optionally, a `transaction` header MAY be specified, indicating
-that the message acknowledgment SHOULD be part of the named transaction.
+The `ACK` frame MUST include an `id` header matching the `ack` header of the
+`MESSAGE` being acknowledged. Optionally, a `transaction` header MAY be
+specified, indicating that the message acknowledgment SHOULD be part of the
+named transaction.
 
     ACK
-    subscription:0
-    message-id:007
+    id:12345
     transaction:tx1
 
     ^@
@@ -482,12 +487,12 @@ client did not consume the message. The server can then either send the
 message to a different client, discard it, or put it in a dead letter queue.
 The exact behavior is server specific.
 
-`NACK` takes the same headers as `ACK`: `message-id` (REQUIRED),
-`subscription` (REQUIRED) and `transaction` (OPTIONAL).
+`NACK` takes the same headers as `ACK`: `id` (REQUIRED) and `transaction`
+(OPTIONAL).
 
-`NACK` applies either to one single message (if the subscription's ack mode
-is `client-individual`) or to all messages sent before and not yet `ACK`'ed
-or `NACK`'ed.
+`NACK` applies either to one single message (if the subscription's `ack`
+mode is `client-individual`) or to all messages sent before and not yet
+`ACK`'ed or `NACK`'ed (if the subscription's `ack` mode is `client`).
 
 ### BEGIN
 
@@ -628,6 +633,12 @@ corresponding `SEND` frame.
 The `MESSAGE` frame MUST also contain a `message-id` header with a unique
 identifier for that message and a `subscription` header matching the
 identifier of the subscription that is receiving the message.
+
+If the message is received from a subscription that requires explicit
+acknowledgment (either `client` or `client-individual` mode) then the
+`MESSAGE` frame MUST also contain an `ack` header with an arbitrary
+value. This header will be used to relate the message to a subsequent
+`ACK` or `NACK` frame.
 
 The frame body contains the contents of the message:
 
