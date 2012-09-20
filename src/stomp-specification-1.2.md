@@ -239,9 +239,9 @@ frame. STOMP 1.2 clients SHOULD continue to use the `CONNECT` command to
 remain backward compatible with STOMP 1.0 servers.
 
 Clients that use the `STOMP` frame instead of the `CONNECT` frame will only
-be able to connect to STOMP 1.2 servers but the advantage is that a protocol
-sniffer/discriminator will be able to differentiate the STOMP connection from
-an HTTP connection.
+be able to connect to STOMP 1.2 servers (as well as some STOMP 1.1 servers)
+but the advantage is that a protocol sniffer/discriminator will be able to
+differentiate the STOMP connection from an HTTP connection.
 
 STOMP 1.2 clients MUST set the following headers:
 
@@ -507,7 +507,8 @@ transaction will be processed atomically based on the transaction.
 
 The `transaction` header is REQUIRED, and the transaction identifier will be
 used for `SEND`, `COMMIT`, `ABORT`, `ACK`, and `NACK` frames to bind them to
-the named transaction. Transaction identifiers MUST be unique per connection.
+the named transaction. Within the same connection, different transactions MUST
+use different transaction identifiers.
 
 Any started transactions which have not been committed will be implicitly
 aborted if the client sends a `DISCONNECT` frame or if the TCP connection
@@ -589,7 +590,7 @@ consider the body to be a binary blob.
 The implied text encoding for MIME types starting with `text/` is UTF-8. If
 you are using a text based MIME type with a different encoding then you
 SHOULD append `;charset=<encoding>` to the MIME type. For example,
-`text/html;charset=utf-16` SHOULD be used if your sending an html body in
+`text/html;charset=utf-16` SHOULD be used if your sending an HTML body in
 UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
 non `text/` MIME types which can be interpreted as text. A good example of
 this would be a UTF-8 encoded XML. Its `content-type` SHOULD get set to
