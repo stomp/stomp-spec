@@ -174,17 +174,53 @@ headers with spaces.
 Only the `SEND`, `MESSAGE`, and `ERROR` frames MAY have a body. All other
 frames MUST NOT have a body.
 
-### Size Limits
+### Standard Headers
 
-To prevent malicious clients from exploiting memory allocation in a
-server, servers MAY place maximum limits on:
+Some headers MAY be used, and have special meaning, with most frames.
 
-* the number of frame headers allowed in a single frame
-* the maximum length of header lines
-* the maximum size of a frame body
+#### Header content-length
 
-If these limits are exceeded the server SHOULD send the client an `ERROR`
-frame and then close the connection.
+The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-length`
+header if a frame body is present. If a frame's body contains NULL octets, the
+frame MUST include a `content-length` header. The header is an octet count for
+the length of the message body. If a `content-length` header is included, this
+number of octets MUST be read, regardless of whether or not there are NULL
+octets in the body. The frame still needs to be terminated with a NULL
+octet.
+
+#### Header content-type
+
+If a frame body is present, the `SEND`, `MESSAGE` and `ERROR` frames SHOULD
+include a `content-type` header to help the receiver of the frame interpret
+its body. If the `content-type` header is set, its value MUST be a MIME type
+which describes the format of the body. Otherwise, the receiver SHOULD
+consider the body to be a binary blob.
+
+The implied text encoding for MIME types starting with `text/` is UTF-8. If
+you are using a text based MIME type with a different encoding then you
+SHOULD append `;charset=<encoding>` to the MIME type. For example,
+`text/html;charset=utf-16` SHOULD be used if your sending an HTML body in
+UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
+non `text/` MIME types which can be interpreted as text. A good example of
+this would be a UTF-8 encoded XML. Its `content-type` SHOULD get set to
+`application/xml;charset=utf-8`
+
+All STOMP clients and servers MUST support UTF-8 encoding and decoding. Therefore,
+for maximum interoperability in a heterogeneous computing environment, it is
+RECOMMENDED that text based content be encoded with UTF-8.
+
+#### Header receipt
+
+Any client frame other than `CONNECT` MAY specify a `receipt` header with an
+arbitrary value. This will cause the server to acknowledge the processing of
+the client frame with a `RECEIPT` frame (see the [RECEIPT](#RECEIPT) frame
+for more details).
+
+    SEND
+    destination:/queue/a
+    receipt:message-12345
+
+    hello queue a^@
 
 ### Repeated Header Entries
 
@@ -208,6 +244,30 @@ For example, if the client receives:
     ^@
 
 The value of the `foo` header is just `World`.
+
+### Size Limits
+
+To prevent malicious clients from exploiting memory allocation in a
+server, servers MAY place maximum limits on:
+
+* the number of frame headers allowed in a single frame
+* the maximum length of header lines
+* the maximum size of a frame body
+
+If these limits are exceeded the server SHOULD send the client an `ERROR`
+frame and then close the connection.
+
+### Connection Lingering
+
+STOMP servers must be able to support clients which rapidly connect and
+disconnect.
+
+This implies a server will likely only allow closed connections to linger
+for short time before the connection is reset.
+
+As a consequence, a client may not receive the last frame sent by the server
+(for instance an `ERROR` frame or the `RECEIPT` frame in reply to a
+`DISCONNECT` frame) before the socket is reset.
 
 ## Connecting
 
@@ -289,7 +349,7 @@ STOMP 1.2 servers MAY set the following headers:
 
     `server:Apache/1.3.9`
 
-## Protocol Negotiation
+### Protocol Negotiation
 
 From STOMP 1.1 and onwards, the `CONNECT` frame MUST include the
 `accept-version` header. It SHOULD be set to a comma separated list of
@@ -326,7 +386,76 @@ close the connection:
 
     Supported protocol versions are 1.2 2.1^@
 
-## Once Connected
+### Heart-beating
+
+Heart-beating can optionally be used to test the healthiness of the
+underlying TCP connection and to make sure that the remote end is alive and
+kicking.
+
+In order to enable heart-beating, each party has to declare what it can do
+and what it would like the other party to do. This happens at the very
+beginning of the STOMP session, by adding a `heart-beat` header to the
+`CONNECT` and `CONNECTED` frames.
+
+When used, the `heart-beat` header MUST contain two positive integers
+separated by a comma.
+
+The first number represents what the sender of the frame can do (outgoing
+heart-beats):
+
+* 0 means it cannot send heart-beats
+
+* otherwise it is the smallest number of milliseconds between heart-beats
+  that it can guarantee
+
+The second number represents what the sender of the frame would like
+to get (incoming heart-beats):
+
+* 0 means it does not want to receive heart-beats
+
+* otherwise it is the desired number of milliseconds between heart-beats
+
+The `heart-beat` header is OPTIONAL. A missing `heart-beat` header MUST be
+treated the same way as a "heart-beat:0,0" header, that is: the party cannot
+send and does not want to receive heart-beats.
+
+The `heart-beat` header provides enough information so that each party can
+find out if heart-beats can be used, in which direction, and with which
+frequency.
+
+More formally, the initial frames look like:
+
+    CONNECT
+    heart-beat:<cx>,<cy>
+
+    CONNECTED:
+    heart-beat:<sx>,<sy>
+
+For heart-beats from the client to the server:
+
+* if `<cx>` is 0 (the client cannot send heart-beats) or `<sy>` is 0 (the
+  server does not want to receive heart-beats) then there will be none
+
+* otherwise, there will be heart-beats every MAX(`<cx>`,`<sy>`) milliseconds
+
+In the other direction, `<sx>` and `<cy>` are used the same way.
+
+Regarding the heart-beats themselves, any new data received over the network
+connection is an indication that the remote end is alive. In a given
+direction, if heart-beats are expected every `<n>` milliseconds:
+
+* the sender MUST send new data over the network connection at least every
+  `<n>` milliseconds
+
+* if the sender has no real STOMP frame to send, it MUST send an end-of-line (EOL)
+
+* if, inside a time window of at least `<n>` milliseconds, the receiver did
+  not receive any new data, it MAY consider the connection as dead
+
+* because of timing inaccuracies, the receiver SHOULD be tolerant and take
+  into account an error margin
+
+## Client Frames
 
 A client MAY send a frame not in this list, but for such a frame a STOMP 1.2
 server MAY respond with an `ERROR` frame and then close the connection.
@@ -340,8 +469,6 @@ server MAY respond with an `ERROR` frame and then close the connection.
 * [`ACK`](#ACK)
 * [`NACK`](#NACK)
 * [`DISCONNECT`](#DISCONNECT)
-
-## Client Frames
 
 ### SEND
 
@@ -565,54 +692,6 @@ client might never receive the expected `RECEIPT` frame. See the
 
 Clients MUST NOT send any more frames after the `DISCONNECT` frame is sent.
 
-## Standard Headers
-
-Some headers MAY be used, and have special meaning, with most frames.
-
-### Header content-length
-
-The `SEND`, `MESSAGE` and `ERROR` frames SHOULD include a `content-length`
-header if a frame body is present. If a frame's body contains NULL octets, the
-frame MUST include a `content-length` header. The header is an octet count for
-the length of the message body. If a `content-length` header is included, this
-number of octets MUST be read, regardless of whether or not there are NULL
-octets in the body. The frame still needs to be terminated with a NULL
-octet.
-
-### Header content-type
-
-If a frame body is present, the `SEND`, `MESSAGE` and `ERROR` frames SHOULD
-include a `content-type` header to help the receiver of the frame interpret
-its body. If the `content-type` header is set, its value MUST be a MIME type
-which describes the format of the body. Otherwise, the receiver SHOULD
-consider the body to be a binary blob.
-
-The implied text encoding for MIME types starting with `text/` is UTF-8. If
-you are using a text based MIME type with a different encoding then you
-SHOULD append `;charset=<encoding>` to the MIME type. For example,
-`text/html;charset=utf-16` SHOULD be used if your sending an HTML body in
-UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
-non `text/` MIME types which can be interpreted as text. A good example of
-this would be a UTF-8 encoded XML. Its `content-type` SHOULD get set to
-`application/xml;charset=utf-8`
-
-All STOMP clients and servers MUST support UTF-8 encoding and decoding. Therefore,
-for maximum interoperability in a heterogeneous computing environment, it is
-RECOMMENDED that text based content be encoded with UTF-8.
-
-### Header receipt
-
-Any client frame other than `CONNECT` MAY specify a `receipt` header with an
-arbitrary value. This will cause the server to acknowledge the processing of
-the client frame with a `RECEIPT` frame (see the [RECEIPT](#RECEIPT) frame
-for more details).
-
-    SEND
-    destination:/queue/a
-    receipt:message-12345
-
-    hello queue a^@
-
 ## Server Frames
 
 The server will, on occasion, send frames to the client (in addition to the
@@ -710,87 +789,6 @@ header of the frame which the error is related to.
 `ERROR` frames SHOULD include a
 [`content-length`](#Header_content-length) header and a
 [`content-type`](#Header_content-type) header if a body is present.
-
-### Connection Lingering
-
-STOMP servers must be able to support clients which rapidly connect and
-disconnect.
-
-This implies a server will likely only allow closed connections to linger
-for short time before the connection is reset.
-
-As a consequence, a client may not receive the last frame sent by the server
-(for instance an `ERROR` frame or the `RECEIPT` frame in reply to a
-`DISCONNECT` frame) before the socket is reset.
-
-## Heart-beating
-
-Heart-beating can optionally be used to test the healthiness of the
-underlying TCP connection and to make sure that the remote end is alive and
-kicking.
-
-In order to enable heart-beating, each party has to declare what it can do
-and what it would like the other party to do. This happens at the very
-beginning of the STOMP session, by adding a `heart-beat` header to the
-`CONNECT` and `CONNECTED` frames.
-
-When used, the `heart-beat` header MUST contain two positive integers
-separated by a comma.
-
-The first number represents what the sender of the frame can do (outgoing
-heart-beats):
-
-* 0 means it cannot send heart-beats
-
-* otherwise it is the smallest number of milliseconds between heart-beats
-  that it can guarantee
-
-The second number represents what the sender of the frame would like
-to get (incoming heart-beats):
-
-* 0 means it does not want to receive heart-beats
-
-* otherwise it is the desired number of milliseconds between heart-beats
-
-The `heart-beat` header is OPTIONAL. A missing `heart-beat` header MUST be
-treated the same way as a "heart-beat:0,0" header, that is: the party cannot
-send and does not want to receive heart-beats.
-
-The `heart-beat` header provides enough information so that each party can
-find out if heart-beats can be used, in which direction, and with which
-frequency.
-
-More formally, the initial frames look like:
-
-    CONNECT
-    heart-beat:<cx>,<cy>
-
-    CONNECTED:
-    heart-beat:<sx>,<sy>
-
-For heart-beats from the client to the server:
-
-* if `<cx>` is 0 (the client cannot send heart-beats) or `<sy>` is 0 (the
-  server does not want to receive heart-beats) then there will be none
-
-* otherwise, there will be heart-beats every MAX(`<cx>`,`<sy>`) milliseconds
-
-In the other direction, `<sx>` and `<cy>` are used the same way.
-
-Regarding the heart-beats themselves, any new data received over the network
-connection is an indication that the remote end is alive. In a given
-direction, if heart-beats are expected every `<n>` milliseconds:
-
-* the sender MUST send new data over the network connection at least every
-  `<n>` milliseconds
-
-* if the sender has no real STOMP frame to send, it MUST send an end-of-line (EOL)
-
-* if, inside a time window of at least `<n>` milliseconds, the receiver did
-  not receive any new data, it MAY consider the connection as dead
-
-* because of timing inaccuracies, the receiver SHOULD be tolerant and take
-  into account an error margin
 
 ## Augmented BNF
 
