@@ -792,6 +792,55 @@ header of the frame which the error is related to.
 [`content-length`](#Header_content-length) header and a
 [`content-type`](#Header_content-type) header if a body is present.
 
+## Frames and Headers
+
+In addition to the [standard headers](#Standard_Headers) described above
+(`content-length`, `content-type` and `receipt`), here are all the headers
+defined in this specification that each frame MUST or MAY use:
+
+* `CONNECT` or `STOMP`
+    * REQUIRED: `accept-version`, `host`
+    * OPTIONAL: `login`, `passcode`, `heart-beat`
+* `CONNECTED`
+    * REQUIRED: `version`
+    * OPTIONAL: `session`, `server`, `heart-beat`
+* `SEND`
+    * REQUIRED: `destination`
+    * OPTIONAL: `transaction`
+* `SUBSCRIBE`
+    * REQUIRED: `destination`, `id`
+    * OPTIONAL: `ack`
+* `UNSUBSCRIBE`
+    * REQUIRED: `id`
+    * OPTIONAL: none
+* `ACK` or `NACK`
+    * REQUIRED: `id`
+    * OPTIONAL: `transaction`
+* `BEGIN` or `COMMIT` or `ABORT`
+    * REQUIRED: `transaction`
+    * OPTIONAL: none
+* `DISCONNECT`
+    * REQUIRED: none
+    * OPTIONAL: none
+* `MESSAGE`
+    * REQUIRED: `destination`, `message-id`, `subscription`
+    * OPTIONAL: `ack`
+* `RECEIPT`
+    * REQUIRED: `receipt-id`
+    * OPTIONAL: none
+* `ERROR`
+    * REQUIRED: none
+    * OPTIONAL: `message`
+
+In addition, the `SEND` and `MESSAGE` frames MAY include arbitrary user
+defined headers that SHOULD be considered as being part of the carried
+message. Also, the `ERROR` frame SHOULD include additional headers to help
+identify the original frame that caused the error.
+
+Finally, STOMP servers MAY use additional headers to give access to features
+like persistency or expiration. Consult your server's documentation for
+details.
+
 ## Augmented BNF
 
 A STOMP session can be more formally described using the
