@@ -379,7 +379,7 @@ it has in common with the client:
     ^@
 
 If the client and server do not share any common protocol versions, then the
-sever SHOULD respond with an `ERROR` frame similar to the following and then
+sever MUST respond with an `ERROR` frame similar to the following and then
 close the connection:
 
     ERROR
