@@ -54,10 +54,10 @@ semantics that they can support with STOMP.
 A STOMP client is a user-agent which can act in two (possibly simultaneous)
 modes:
 
-* As a producer, sending messages to a destination on the server via a `SEND`
+* as a producer, sending messages to a destination on the server via a `SEND`
   frame
 
-* As a consumer, sending a `SUBSCRIBE` frame for a given destination and
+* as a consumer, sending a `SUBSCRIBE` frame for a given destination and
   receiving messages from the server as `MESSAGE` frames.
 
 ### Changes in the Protocol
