@@ -83,7 +83,7 @@ some areas of the specification such as:
 
 * scope and uniqueness of subscription and transaction identifiers
 
-* sequential processing of frames (FIXME: not yet done...)
+* meaning of the `RECEIPT` frame with regard to previous frames
 
 ### Design Philosophy
 
@@ -753,6 +753,13 @@ the `receipt` header in the frame which this is a receipt for.
     receipt-id:message-12345
 
     ^@
+
+A `RECEIPT` frame is an acknowledgment that the corresponding client frame
+has been _processed_ by the server. Since STOMP is stream based, the receipt
+is also a cumulative acknowledgment that all the previous frames have been
+_received_ by the server. However, these previous frames may not yet be
+fully _processed_. If the client disconnects, previously received frames
+SHOULD continue to get processed by the server.
 
 ### ERROR
 
