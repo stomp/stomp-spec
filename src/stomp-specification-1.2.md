@@ -129,13 +129,13 @@ looks like:
 The frame starts with a command string terminated by an end-of-line (EOL),
 which consists of an OPTIONAL carriage return (octet 13) followed by a
 REQUIRED line feed (octet 10). Following the command are zero or more header
-entries in `<key>:<value>` format. Each header entry is terminated by an
-EOL. A blank line indicates the end of the headers and the beginning of the
-body. The body is then followed by the NULL octet. The examples in this
-document will use `^@`, control-@ in ASCII, to represent the NULL octet. The
-NULL octet can be optionally followed by multiple EOLs. For more details, on
-how to parse STOMP frames, see the [Augmented BNF](#Augmented_BNF) section
-of this document.
+entries in `<key>:<value>` format. Each header entry is terminated by an EOL.
+A blank line (i.e. an extra EOL) indicates the end of the headers and the
+beginning of the body. The body is then followed by the NULL octet. The
+examples in this document will use `^@`, control-@ in ASCII, to represent
+the NULL octet. The NULL octet can be optionally followed by multiple EOLs.
+For more details, on how to parse STOMP frames, see the
+[Augmented BNF](#Augmented_BNF) section of this document.
 
 All commands and header names referenced in this document are case sensitive.
 
