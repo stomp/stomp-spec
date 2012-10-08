@@ -179,6 +179,7 @@ table.clients
       * [stomp.py](http://code.google.com/p/stomppy/)
       * [pyactivemq](http://code.google.com/p/pyactivemq/)
       * [stomper](http://code.google.com/p/stomper/)
+      * [stompest](https://github.com/mozes/stompest)
 
   - language("Ruby on Rails")
     :markdown
