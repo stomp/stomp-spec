@@ -1,4 +1,4 @@
-# STOMP Protocol Specification, Version 1.2 (Draft)
+# STOMP Protocol Specification, Version 1.2
 
 {:toc:2-5}
 
