@@ -5,6 +5,19 @@ title: Implementations
 The Simple Text Oriented Messaging Protocol
 
 --- name:content pipeline:jade
+.toc
+  ul(style="list-style:none;")
+    li
+      a(href="#STOMP_1_2_Servers") STOMP 1.2 Servers
+    li
+      a(href="#STOMP_1_1_Servers") STOMP 1.1 Servers
+    li
+      a(href="#STOMP_1_1_Clients") STOMP 1.1 Clients
+    li
+      a(href="#STOMP_1_0_Servers") STOMP 1.0 Servers
+    li
+      a(href="#STOMP_1_0_Clients") STOMP 1.0 Clients
+
 - def language(name:String)(func: =>Unit) 
   tr
     td
@@ -12,13 +25,21 @@ The Simple Text Oriented Messaging Protocol
     td
       !~~ capture(func)
 :markdown
+  # STOMP 1.2 Servers
+
+  The following is a list of the various STOMP 1.1 compliant message 
+  servers.
+
+  * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
+    ActiveMQ.
+
   # STOMP 1.1 Servers
 
   The following is a list of the various STOMP 1.1 compliant message 
   servers.
 
   * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
-    ActiveMQ focused on STOMP messaging.
+    ActiveMQ.
 
   # STOMP 1.1 Clients
   Pick the right Stomp client for your particular language or platform.
@@ -62,7 +83,7 @@ table.clients
     the STOMP 1.0 reference implementation.
 
   * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
-    ActiveMQ focused on STOMP messaging.
+    ActiveMQ.
 
   * [CoilMQ](http://code.google.com/p/coilmq/) is a lightweight pure Python Stomp
     broker inspired by StompServer.
