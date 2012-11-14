@@ -50,6 +50,7 @@ table.clients
   - language("Python")
     :markdown
       * [stomp.py](http://code.google.com/p/stomppy/)
+      * [stompest](https://github.com/nikipore/stompest)
 
 :markdown
   # STOMP 1.0 Servers
@@ -179,7 +180,7 @@ table.clients
       * [stomp.py](http://code.google.com/p/stomppy/)
       * [pyactivemq](http://code.google.com/p/pyactivemq/)
       * [stomper](http://code.google.com/p/stomper/)
-      * [stompest](https://github.com/mozes/stompest)
+      * [stompest](https://github.com/nikipore/stompest)
 
   - language("Ruby on Rails")
     :markdown
