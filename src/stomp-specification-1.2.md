@@ -828,7 +828,7 @@ defined in this specification that each frame MUST or MAY use:
     * OPTIONAL: none
 * `DISCONNECT`
     * REQUIRED: none
-    * OPTIONAL: none
+    * OPTIONAL: receipt
 * `MESSAGE`
     * REQUIRED: `destination`, `message-id`, `subscription`
     * OPTIONAL: `ack`
