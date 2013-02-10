@@ -33,6 +33,9 @@ The Simple Text Oriented Messaging Protocol
   * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
     ActiveMQ.
 
+  * [RabbitMQ](http://www.rabbitmq.com/plugins.html#rabbitmq-stomp) an Erlang-based,
+    multi-protocol broker with full support for STOMP via a plugin.
+
   # STOMP 1.1 Servers
 
   The following is a list of the various STOMP 1.1 compliant message 
@@ -40,6 +43,9 @@ The Simple Text Oriented Messaging Protocol
 
   * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
     ActiveMQ.
+
+  * [RabbitMQ](http://www.rabbitmq.com/plugins.html#rabbitmq-stomp) an Erlang-based,
+    multi-protocol broker with full support for STOMP via a plugin.
 
   # STOMP 1.1 Clients
   Pick the right Stomp client for your particular language or platform.
