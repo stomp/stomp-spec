@@ -27,7 +27,7 @@ The Simple Text Oriented Messaging Protocol
 :markdown
   # STOMP 1.2 Servers
 
-  The following is a list of the various STOMP 1.1 compliant message 
+  The following is a list of the various STOMP 1.2 compliant message 
   servers.
 
   * [Apache Apollo](http://activemq.apache.org/apollo) a redesigned version of 
