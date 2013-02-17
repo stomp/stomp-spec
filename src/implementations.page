@@ -36,6 +36,19 @@ The Simple Text Oriented Messaging Protocol
   * [RabbitMQ](http://www.rabbitmq.com/plugins.html#rabbitmq-stomp) an Erlang-based,
     multi-protocol broker with full support for STOMP via a plugin.
 
+  # STOMP 1.2 Clients
+  Pick the right Stomp client for your particular language or platform.
+
+br
+table.clients
+  tr
+    th Language
+    th Libraries
+
+  - language("Python")
+    :markdown
+      * [stompest](https://github.com/nikipore/stompest)
+
   # STOMP 1.1 Servers
 
   The following is a list of the various STOMP 1.1 compliant message 
