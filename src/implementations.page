@@ -45,6 +45,7 @@ table.clients
     th Language
     th Libraries
 
+:markdown
   - language("Python")
     :markdown
       * [stompest](https://github.com/nikipore/stompest)
