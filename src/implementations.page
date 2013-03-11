@@ -74,6 +74,12 @@ table.clients
   tr
     td
       :markdown
+        [Stampy](http://mrstampy.github.com/Stampy/)
+    td a Java implementation of the STOMP 1.2 specification
+    td 1.2
+  tr
+    td
+      :markdown
         [StompConnect](http://docs.codehaus.org/display/STOMP/StompConnect)
     td provides a bridge to any other JMS provider
     td 1.0
@@ -222,6 +228,13 @@ table.clients
     td PHP
     td a simpler STOMP client for PHP
     td 1.0
+  tr
+    td
+      :markdown
+        [Stampy](http://mrstampy.github.com/Stampy/)
+    td Java
+    td a Java implementation of the STOMP 1.2 specification
+    td 1.2
   tr
     td
       :markdown
