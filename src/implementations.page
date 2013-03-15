@@ -301,6 +301,13 @@ table.clients
   tr
     td
       :markdown
+        [tStomp](https://github.com/siemens/tstomp)
+    td TCL
+    td a STOMP Implementation for TCL
+    td 1.1
+  tr
+    td
+      :markdown
         [Zend\_Queue](https://github.com/zendframework/ZendQueue)
     td PHP
     td for Zend PHP clients
