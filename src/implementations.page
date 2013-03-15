@@ -161,7 +161,7 @@ table.clients
   tr
     td
       :markdown
-        [hxStomp](hxstomp|http://code.google.com/p/hxstomp/)
+        [hxStomp](http://code.google.com/p/hxstomp/)
     td Haxe
     td a TCP socket-based STOMP protocol client library written for the Haxe language
     td 1.0
