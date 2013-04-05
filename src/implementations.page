@@ -224,6 +224,13 @@ table.clients
   tr
     td
       :markdown
+        [React/STOMP](https://github.com/reactphp/stomp)
+    td PHP
+    td STOMP bindings for React
+    td 1.1
+  tr
+    td
+      :markdown
         [simplisticstompclient](http://code.google.com/p/simplisticstompclient/)
     td PHP
     td a simpler STOMP client for PHP
