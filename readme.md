@@ -1,21 +1,22 @@
 ## Overview
 
-Stomp is the Simple (or Streaming) Text Orientated Messaging Protocol.
+STOMP is the Simple (or Streaming) Text Orientated Messaging Protocol.
 
-Stomp provides an interoperable wire format so that Stomp clients can
-communicate with any Stomp message broker to provide easy and widespread
+STOMP provides an interoperable wire format so that STOMP clients can
+communicate with any STOMP message broker to provide easy and widespread
 messaging interoperability among many languages, platforms and brokers.
 
 ## Specification
 
-This git repository hosts the released and in progress STOMP specifications.  The
-lasted released specification is located at:
+This git repository hosts the released and in progress STOMP specifications.
+The latest released specification is located at:
 
-[src/stomp-specification-1.1.md](src/stomp-specification-1.1.md)
+[src/stomp-specification-1.2.md](src/stomp-specification-1.2.md)
 
 ## Website Generation
 
-This git repository generates the STOMP specification static website
+This git repository generates the
+[STOMP specification static website](http://stomp.github.com/)
 using either [Maven](http://maven.apache.org/download.html) or the
 [SBT](http://code.google.com/p/simple-build-tool/wiki/Setup) build tool.
 
