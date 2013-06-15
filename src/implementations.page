@@ -308,6 +308,13 @@ table.clients
   tr
     td
       :markdown
+        [stomp.js](http://jmesnil.net/stomp-websocket/doc/)
+    td JavaScript
+    td is a JavaScript library for Web browsers using STOMP Over HTML Web Sockets
+    td 1.0 1.1
+  tr
+    td
+      :markdown
         [tStomp](https://github.com/siemens/tstomp)
     td TCL
     td a STOMP Implementation for TCL
