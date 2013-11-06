@@ -280,6 +280,13 @@ table.clients
   tr
     td
       :markdown
+        [StompKit](https://github.com/mobile-web-messaging/StompKit/)
+    td Objective-C
+    td modern event-driven Objective-C library for STOMP
+    td 1.2
+  tr
+    td
+      :markdown
         [stompy](https://pypi.python.org/pypi/stompy)
     td Python
     td implementation of the STOMP protocol in Python
