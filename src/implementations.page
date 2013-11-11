@@ -301,10 +301,10 @@ table.clients
   tr
     td
       :markdown
-        [stomp.py](https://code.google.com/p/stomppy/)
+        [stomp.py](https://github.com/jasonrbriggs/stomp.py)
     td Python
-    td a client library for accessing messaging servers using the STOMP protocol
-    td 1.0 1.1
+    td a Python client library which can also be run as a standalone, command-line client for testing.
+    td 1.0 1.1 1.2
   tr
     td
       :markdown
