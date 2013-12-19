@@ -196,6 +196,13 @@ table.clients
   tr
     td
       :markdown
+        [objc-stomp/WebSocket](https://github.com/nmaletm/objc-stomp)
+    td Objective-C
+    td a simple STOMP/WebSocket client based on objc-stomp and SocketRocket
+    td 1.0
+  tr
+    td
+      :markdown
         [POE::Component::Client::Stomp](http://search.cpan.org/dist/POE-Component-Client-Stomp/)
     td Perl
     td a Perl extension for the POE Environment
