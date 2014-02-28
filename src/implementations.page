@@ -255,7 +255,7 @@ table.clients
         [stomp](https://rubygems.org/gems/stomp)
     td Ruby
     td client for the STOMP messaging protocol
-    td 1.0 1.1
+    td 1.0 1.1 1.2
   tr
     td
       :markdown
