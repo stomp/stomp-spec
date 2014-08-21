@@ -708,7 +708,7 @@ More formally, the initial frames look like:
     CONNECT
     heart-beat:<cx>,<cy>
 
-    CONNECTED:
+    CONNECTED
     heart-beat:<sx>,<sy>
 
 For heart-beats from the client to the server:
