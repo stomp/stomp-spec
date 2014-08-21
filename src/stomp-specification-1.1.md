@@ -359,7 +359,7 @@ messages based on the application defined headers using a selector
 on a `SUBSCRIBE` frame. The user defined headers MUST be passed through
 in the `MESSAGE` frame.
 
-If the server cannot successfully process the `SEND` frame frame for any reason,
+If the server cannot successfully process the `SEND` frame for any reason,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
 ### SUBSCRIBE
