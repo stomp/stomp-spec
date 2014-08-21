@@ -290,7 +290,7 @@ it has in common with the client:
     ^@
 
 If the client and server do not share any common protocol versions, then the
-sever SHOULD respond with an `ERROR` frame similar to:
+server SHOULD respond with an `ERROR` frame similar to:
 
     ERROR
     version:1.2,2.1
@@ -350,7 +350,7 @@ messages based on the application defined headers using a selector
 on a `SUBSCRIBE` frame. The user defined headers MUST be passed through
 in the `MESSAGE` frame.
 
-If the sever cannot successfully process the `SEND` frame frame for any reason,
+If the server cannot successfully process the `SEND` frame frame for any reason,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
 ### SUBSCRIBE
@@ -371,7 +371,7 @@ Example:
 
     ^@
 
-If the sever cannot successfully create the subscription,
+If the server cannot successfully create the subscription,
 the server MUST send the client an `ERROR` frame and disconnect the client.
 
 STOMP servers MAY support additional server specific headers to customize the
