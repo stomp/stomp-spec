@@ -315,6 +315,13 @@ table.clients
   tr
     td
       :markdown
+        [torstomp](https://github.com/wpjunior/torstomp)
+    td Python
+    td A simple simple client written for tornado framework
+    td 1.1
+  tr
+    td
+      :markdown
         [stomp.js](http://jmesnil.net/stomp-websocket/doc/)
     td JavaScript
     td is a JavaScript library for Web browsers using STOMP Over HTML Web Sockets
