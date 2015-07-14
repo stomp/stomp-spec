@@ -400,20 +400,20 @@ subscription.
 The valid values for the `ack` header are `auto`, `client`, or
 `client-individual`. If the header is not set, it defaults to `auto`.
 
-When the the `ack` mode is `auto`, then the client does not need to send the
+When the `ack` mode is `auto`, then the client does not need to send the
 server `ACK` frames for the messages it receives. The server will assume the
-client has received the message as soon as it sends it to the the client.
+client has received the message as soon as it sends it to the client.
 This acknowledgment mode can cause messages being transmitted to the client
 to get dropped.
 
-When the the `ack` mode is `client`, then the client MUST send the server
+When the `ack` mode is `client`, then the client MUST send the server
 `ACK` frames for the messages it processes. If the connection fails before a
 client sends an `ACK` for the message the server will assume the message has
 not been processed and MAY redeliver the message to another client. The `ACK`
 frames sent by the client will be treated as a cumulative `ACK`. This means the `ACK` operates on the message specified in the `ACK` frame
 and all messages sent to the subscription before the `ACK`-ed message.
 
-When the the `ack` mode is `client-individual`, the ack mode operates just
+When the `ack` mode is `client-individual`, the ack mode operates just
 like the `client` ack mode except that the `ACK` or `NACK` frames sent by the
 client are not cumulative. This means that an `ACK` or `NACK` for a
 subsequent message MUST NOT cause a previous message to get acknowledged.
