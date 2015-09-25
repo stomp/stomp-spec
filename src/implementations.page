@@ -32,6 +32,12 @@ table.clients
   tr
     td
       :markdown
+        [ Apache ActiveMQ Artemis](http://activemq.apache.org/artemis)
+    td Apache ActiveMQ Artemis has a proven non blocking architecture. It delivers outstanding performance.
+    td 1.0 1.1 1.2
+  tr
+    td
+      :markdown
         [Apache Apollo](http://activemq.apache.org/apollo)
     td a redesigned version of ActiveMQ
     td 1.0 1.1 1.2
