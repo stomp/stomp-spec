@@ -15,7 +15,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
   
@@ -27,15 +29,17 @@
   <description>The Stomp Website</description>
 
   <properties>
-    <scala-version>2.9.1</scala-version>
-    <scala-plugin-version>2.15.1</scala-plugin-version>
-    <scalate-version>1.5.3</scalate-version>
-    <scalamd-version>1.5</scalamd-version>
-    <slf4j-version>1.6.1</slf4j-version>
+    <scala-version>2.11.12</scala-version>
+    <scala-major-version>2.11</scala-major-version>
+    <scala-plugin-version>2.15.2</scala-plugin-version>
+    <scalate-version>1.9.6</scalate-version>
+    <scalate-plugin-version>1.7.1</scalate-plugin-version>
+    <scalamd-version>1.7.3</scalamd-version>
+    <slf4j-version>1.7.30</slf4j-version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
-    
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
@@ -46,20 +50,19 @@
       <artifactId>scala-compiler</artifactId>
       <version>${scala-version}</version>
     </dependency>
-        
     <dependency>
-      <groupId>org.fusesource.scalate</groupId>
-      <artifactId>scalate-wikitext</artifactId>
+      <groupId>org.scalatra.scalate</groupId>
+      <artifactId>scalate-wikitext_${scala-major-version}</artifactId>
       <version>${scalate-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.fusesource.scalate</groupId>
-      <artifactId>scalate-page</artifactId>
+      <groupId>org.scalatra.scalate</groupId>
+      <artifactId>scalate-page_${scala-major-version}</artifactId>
       <version>${scalate-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.fusesource.scalamd</groupId>
-      <artifactId>scalamd</artifactId>
+      <groupId>org.scalatra.scalate</groupId>
+      <artifactId>scalamd_${scala-major-version}</artifactId>
       <version>${scalamd-version}</version>
     </dependency>
     <dependency>
@@ -93,9 +96,9 @@
       </plugin>    
 
       <plugin>
-        <groupId>org.fusesource.scalate</groupId>
-        <artifactId>maven-scalate-plugin</artifactId>
-        <version>${scalate-version}</version>
+        <groupId>org.scalatra.scalate</groupId>
+        <artifactId>maven-scalate-plugin_${scala-major-version}</artifactId>
+        <version>${scalate-plugin-version}</version>
         
         <executions>
           <execution>
