@@ -46,7 +46,7 @@ table.clients
       :markdown
         [CoilMQ](https://github.com/hozn/coilmq/)
     td a lightweight pure Python STOMP broker inspired by StompServer
-    td 1.0
+    td 1.0 1.1 1.2
   tr
     td
       :markdown
