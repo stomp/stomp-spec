@@ -80,12 +80,6 @@ table.clients
   tr
     td
       :markdown
-        [StompConnect](http://docs.codehaus.org/display/STOMP/StompConnect)
-    td provides a bridge to any other JMS provider
-    td 1.0
-  tr
-    td
-      :markdown
         [StompServer](http://stompserver.rubyforge.org/)
     td a lightweight pure Ruby STOMP server
     td 1.0
