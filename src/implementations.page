@@ -224,6 +224,13 @@ table.clients
   tr
     td
       :markdown
+        [rx-stomp](https://github.com/stomp-js/rx-stomp/)
+    td JavaScript
+    td a full-featured STOMP implementation for JavaScript/TypeScript exposed as RxJS primitives
+    td 1.0 1.1 1.2
+  tr
+    td
+      :markdown
         [simplisticstompclient](http://code.google.com/p/simplisticstompclient/)
     td PHP
     td a simpler STOMP client for PHP
@@ -269,6 +276,13 @@ table.clients
         [stompest](https://github.com/nikipore/stompest)
     td Python
     td a full-featured STOMP implementation for Python including both synchronous and asynchronous clients
+    td 1.0 1.1 1.2
+  tr
+    td
+      :markdown
+        [stompjs](https://github.com/stomp-js/stompjs/)
+    td JavaScript
+    td a full-featured STOMP implementation for JavaScript/TypeScript
     td 1.0 1.1 1.2
   tr
     td
