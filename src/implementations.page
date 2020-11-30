@@ -174,13 +174,6 @@ table.clients
   tr
     td
       :markdown
-        [libstomp](http://stomp.codehaus.org/C)
-    td C
-    td an APR based C library
-    td 1.0
-  tr
-    td
-      :markdown
         [Net::Stomp](http://search.cpan.org/dist/Net-Stomp/)
     td Perl
     td a Streaming Text Orientated Messaging Protocol client
