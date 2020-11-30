@@ -74,12 +74,6 @@ table.clients
   tr
     td
       :markdown
-        [Sprinkle](http://www.thuswise.org/sprinkle/index.html)
-    td written in Python and runs on Unix type platforms
-    td 1.0
-  tr
-    td
-      :markdown
         [Stampy](http://mrstampy.github.com/Stampy/)
     td a Java implementation of the STOMP 1.2 specification
     td 1.2
