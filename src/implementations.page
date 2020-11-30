@@ -83,6 +83,12 @@ table.clients
         [StompServer](http://stompserver.rubyforge.org/)
     td a lightweight pure Ruby STOMP server
     td 1.0
+  tr
+    td
+      :markdown
+        [Xtomp](http://xtomp.tp23.org/)
+    td a STOMP message broker written in C based on nginx core
+    td 1.2
 
 :markdown
   # STOMP Clients
