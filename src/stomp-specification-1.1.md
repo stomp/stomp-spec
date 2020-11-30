@@ -232,7 +232,7 @@ an HTTP connection.
 STOMP 1.1 clients MUST set the following headers:
 
 * `accept-version` : The versions of the STOMP protocol the client supports.
-  See [Protocol Negotiation](#protocol_negotiation) for more details.
+  See [Protocol Negotiation](#Protocol_Negotiation) for more details.
 
 * `host` : The name of a virtual host that the client wishes to connect to.
   It is recommended clients set this to the host name that the socket
@@ -252,7 +252,7 @@ STOMP 1.1 clients MAY set the following headers:
 STOMP 1.1 servers MUST set the following headers:
 
 * `version` : The version of the STOMP protocol the session will be using.
-  See [Protocol Negotiation](#protocol_negotiation) for more details.
+  See [Protocol Negotiation](#Protocol_Negotiation) for more details.
 
 STOMP 1.1 servers MAY set the following headers:
 
