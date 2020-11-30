@@ -201,7 +201,7 @@ consider the body to be a binary blob.
 The implied text encoding for MIME types starting with `text/` is UTF-8. If
 you are using a text based MIME type with a different encoding then you
 SHOULD append `;charset=<encoding>` to the MIME type. For example,
-`text/html;charset=utf-16` SHOULD be used if your sending an HTML body in
+`text/html;charset=utf-16` SHOULD be used if you're sending an HTML body in
 UTF-16 encoding. The `;charset=<encoding>` SHOULD also get appended to any
 non `text/` MIME types which can be interpreted as text. A good example of
 this would be a UTF-8 encoded XML. Its `content-type` SHOULD get set to
