@@ -774,7 +774,7 @@ empty).
     ERROR
     receipt-id:message-12345
     content-type:text/plain
-    content-length:171
+    content-length:170
     message:malformed frame received
 
     The message:
