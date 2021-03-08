@@ -251,7 +251,7 @@ STOMP 1.1 servers MAY set the following headers:
 
 * `server`  : A field that contains information about the STOMP server.
   The field MUST contain a server-name field and MAY be followed by optional 
-  comment feilds delimited by a space character.
+  comment feilds delimited by a space octet.
 
   The server-name field consists of a name token followed by an optional version
   number token.
